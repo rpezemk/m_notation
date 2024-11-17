@@ -1,22 +1,59 @@
-from PyQt5.QtWidgets import QMainWindow, QHBoxLayout, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QMainWindow, QHBoxLayout, QVBoxLayout, QWidget, QPushButton
 from widgets.note_widget import PartWidget
 
 import widgets.widget_utils as w_utils
+
+
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Stacked Panels")
-        central, self.stack_layout = w_utils.emit_central_pair(self, QVBoxLayout)
         self.note_widgets = []
-        self.setCentralWidget(central)
         
+        
+        all_widget = QWidget()
+        all_layout = QVBoxLayout(all_widget)
+        
+        top_button = QPushButton("top button")
+        top_button.setFixedHeight(30)
+        all_layout.addWidget(top_button)
+        
+        pane_and_scores_widget = QWidget()
+        pane_and_scores_widget.setStyleSheet("background-color: black;")
+        pane_and_scores_layout =  QHBoxLayout(pane_and_scores_widget)
+        pane_and_scores_layout.setSpacing(0)
+        pane_and_scores_layout.setContentsMargins(0, 0, 0, 0)
+
+        left_pane_widget = QWidget()
+        left_pane_widget.setFixedWidth(120)  
+        
+        scores_widget = QWidget()
+        scores_layout = QVBoxLayout(scores_widget)
+        
+        for i in range(0, 5):
+            note_widget = PartWidget()
+            note_widget.setFixedHeight(120)  
+            scores_layout.addWidget(note_widget)
+            self.note_widgets.append(note_widget)
+            
+        scores_layout.addStretch()
+        
+        pane_and_scores_layout.addWidget(left_pane_widget)
+        pane_and_scores_layout.addWidget(scores_widget)
+        
+        all_layout.addWidget(pane_and_scores_widget)        
+        self.setCentralWidget(all_widget)
+        # for i in range(5):
+        #     self.add_child_to_stack(PartWidget())
+        # # self.score_layout.addStretch()
+    
     def add_child_to_stack(self, widget: QWidget = None):
         if widget is None:
             return
         widget.setFixedHeight(120)  
-        self.stack_layout.addWidget(widget)
-        self.note_widgets.append(widget)
+        # self.score_layout.addWidget(widget)
+        # self.note_widgets.append(widget)
         
     def resizeEvent(self, event):
         new_size = event.size()  
@@ -27,4 +64,4 @@ class MainWindow(QMainWindow):
     def show(self):
         super().show()
         for widget in self.note_widgets:
-            widget.draw()
+           widget.draw()
