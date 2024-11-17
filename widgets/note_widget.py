@@ -2,8 +2,9 @@ import random
 from PyQt5.QtWidgets import QWidget
 from PyQt5.QtCore import Qt, QRect
 from PyQt5.QtGui import QPainter, QColor
-from fonts.glyphs import Glyphs
 
+from fonts.glyphs import Glyphs
+import fonts.loader
 from model.structure import Note
 
 class NoteWidget(QWidget):
@@ -14,6 +15,10 @@ class NoteWidget(QWidget):
         self.stem_height = 15  
         self.flag_width = 7  
         self.bravura_font = None
+        res, font = fonts.loader.try_get_music_font()
+        if not res:
+            raise "error loading font"
+        self.bravura_font = font
         
     def show(self):
         self.generate_notes()
