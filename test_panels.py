@@ -1,16 +1,17 @@
 import sys
 from PyQt5.QtCore import Qt, QRect, QPointF
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel
+from widgets.note_widget import NoteWidget
 
 class StaffPanel(QWidget):
     def __init__(self, height=120):
         super().__init__()
         self.setFixedHeight(height)
         self.setStyleSheet("background-color: lightblue; border: 1px solid black;")
-        self.label = QLabel(f"Panel {self}")
-        self.label.setAlignment(Qt.AlignCenter)
+        self.note_widget = NoteWidget()
         layout = QVBoxLayout(self)
-        layout.addWidget(self.label)
+        layout.addWidget(self.note_widget)
+        self.note_widget.generate_notes()
 
 class MainWindow(QMainWindow):
     def __init__(self):
