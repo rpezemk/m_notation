@@ -9,16 +9,7 @@ from PyQt5.QtGui import QPainter, QColor, QPainterPath
 from PyQt5.QtGui import QFont, QFontDatabase
 from fonts.glyphs import Glyphs
 
-    
-
 from model.note import Note
-
-working_dir = os.getcwd()
-
-font_path = os.path.join(working_dir, "fonts/bravura/Bravura.otf")
-
-ex = os.path.exists(font_path)
-
 
 
 class NoteWidget(QWidget):
@@ -84,14 +75,13 @@ class NoteWindow(QMainWindow):
         container = QWidget()
         container.setLayout(layout)
         self.setCentralWidget(container)
-        
-        
-        
+         
     def resizeEvent(self, event):
         new_size = event.size()  # Get the new size of the window
         self.setWindowTitle(f"Window resized to: {new_size.width()} x {new_size.height()}")
         super().resizeEvent(event)  # Call the parent class's resizeEvent
         self.note_widget.show()
+        
     def show(self):
         super().show()
         self.note_widget.generate_notes()
