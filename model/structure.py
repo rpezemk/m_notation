@@ -9,8 +9,8 @@ class ParentOf():
         
     def append_child(self, child: 'ChildOf'):
         child.parent = self
-        self.children.append(child)
         child.child_no = len(self.children)
+        self.children.append(child)
     
 class ChildOf():
     def __init__(self, parent:ParentOf = None):

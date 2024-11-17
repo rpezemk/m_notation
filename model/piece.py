@@ -21,5 +21,7 @@ def generate_sample_piece(n_parts: int, n_measures: int):
         part = Part(children=[], parent=piece)
         for measure_no in range(0, n_measures):
             notes = [Note(0, 0), Note(1, 1), Note(2, 6), Note(3, 7)]
-            measure = Measure(parent=part, children=[])
-            
+            measure = Measure(parent=part, children=notes)
+            part.append_child(measure)
+        piece.append_child(part)
+    return piece
