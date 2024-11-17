@@ -49,13 +49,14 @@ class StaffWidget(QWidget):
         self.line_spacing = 10
         self.staff_offset = 30
         self.no_of_measures = 4
-             
+        self.dark_gray = QColor(100, 100, 100)
+        self.light_gray = QColor(140, 140, 140)
+        
     def draw(self):
         w = self.width()
         h = self.height()
         self.notes = [
-            (Note(random.randint(0, w), random.randint(0, 7),
-             QColor(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))))
+            (Note(random.randint(0, w), random.randint(0, 7)))
             for _ in range(10)
         ]
         self.update()  
@@ -65,27 +66,40 @@ class StaffWidget(QWidget):
         painter.setRenderHint(QPainter.Antialiasing, False)
         painter.setFont(self.bravura_font)
         
-        painter.setPen(QColor(self.foreground, self.foreground, self.foreground))
+        self.draw_clef(painter) 
+        self.draw_staff_lines(painter)
+        self.draw_bar_lines(painter)
+        self.draw_all_notes(painter)
+            
+        painter.end()
+
+    def draw_clef(self, painter):
+        painter.setPen(self.dark_gray)
+        painter.setBrush(self.dark_gray)
         text_rect = QRect(0, -23, 40, 200)
-        painter.drawText(text_rect, Qt.AlignTop, Glyphs.G_Clef) 
-        
+        painter.drawText(text_rect, Qt.AlignTop, Glyphs.G_Clef)
+
+    def draw_all_notes(self, painter):
         for note in self.notes:
             note.pitch = int((note.pitch * self.line_spacing) / 2) + self.line_spacing * 4
             self.draw_note(painter, note)
-        
-        painter.setBrush(QColor(120, 120, 120))
+
+    def draw_staff_lines(self, painter):
+        painter.setBrush(self.dark_gray)
+        painter.setPen(self.dark_gray)
         for i in range(0, 5):
             painter.drawRect(QRect(0, self.staff_offset + i*self.line_spacing, self.width(), 1))
+
+
+    def draw_bar_lines(self, painter):
         measure_width = int(self.width()/self.no_of_measures)
         for i in range(0, self.no_of_measures + 1):
             curr_x = measure_width * i
             painter.drawRect(QRect(curr_x, self.staff_offset, 1, 4*self.line_spacing))
-            
-        painter.end()
         
     def draw_note(self, painter, note):
         res_y = note.pitch
-        painter.setPen(QColor(self.foreground, self.foreground, self.foreground))
+        painter.setPen(self.light_gray)
         text_rect = QRect(note.time - self.note_size, res_y - self.note_size, self.note_size * 2, self.note_size * 2)
         painter.drawText(text_rect, Qt.AlignCenter, Glyphs.EighthNote) 
 
