@@ -1,16 +1,16 @@
 import sys
 import os
 import random
+from typing import Tuple
 import PyQt5.QtGui
-from PyQt5.QtGui import QFontDatabase, QFont
 from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget
 from PyQt5.QtCore import Qt, QRect, QPointF
 from PyQt5.QtGui import QPainter, QColor, QPainterPath
 from PyQt5.QtGui import QFont, QFontDatabase
 from fonts.glyphs import Glyphs
 
-from model.note import Note
-
+from model.structure import Note
+import fonts.loader
 
 class NoteWidget(QWidget):
     def __init__(self):
@@ -20,6 +20,7 @@ class NoteWidget(QWidget):
         self.stem_height = 15  
         self.flag_width = 7  
         self.bravura_font = None
+        
     def show(self):
         super().show()
         self.generate_notes()
@@ -30,7 +31,7 @@ class NoteWidget(QWidget):
         self.notes = [
             (Note(random.randint(0, w), random.randint(0, h),
              QColor(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))))
-            for _ in range(10000)
+            for _ in range(200)
         ]
         self.update()  
 
@@ -39,10 +40,10 @@ class NoteWidget(QWidget):
         painter.setRenderHint(QPainter.Antialiasing)
         painter.setFont(self.bravura_font)
         for note in self.notes:
-            self.draw_note(painter, note.x, note.y, note.color)
+            self.draw_note(painter, note.time, note.pitch, note.color)
 
     def draw_note(self, painter, x, y, color):
-        painter.setPen(color)
+        painter.setPen(QColor(0, 0, 0))
         painter.setFont(painter.font())  # Optionally, set a custom font or size
         text_rect = QRect(x - self.note_size, y - self.note_size, self.note_size * 2, self.note_size * 2)
         painter.drawText(text_rect, Qt.AlignCenter, Glyphs.EighthNote)  # Draw the "X" centered at the position
@@ -54,14 +55,14 @@ class NoteWidget(QWidget):
             click_pos = event.pos()
             
             for note in self.notes[:]:
-                x, y = (note.x, note.y)
+                x, y = (note.time, note.pitch)
                 if (x - click_pos.x())**2 + (y - click_pos.y())**2 <= (self.note_size // 2)**2:
                     self.notes.remove(note)  
                     self.update()  
                     break  
 
 
-class NoteWindow(QMainWindow):
+class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("m_notator")
@@ -89,18 +90,8 @@ class NoteWindow(QMainWindow):
         
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    window = NoteWindow()
-    try:
-        font_db = PyQt5.QtGui.QFontDatabase()
-        font_path = os.path.join(os.getcwd(), "fonts/bravura", "Bravura.otf")
-        font_id = font_db.addApplicationFont(font_path)
-        if font_id == -1:
-            print("Failed to load the font.")
-        else:
-            print(f"Font loaded successfully with ID: {font_id}")
-        font_family = font_db.applicationFontFamilies(font_id)[0]
-        window.note_widget.bravura_font = QFont(font_family, 40)
-    except Exception as e:
-        print(f"Error loading font: {e}")
+    window = MainWindow()
+    res, font = fonts.loader.try_get_music_font()
+    window.note_widget.bravura_font = font
     window.show()
     sys.exit(app.exec_())
