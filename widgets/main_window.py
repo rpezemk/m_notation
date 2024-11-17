@@ -13,7 +13,7 @@ class MainWindow(QMainWindow):
         self.setGeometry(100, 100, 800, 600)
         self.note_widget = NoteWidget()
         self.redraw_button = QPushButton("Redraw Notes")
-        self.redraw_button.clicked.connect(self.note_widget.generate_notes)
+        self.redraw_button.clicked.connect(self.note_widget.draw)
         layout = QVBoxLayout()
         layout.addWidget(self.note_widget)
         layout.addWidget(self.redraw_button)
@@ -29,5 +29,5 @@ class MainWindow(QMainWindow):
         
     def show(self):
         super().show()
-        self.note_widget.generate_notes()
+        self.note_widget.draw()
         
