@@ -2,7 +2,7 @@ import sys
 from PyQt5.QtCore import Qt, QRect, QPointF
 from PyQt5.QtWidgets import QApplication, QMainWindow, QWidget, QVBoxLayout, QLabel
 
-class Panel(QWidget):
+class StaffPanel(QWidget):
     def __init__(self, height=120):
         super().__init__()
         self.setFixedHeight(height)
@@ -21,9 +21,8 @@ class MainWindow(QMainWindow):
         main_widget = QWidget(self)
         main_layout = QVBoxLayout(main_widget)
 
-        # Stack 10 panels, each 120px in height
-        for i in range(10):
-            panel = Panel(120)
+        for i in range(5):
+            panel = StaffPanel(120)
             main_layout.addWidget(panel)
 
         self.setCentralWidget(main_widget)
