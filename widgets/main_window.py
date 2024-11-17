@@ -7,9 +7,10 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Stacked Panels")
-        _, self.stack_layout = w_utils.emit_central_pair(self, QVBoxLayout)
+        central, self.stack_layout = w_utils.emit_central_pair(self, QVBoxLayout)
         self.note_widgets = []
-
+        self.setCentralWidget(central)
+        
     def add_child_to_stack(self, widget: QWidget = None):
         if widget is None:
             return
