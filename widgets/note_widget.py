@@ -43,7 +43,6 @@ class StaffWidget(QWidget):
         self.note_size = 120 
         self.stem_height = 15  
         self.flag_width = 7  
-        self.bravura_font = None
         self.foreground = foreground        
         res, self.bravura_font = fonts.loader.try_get_music_font()
         self.left_area_width = 100 
@@ -63,7 +62,7 @@ class StaffWidget(QWidget):
 
     def paintEvent(self, event):
         painter = QPainter(self)
-        painter.setRenderHint(QPainter.Antialiasing)
+        painter.setRenderHint(QPainter.Antialiasing, False)
         painter.setFont(self.bravura_font)
         
         painter.setPen(QColor(self.foreground, self.foreground, self.foreground))
@@ -72,9 +71,9 @@ class StaffWidget(QWidget):
         
         for note in self.notes:
             note.pitch = int((note.pitch * self.line_spacing) / 2) + self.line_spacing * 4
-            self.draw_note(painter, note.time, note.pitch, note.color)
+            self.draw_note(painter, note)
         
-        painter.setBrush(QColor(120, 120, 120))  # Green color
+        painter.setBrush(QColor(120, 120, 120))
         for i in range(0, 5):
             painter.drawRect(QRect(0, self.staff_offset + i*self.line_spacing, self.width(), 1))
         measure_width = int(self.width()/self.no_of_measures)
@@ -84,10 +83,10 @@ class StaffWidget(QWidget):
             
         painter.end()
         
-    def draw_note(self, painter, x, y, color):
-        res_y = y
+    def draw_note(self, painter, note):
+        res_y = note.pitch
         painter.setPen(QColor(self.foreground, self.foreground, self.foreground))
-        text_rect = QRect(x - self.note_size, res_y - self.note_size, self.note_size * 2, self.note_size * 2)
+        text_rect = QRect(note.time - self.note_size, res_y - self.note_size, self.note_size * 2, self.note_size * 2)
         painter.drawText(text_rect, Qt.AlignCenter, Glyphs.EighthNote) 
 
     def mousePressEvent(self, event):
