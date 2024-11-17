@@ -1,33 +1,29 @@
-import sys
-import os
-import random
-from typing import Tuple
-import PyQt5.QtGui
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget
-from widgets.note_widget import NoteWidget
+from PyQt5.QtWidgets import QMainWindow, QHBoxLayout, QVBoxLayout, QWidget
+from widgets.note_widget import PartWidget
+
+import widgets.widget_utils as w_utils
 
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("m_notator")
-        self.setGeometry(100, 100, 800, 600)
-        self.note_widget = NoteWidget()
-        self.redraw_button = QPushButton("Redraw Notes")
-        self.redraw_button.clicked.connect(self.note_widget.draw)
-        layout = QVBoxLayout()
-        layout.addWidget(self.note_widget)
-        layout.addWidget(self.redraw_button)
-        container = QWidget()
-        container.setLayout(layout)
-        self.setCentralWidget(container)
-         
-    def resizeEvent(self, event):
-        new_size = event.size()  # Get the new size of the window
-        self.setWindowTitle(f"Window resized to: {new_size.width()} x {new_size.height()}")
-        super().resizeEvent(event)  # Call the parent class's resizeEvent
-        self.note_widget.show()
+        self.setWindowTitle("Stacked Panels")
+        _, self.stack_layout = w_utils.emit_central_pair(self, QVBoxLayout)
+        self.note_widgets = []
+
+    def add_child_to_stack(self, widget: QWidget = None):
+        if widget is None:
+            return
+        widget.setFixedHeight(120)  
+        self.stack_layout.addWidget(widget)
+        self.note_widgets.append(widget)
         
+    def resizeEvent(self, event):
+        new_size = event.size()  
+        self.setWindowTitle(f"Window resized to: {new_size.width()} x {new_size.height()}")
+        super().resizeEvent(event)  
+        self.show()
+
     def show(self):
         super().show()
-        self.note_widget.draw()
-        
+        for widget in self.note_widgets:
+            widget.draw()
