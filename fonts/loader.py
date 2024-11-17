@@ -22,7 +22,7 @@ def try_get_music_font() -> Tuple[bool,QFont]:
         if font_id == -1:
             raise FontLoadError(f"could not load {font_path} font file")
         font_family = font_db.applicationFontFamilies(font_id)[0]
-        res_font = QFont(font_family, 40)
+        res_font = QFont(font_family, 35)
         ok = True
     except Exception as e:
         print(f"Error loading font: {e}")

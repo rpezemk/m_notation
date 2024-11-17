@@ -17,7 +17,7 @@ class PartWidget(QWidget):
         layout.setSpacing(0)
         
         # Left area with a label
-        self.left_area = QWidget(self)
+        self.left_area = QWidget()
         self.left_area.setFixedWidth(self.left_area_width)
         self.left_area.setStyleSheet("background-color: lightgray; border-right: 1px solid black;")
         self.label = QLabel("Label", self.left_area)
@@ -40,21 +40,24 @@ class StaffWidget(QWidget):
     def __init__(self, foreground: int = 99):
         super().__init__()
         self.notes = []  
-        self.note_size = 30  
+        self.note_size = 120 
         self.stem_height = 15  
         self.flag_width = 7  
         self.bravura_font = None
         self.foreground = foreground        
         res, self.bravura_font = fonts.loader.try_get_music_font()
         self.left_area_width = 100 
-                
+        self.line_spacing = 10
+        self.staff_offset = 30
+        self.no_of_measures = 4
+             
     def draw(self):
         w = self.width()
         h = self.height()
         self.notes = [
-            (Note(random.randint(0, w), random.randint(0, h),
+            (Note(random.randint(0, w), random.randint(0, 7),
              QColor(random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))))
-            for _ in range(100)
+            for _ in range(10)
         ]
         self.update()  
 
@@ -63,16 +66,29 @@ class StaffWidget(QWidget):
         painter.setRenderHint(QPainter.Antialiasing)
         painter.setFont(self.bravura_font)
         
+        painter.setPen(QColor(self.foreground, self.foreground, self.foreground))
+        text_rect = QRect(0, -23, 40, 200)
+        painter.drawText(text_rect, Qt.AlignTop, Glyphs.G_Clef) 
+        
         for note in self.notes:
+            note.pitch = int((note.pitch * self.line_spacing) / 2) + self.line_spacing * 4
             self.draw_note(painter, note.time, note.pitch, note.color)
-        painter.setBrush(QColor(0, 255, 0))  # Green color
-        painter.drawRect(QRect(0, 0, 50, 50))
+        
+        painter.setBrush(QColor(120, 120, 120))  # Green color
+        for i in range(0, 5):
+            painter.drawRect(QRect(0, self.staff_offset + i*self.line_spacing, self.width(), 1))
+        measure_width = int(self.width()/self.no_of_measures)
+        for i in range(0, self.no_of_measures + 1):
+            curr_x = measure_width * i
+            painter.drawRect(QRect(curr_x, self.staff_offset, 1, 4*self.line_spacing))
+            
         painter.end()
         
     def draw_note(self, painter, x, y, color):
+        res_y = y
         painter.setPen(QColor(self.foreground, self.foreground, self.foreground))
-        text_rect = QRect(x - self.note_size, y - self.note_size, self.note_size * 2, self.note_size * 2)
-        painter.drawText(text_rect, Qt.AlignCenter, Glyphs.EighthNote)  # Draw the "X" centered at the position
+        text_rect = QRect(x - self.note_size, res_y - self.note_size, self.note_size * 2, self.note_size * 2)
+        painter.drawText(text_rect, Qt.AlignCenter, Glyphs.EighthNote) 
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:

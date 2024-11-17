@@ -44,17 +44,7 @@ class MainWindow(QMainWindow):
         
         all_layout.addWidget(pane_and_scores_widget)        
         self.setCentralWidget(all_widget)
-        # for i in range(5):
-        #     self.add_child_to_stack(PartWidget())
-        # # self.score_layout.addStretch()
     
-    def add_child_to_stack(self, widget: QWidget = None):
-        if widget is None:
-            return
-        widget.setFixedHeight(120)  
-        # self.score_layout.addWidget(widget)
-        # self.note_widgets.append(widget)
-        
     def resizeEvent(self, event):
         new_size = event.size()  
         self.setWindowTitle(f"Window resized to: {new_size.width()} x {new_size.height()}")
