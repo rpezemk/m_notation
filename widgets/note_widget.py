@@ -33,7 +33,7 @@ class PartWidget(QWidget):
         self.setStyleSheet("background-color: lightblue; border: 1px solid black;")
         
     def draw(self):
-        self.staff_widget.draw()
+        self.staff_widget.update()
 
 
 class StaffWidget(QWidget):
@@ -52,16 +52,16 @@ class StaffWidget(QWidget):
         self.dark_gray = QColor(100, 100, 100)
         self.light_gray = QColor(140, 140, 140)
         
-    def draw(self):
+
+
+    def paintEvent(self, event):
         w = self.width()
         h = self.height()
         self.notes = [
             (Note(random.randint(0, w), random.randint(0, 7)))
             for _ in range(10)
         ]
-        self.update()  
-
-    def paintEvent(self, event):
+        # self.update()  
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing, False)
         painter.setFont(self.bravura_font)
