@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout,
 from PyQt5.QtCore import Qt, QRect, QPointF
 from PyQt5.QtGui import QPainter, QColor, QPainterPath
 from PyQt5.QtGui import QFont, QFontDatabase
-
+from fonts.glyphs import Glyphs
 
     
 
@@ -15,7 +15,7 @@ from model.note import Note
 
 working_dir = os.getcwd()
 
-font_path = os.path.join(working_dir, "fonts/Bravura.otf")
+font_path = os.path.join(working_dir, "fonts/bravura/Bravura.otf")
 
 ex = os.path.exists(font_path)
 
@@ -54,7 +54,7 @@ class NoteWidget(QWidget):
         painter.setPen(color)
         painter.setFont(painter.font())  # Optionally, set a custom font or size
         text_rect = QRect(x - self.note_size, y - self.note_size, self.note_size * 2, self.note_size * 2)
-        painter.drawText(text_rect, Qt.AlignCenter, "\uE050")  # Draw the "X" centered at the position
+        painter.drawText(text_rect, Qt.AlignCenter, Glyphs.EighthNote)  # Draw the "X" centered at the position
 
 
 
@@ -102,7 +102,7 @@ if __name__ == "__main__":
     window = NoteWindow()
     try:
         font_db = PyQt5.QtGui.QFontDatabase()
-        font_path = os.path.join(os.getcwd(), "fonts", "Bravura.otf")
+        font_path = os.path.join(os.getcwd(), "fonts/bravura", "Bravura.otf")
         font_id = font_db.addApplicationFont(font_path)
         if font_id == -1:
             print("Failed to load the font.")

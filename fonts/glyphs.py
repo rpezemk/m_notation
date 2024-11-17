@@ -1,4 +1,4 @@
-class ConstGlyphs:
+class Glyphs:
     G_Clef = "\uE050"
     C_Clef = "\uE05C"
     F_Clef = "\uE062"
