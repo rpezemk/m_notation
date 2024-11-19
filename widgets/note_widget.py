@@ -53,16 +53,19 @@ class StaffWidget(QWidget):
         self.dark_gray = QColor(100, 100, 100)
         self.light_gray = QColor(140, 140, 140)
         
+        w = 500
+        self.notes = [
+            (Note(random.randint(0, w), random.randint(0, 3)))
+            for _ in range(10)
+        ]
 
-
+        
+    
     def paintEvent(self, event):
         w = self.width()
         h = self.height()
-        self.notes = [
-            (Note(random.randint(0, w), random.randint(0, 7)))
-            for _ in range(10)
-        ]
-        # self.update()  
+        if w < 30 or h < 30:
+            return
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing, False)
         painter.setFont(self.bravura_font)
@@ -82,7 +85,6 @@ class StaffWidget(QWidget):
 
     def draw_all_notes(self, painter):
         for note in self.notes:
-            note.pitch = int((note.pitch * self.line_spacing) / 2) + self.line_spacing * 4
             self.draw_note(painter, note)
 
     def draw_staff_lines(self, painter):
@@ -99,16 +101,17 @@ class StaffWidget(QWidget):
             painter.drawRect(QRect(curr_x, self.staff_offset, 1, 4*self.line_spacing))
         
     def draw_note(self, painter, note):
-        res_y = note.pitch
+        res_y = int( (-note.get_pitch() * self.line_spacing) / 2) + self.line_spacing * 8
         painter.setPen(self.light_gray)
         text_rect = QRect(note.time - self.note_size, res_y - self.note_size, self.note_size * 2, self.note_size * 2)
         painter.drawText(text_rect, Qt.AlignCenter, Glyphs.EighthNote) 
 
+
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             click_pos = event.pos()
-            for note in self.notes[:]:
-                x, y = (note.time, note.pitch)
+            for note in self.notes:
+                x, y = (note.time, note.get_pitch())
                 if (x - click_pos.x())**2 + (y - click_pos.y())**2 <= (self.note_size // 2)**2:
                     self.notes.remove(note)  
                     self.update()  

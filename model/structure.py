@@ -38,4 +38,19 @@ class Note(TimeHolder):
     def __init__(self, time, pitch, duration = Duration.QUARTER, parent: ParentOf = None):
         super().__init__(duration=duration, parent=parent)
         self.time = time
-        self.pitch = pitch
+        self.__pitch = pitch
+        
+    def set_pitch(self, p):
+        self.__pitch = p
+        self.assure_pitch()
+    
+    def get_pitch(self):
+        res = self.__pitch
+        self.assure_pitch()
+        return self.__pitch
+    
+    def assure_pitch(self):
+        if -100 <= self.__pitch <= 100:
+            pass
+        else:
+            abdfsdf = 234
