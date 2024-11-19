@@ -32,10 +32,6 @@ class PartWidget(QWidget):
         layout.addWidget(self.left_area)
         layout.addWidget(self.staff_widget)
         self.setStyleSheet("background-color: lightblue; border: 1px solid black;")
-        
-    def load_part(part: Part):
-        pass
-
 
 class StaffWidget(QWidget):
     def __init__(self, foreground: int = 99):
