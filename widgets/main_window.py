@@ -61,7 +61,6 @@ class MainWindow(QMainWindow):
             part_widget.setFixedHeight(120)  
             self.part_layouts.addWidget(part_widget)
             self.part_widgets.append(part_widget)
-            # part_widget.staff_widget.load_part(part)
             part_widget.staff_widget.set_bars(part.children[:4])
             part_widget.staff_widget.update()
                 
@@ -69,9 +68,3 @@ class MainWindow(QMainWindow):
         self.part_layouts.parentWidget().update()
         self.part_layouts.update()
         
-        # self.show()
-        # for widget in self.note_widgets:
-        #    widget.draw()
-        # self.repaint()
-        # super().show()
-    
