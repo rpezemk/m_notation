@@ -12,7 +12,7 @@ class MainWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("Stacked Panels")
         self.part_widgets = []
-        
+        self.setStyleSheet("background-color: black;")
         
         all_widget = QWidget()
         all_layout = QVBoxLayout(all_widget)
