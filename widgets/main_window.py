@@ -57,22 +57,17 @@ class MainWindow(QMainWindow):
         self.setWindowTitle(f"Window resized to: {new_size.width()} x {new_size.height()}")
         super().resizeEvent(event)  
         self.show()
-
-    def show(self):
-        super().show()
-        for widget in self.note_widgets:
-           widget.draw()
     
     def load_piece(self, piece: Piece):
         w_utils.clear_layout(self.scores_layout)
         self.note_widgets.clear()
         
-        for i in range(0, 5):
+        for part in piece.children:
             note_widget = PartWidget()
             note_widget.setFixedHeight(120)  
             self.scores_layout.addWidget(note_widget)
             self.note_widgets.append(note_widget)
-            note_widget.draw()
+            note_widget.staff_widget.update()
                 
         self.scores_layout.addStretch()
         self.scores_layout.parentWidget().update()

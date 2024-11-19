@@ -32,8 +32,7 @@ class PartWidget(QWidget):
         layout.addWidget(self.staff_widget)
         self.setStyleSheet("background-color: lightblue; border: 1px solid black;")
         
-    def draw(self):
-        self.staff_widget.update()
+
 
 
 class StaffWidget(QWidget):
