@@ -4,8 +4,8 @@ from PyQt5.QtGui import QColor
 from model.duration import Duration
 
 class ParentOf():
-    def __init__(self, children:list['ChildOf'] = []):
-        self.children = children
+    def __init__(self, children:list['ChildOf'] = None):
+        self.children = [] if children is None else children
         
     def append_child(self, child: 'ChildOf'):
         child.parent = self
@@ -19,8 +19,8 @@ class ChildOf():
         
 class ParentAndChild(ParentOf, ChildOf):
     def __init__(self, children=None, parent=None):
-        ParentOf.__init__(self, children=children)  # Directly calling ParentOf's __init__
-        ChildOf.__init__(self, parent=parent)  
+        self.children = [] if children is None else children
+        self.parent=parent
     
     
 class TimeHolder(ChildOf):

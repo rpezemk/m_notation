@@ -11,7 +11,7 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Stacked Panels")
-        self.note_widgets = []
+        self.part_widgets = []
         
         
         all_widget = QWidget()
@@ -32,15 +32,9 @@ class MainWindow(QMainWindow):
         left_pane_widget.setFixedWidth(120)  
         
         scores_widget = QWidget()
-        self.scores_layout = QVBoxLayout(scores_widget)
-        
-        for i in range(0, 5):
-            note_widget = PartWidget()
-            note_widget.setFixedHeight(120)  
-            self.scores_layout.addWidget(note_widget)
-            self.note_widgets.append(note_widget)
-            
-        self.scores_layout.addStretch()
+        self.part_layouts = QVBoxLayout(scores_widget)
+                    
+        self.part_layouts.addStretch()
         
         pane_and_scores_layout.addWidget(left_pane_widget)
         pane_and_scores_layout.addWidget(scores_widget)
@@ -59,19 +53,20 @@ class MainWindow(QMainWindow):
         self.show()
     
     def load_piece(self, piece: Piece):
-        w_utils.clear_layout(self.scores_layout)
-        self.note_widgets.clear()
+        w_utils.clear_layout(self.part_layouts)
+        self.part_widgets.clear()
         
         for part in piece.children:
-            note_widget = PartWidget()
-            note_widget.setFixedHeight(120)  
-            self.scores_layout.addWidget(note_widget)
-            self.note_widgets.append(note_widget)
-            note_widget.staff_widget.update()
+            part_widget = PartWidget()
+            part_widget.setFixedHeight(120)  
+            self.part_layouts.addWidget(part_widget)
+            self.part_widgets.append(part_widget)
+            # part_widget.staff_widget.load_part(part)
+            part_widget.staff_widget.update()
                 
-        self.scores_layout.addStretch()
-        self.scores_layout.parentWidget().update()
-        self.scores_layout.update()
+        self.part_layouts.addStretch()
+        self.part_layouts.parentWidget().update()
+        self.part_layouts.update()
         
         # self.show()
         # for widget in self.note_widgets:

@@ -9,7 +9,6 @@ from widgets.note_widget import PartWidget
 import model.piece 
 if __name__ == "__main__":
     app = QApplication(sys.argv)
-    piece = model.piece.generate_sample_piece(4, 8)
     window = MainWindow()
     # window.load_piece(piece)
     window.show()

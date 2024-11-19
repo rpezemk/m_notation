@@ -5,6 +5,7 @@ from PyQt5.QtGui import QPainter, QColor
 
 from fonts.glyphs import Glyphs
 import fonts.loader
+from model.piece import Part
 from model.structure import Note
 
 class PartWidget(QWidget):
@@ -32,7 +33,8 @@ class PartWidget(QWidget):
         layout.addWidget(self.staff_widget)
         self.setStyleSheet("background-color: lightblue; border: 1px solid black;")
         
-
+    def load_part(part: Part):
+        pass
 
 
 class StaffWidget(QWidget):
