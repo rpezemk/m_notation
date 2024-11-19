@@ -56,12 +56,12 @@ class MainWindow(QMainWindow):
         w_utils.clear_layout(self.part_layouts)
         self.part_widgets.clear()
         
-        for part in piece.children:
+        for part in piece.parts:
             part_widget = PartWidget()
             part_widget.setFixedHeight(120)  
             self.part_layouts.addWidget(part_widget)
             self.part_widgets.append(part_widget)
-            part_widget.staff_widget.set_bars(part.children[:4])
+            part_widget.staff_widget.set_bars(part.measures[:4])
             part_widget.staff_widget.update()
                 
         self.part_layouts.addStretch()

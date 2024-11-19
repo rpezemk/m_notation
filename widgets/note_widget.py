@@ -6,7 +6,8 @@ from PyQt5.QtGui import QPainter, QColor
 from fonts.glyphs import Glyphs
 import fonts.loader
 from model.piece import Measure, Part
-from model.structure import Note
+from model.structure import Note, Rest
+from widgets.widget_utils import VisualNote
 
 class PartWidget(QWidget):
     def __init__(self, parent=None, flags=None):
@@ -26,7 +27,6 @@ class PartWidget(QWidget):
         left_layout = QVBoxLayout(self.left_area)
         left_layout.setContentsMargins(0, 0, 0, 0)
         left_layout.addWidget(self.label)
-        
         # Right area with StaffWidget
         self.staff_widget = StaffWidget(foreground=99)
         layout.addWidget(self.left_area)
@@ -53,29 +53,26 @@ class StaffWidget(QWidget):
         self.dark_gray = QColor(100, 100, 100)
         self.light_gray = QColor(140, 140, 140)
         self.measures = []
-        
-        w = 500
-        self.notes = [
-            (Note(random.randint(0, w), random.randint(0, 3)))
-            for _ in range(10)
-        ]
-        
+        self.measure_width = 100
+        self.clef_margin = 30
+        self.bar_left_margin = 15
+        self.bar_right_margin = 5
+        self.visual_notes = []
+
     def get_no_of_measures(self):
         return self.no_of_measures
     
     def set_bars(self, measures: list[Measure]):
-        self.notes = []
         self.measures = measures
-        for m in self.measures:
-            for n in m.children:
-                self.notes.append(n)
-        print(len(self.measures))
+
+
         
     def paintEvent(self, event):
         w = self.width()
         h = self.height()
         if w < 30 or h < 30:
             return
+        
         painter = QPainter(self)
         painter.setRenderHint(QPainter.Antialiasing, False)
         painter.setFont(self.bravura_font)
@@ -83,8 +80,9 @@ class StaffWidget(QWidget):
         self.draw_clef(painter) 
         self.draw_staff_lines(painter)
         self.draw_bar_lines(painter)
-        self.draw_all_notes(painter)
-            
+        self.calculate_vis_notes(painter)
+        self.draw_visual_notes(painter)
+        
         painter.end()
 
     def draw_clef(self, painter):
@@ -93,36 +91,99 @@ class StaffWidget(QWidget):
         text_rect = QRect(0, -23, 40, 200)
         painter.drawText(text_rect, Qt.AlignTop, Glyphs.G_Clef)
 
-    def draw_all_notes(self, painter):
-        for note in self.notes:
-            self.draw_note(painter, note)
+    def get_bar_line_offsets(self) -> list[int]:
+        av_space = self.width() - self.clef_margin
+        if av_space < 10:
+            return [0, 10]
+        self.measure_width = int(av_space/self.no_of_measures)
+        infos = []
+        for i in range(0, self.no_of_measures + 1):
+            infos.append(self.clef_margin + self.measure_width * i)
+        return infos
 
+    def get_inner_bar_segments(self):
+        l_mar = self.bar_left_margin
+        r_mar = self.bar_right_margin
+        infos = self.get_bar_line_offsets()
+        areas = [infos[idx:idx+2] for idx in range(0, len(infos)-1)]
+        areas = [[a[0] + l_mar, a[1] - r_mar] for a in areas]
+        return areas
+        
+    def calculate_vis_notes(self, painter):
+        bar_segments = self.get_inner_bar_segments()
+        self.visual_notes = []
+        for m_no, measure in enumerate(self.measures):
+            seg_start = bar_segments[m_no][0]
+            seg_end = bar_segments[m_no][1]
+            av_width = seg_end - seg_start
+            if av_width < 10:
+                return
+            x_start = seg_start
+            x_end = seg_end
+            b_w = x_end - x_start
+            for n_no, note in enumerate(measure.notes):
+                x_0 = x_start + int((n_no * b_w)/4)
+                if isinstance(note, Note):
+                    res_y = int( (-note.get_pitch() * self.line_spacing) / 2) + self.line_spacing * 8
+                    
+                    vis_note = VisualNote(note, (x_0, res_y))
+                    self.visual_notes.append(vis_note)
+                    
+                elif isinstance(note, Rest):
+                    res_y = int( (0) / 2) + self.line_spacing * 8
+                    vis_note = VisualNote(note, (x_0, res_y))
+                    self.visual_notes.append(vis_note)
+                    
+    def draw_visual_notes(self, painter):
+        for v_n in self.visual_notes:
+            if isinstance(v_n.inner_note, Note):
+                self.draw_note(painter, v_n)                
+            if isinstance(v_n.inner_note, Rest):                
+                self.draw_rest(painter, v_n)
+                
+    def get_staff_line_infos(self):
+        offsets = []
+        for i in range(0, 5):
+            offsets.append(self.staff_offset + i*self.line_spacing)
+        return offsets
+        
     def draw_staff_lines(self, painter):
         painter.setBrush(self.dark_gray)
         painter.setPen(self.dark_gray)
-        for i in range(0, 5):
-            painter.drawRect(QRect(0, self.staff_offset + i*self.line_spacing, self.width(), 1))
-
+        for y_offset in self.get_staff_line_infos():
+            painter.drawRect(QRect(0, y_offset, self.width(), 1))
 
     def draw_bar_lines(self, painter):
-        measure_width = int(self.width()/self.no_of_measures)
-        for i in range(0, self.no_of_measures + 1):
-            curr_x = measure_width * i
+        self.measure_width = int(self.width()/self.no_of_measures)
+        painter.drawRect(QRect(0, self.staff_offset, 1, 4*self.line_spacing))
+        for s in self.get_bar_line_offsets()[1:]:
+            curr_x = s
             painter.drawRect(QRect(curr_x, self.staff_offset, 1, 4*self.line_spacing))
-        
-    def draw_note(self, painter, note):
-        res_y = int( (-note.get_pitch() * self.line_spacing) / 2) + self.line_spacing * 8
+                    
+    def draw_note(self, painter, vis_note: VisualNote):
         painter.setPen(self.light_gray)
-        text_rect = QRect(note.time - self.note_size, res_y - self.note_size, self.note_size * 2, self.note_size * 2)
+        text_rect = QRect(vis_note.point[0] - self.note_size, vis_note.point[1] - self.note_size, self.note_size * 2, self.note_size * 2)
         painter.drawText(text_rect, Qt.AlignCenter, Glyphs.EighthNote) 
 
+    def draw_rest(self, painter, vis_note: VisualNote):
+        painter.setPen(self.light_gray)
+        text_rect = QRect(vis_note.point[0] - self.note_size, vis_note.point[1] - self.note_size, self.note_size * 2, self.note_size * 2)
+        painter.drawText(text_rect, Qt.AlignCenter, Glyphs.Rest_Eighth) 
 
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             click_pos = event.pos()
-            for note in self.notes:
-                x, y = (note.time, note.get_pitch())
+            for v_n in self.visual_notes:
+                x, y = (v_n.point[0], v_n.point[1])
                 if (x - click_pos.x())**2 + (y - click_pos.y())**2 <= (self.note_size // 2)**2:
-                    self.notes.remove(note)  
+                    m = v_n.inner_note.measure
+                    rest = Rest(0, m)
+                    inner_note_idx = m.notes.index(v_n.inner_note)
+                    m.notes[inner_note_idx] = rest
+                    idx = self.visual_notes.index(v_n)
+                    new_vis_note = VisualNote(rest, v_n.point)
+                    print(new_vis_note)
+                    print(new_vis_note.inner_note)
+                    self.visual_notes[idx] = new_vis_note
                     self.update()  
                     break  

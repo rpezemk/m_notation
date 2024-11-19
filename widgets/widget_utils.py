@@ -1,6 +1,8 @@
 from typing import Tuple
 from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QHBoxLayout, QPushButton
 
+from model.structure import Note
+
 def emit_score_view(parent_widget: QMainWindow = None, type = None) -> Tuple[QWidget, QVBoxLayout]:
     widget = QWidget(parent_widget)
     layout = type(widget)
@@ -34,3 +36,10 @@ def clear_layout(layout):
             sub_layout = item.layout()
             if sub_layout is not None:
                 clear_layout(sub_layout)
+                
+                
+class VisualNote():
+    def __init__(self, note: Note, point: Tuple[float, float]):
+        self.inner_note = note
+        self.point = point
+        pass
