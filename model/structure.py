@@ -18,9 +18,10 @@ class ChildOf():
         self.child_no = 0
         
 class ParentAndChild(ParentOf, ChildOf):
-    def __init__(self, children=None, parent=None):
+    def __init__(self, children=None, parent: ParentOf=None):
         self.children = [] if children is None else children
         self.parent=parent
+        self.parent.append_child(self)
     
     
 class TimeHolder(ChildOf):

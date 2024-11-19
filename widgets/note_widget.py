@@ -5,7 +5,7 @@ from PyQt5.QtGui import QPainter, QColor
 
 from fonts.glyphs import Glyphs
 import fonts.loader
-from model.piece import Part
+from model.piece import Measure, Part
 from model.structure import Note
 
 class PartWidget(QWidget):
@@ -52,15 +52,25 @@ class StaffWidget(QWidget):
         self.no_of_measures = 4
         self.dark_gray = QColor(100, 100, 100)
         self.light_gray = QColor(140, 140, 140)
+        self.measures = []
         
         w = 500
         self.notes = [
             (Note(random.randint(0, w), random.randint(0, 3)))
             for _ in range(10)
         ]
-
         
+    def get_no_of_measures(self):
+        return self.no_of_measures
     
+    def set_bars(self, measures: list[Measure]):
+        self.notes = []
+        self.measures = measures
+        for m in self.measures:
+            for n in m.children:
+                self.notes.append(n)
+        print(len(self.measures))
+        
     def paintEvent(self, event):
         w = self.width()
         h = self.height()
