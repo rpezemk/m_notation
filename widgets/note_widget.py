@@ -52,7 +52,7 @@ class StaffWidget(QWidget):
         self.measures = []
         self.measure_width = 100
         self.clef_margin = 30
-        self.bar_left_margin = 15
+        self.bar_left_margin = 25
         self.bar_right_margin = 5
         self.visual_notes = []
         self.y_offsets = None
