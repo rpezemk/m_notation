@@ -6,18 +6,18 @@ from model.duration import Duration
     
     
 class TimeHolder():
-    def __init__(self, duration: Duration = Duration.QUARTER, measure: 'Measure' = None):
+    def __init__(self, duration: Duration = None, measure: 'Measure' = None):
+        self.duration = duration if duration is not None else Duration.QUARTER
         self.measure = measure
-        self.duration = duration
     
 class Rest(TimeHolder):
-    def __init__(self, duration: Duration = Duration.QUARTER, measure: 'Measure' = None):
+    def __init__(self, duration: Duration = None, measure: 'Measure' = None):
+        self.duration = duration if duration is not None else Duration.QUARTER
         self.measure = measure
-        self.duration = duration
     
 class Note():
-    def __init__(self, time, pitch, duration = Duration.QUARTER, measure: 'Measure' = None):
-        self.duration = duration
+    def __init__(self, time, pitch, duration = None, measure: 'Measure' = None):
+        self.duration = duration if duration is not None else Duration.QUARTER
         self.measure = measure
         self.time = time
         self.__pitch = pitch
@@ -40,7 +40,7 @@ class Note():
             
 class Measure():
     def __init__(self, notes: list[Note]=None, parent=None):
-        self.notes = [] if notes is None else notes
+        self.time_holders = [] if notes is None else notes
 
 class Part():
     def __init__(self, measures: list[Measure]=None, piece=None):

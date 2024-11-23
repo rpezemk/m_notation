@@ -71,12 +71,17 @@ class Glyphs:
 
     BreathMark_Comma = "\uE4CE"
     BreathMark_Tick = "\uE4CF"
-
+    # +E247
+    
     Flag_EighthUp = "\uE240"
-    Flag_EighthDown = "\uE242"
-    Flag_SixteenthUp = "\uE244"
-    Flag_SixteenthDown = "\uE246"
-
+    Flag_EighthDown = "\uE241"
+    Flag_SixteenthUp = "\uE242"
+    Flag_SixteenthDown = "\uE243"
+    Flag_ThirtySecondUp = "\uE244"  # Thirty-second note flag (upward)
+    Flag_ThirtySecondDown = "\uE245" # Thirty-second note flag (downward)
+    Flag_SixtyFourthUp = "\uE246"   # Sixty-fourth note flag (upward)
+    Flag_SixtyFourthDown = "\uE247" # Sixty-fourth note flag (downward)
+    
     RepeatEnding1 = "\uE00D"
     RepeatEnding2 = "\uE00E"
 

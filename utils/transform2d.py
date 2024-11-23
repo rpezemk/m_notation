@@ -1,42 +1,30 @@
-import numpy as np
-
 class Transform2D:
-    def __init__(self):
-        self.matrix = np.eye(3)
+    def __init__(self, x = None, y = None):
+        self.x = x if x is not None else 0
+        self.y = y if y is not None else 0
 
-    def translate(self, dx, dy):
-        translation_matrix = np.array([
-            [1, 0, dx],
-            [0, 1, dy],
-            [0, 0, 1]
-        ])
-        self.matrix = self.matrix @ translation_matrix
+    
+    def __add__(a: 'Transform2D', b: 'Transform2D'):
+        return Transform2D(a.x + b.x, a.y + b.y)
+    def __sub__(a: 'Transform2D', b: 'Transform2D'):
+        return Transform2D(a.x - b.x, a.y - b.y)
+    
+    def __mul__(a: 'Transform2D', b: float):
+        return Transform2D(a.x * b, a.y * b)
+    
+    def __str__(self):
+        """User-friendly string for the object."""
+        return f"x={self.x}, y={self.y}"
 
-    def scale(self, sx, sy):
-        scaling_matrix = np.array([
-            [sx, 0, 0],
-            [0, sy, 0],
-            [0,  0, 1]
-        ])
-        self.matrix = self.matrix @ scaling_matrix
+    def __repr__(self):
+        """Developer-friendly string for the object."""
+        return f"x={self.x}, y={self.y}"
 
-    def rotate(self, angle_rad):
-        cos_a = np.cos(angle_rad)
-        sin_a = np.sin(angle_rad)
-        rotation_matrix = np.array([
-            [cos_a, -sin_a, 0],
-            [sin_a,  cos_a, 0],
-            [0,      0,     1]
-        ])
-        self.matrix = self.matrix @ rotation_matrix
 
-    def apply(self, points):
-        points_h = np.hstack([points, np.ones((len(points), 1))])
-        transformed_points = points_h @ self.matrix.T
-        return transformed_points[:, :2]
+t1 = Transform2D(10, 2)
 
-    def reset(self):
-        self.matrix = np.eye(3)
+t2 = Transform2D(20, 9)
 
-    def get_matrix(self):
-        return self.matrix
+t3 = t1 * 100
+
+print(t3)

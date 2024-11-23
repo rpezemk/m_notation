@@ -10,6 +10,8 @@ from model.structure import Note, Rest
 from widgets.widget_utils import VisualNote
 
 from widgets.painters.paint_manager import m_paint_visual
+from utils.space import get_single_ruler, map_to
+
 
 class PartWidget(QWidget):
     def __init__(self, parent=None, flags=None):
@@ -79,7 +81,8 @@ class StaffWidget(QWidget):
         self.calculate_vis_notes(painter)
         painter.setPen(self.light_gray)
         painter.setBrush(self.light_gray)
-        self.draw_visual_notes(painter)
+        for v_n in self.visual_notes:
+            m_paint_visual(painter, v_n)
         painter.end()
 
     def draw_clef(self, painter: QPainter):
@@ -95,7 +98,7 @@ class StaffWidget(QWidget):
     def calculate_vis_notes(self, painter: QPainter):
         bar_segments = self.get_y_segments()
         self.visual_notes = []
-        for m_no, measure in enumerate(self.measures):
+        for m_no, bar in enumerate(self.measures):
             seg_start = bar_segments[m_no][0]
             seg_end = bar_segments[m_no][1]
             av_width = seg_end - seg_start
@@ -104,26 +107,29 @@ class StaffWidget(QWidget):
             x_start = seg_start
             x_end = seg_end
             b_w = x_end - x_start
-            for n_no, note in enumerate(measure.notes):
-                x_0 = x_start + int((n_no * b_w)/4)
+            ruler = get_single_ruler(list([th.duration.to_beats for th in bar.time_holders]))
+            ruler = map_to(ruler, x_start, x_end)
+            
+            for idx, note in enumerate(bar.time_holders):
+                x_0 = int(ruler[idx])
                 if isinstance(note, Note):
                     res_y = int( (-note.get_pitch() * self.line_spacing) / 2) + self.line_spacing * 8
-                    
-                    vis_note = VisualNote(note, (x_0, res_y))
-                    self.visual_notes.append(vis_note)
-                    
                 elif isinstance(note, Rest):
                     res_y = int( (0) / 2) + self.line_spacing * 8
-                    vis_note = VisualNote(note, (x_0, res_y))
-                    self.visual_notes.append(vis_note)
                     
-    def draw_visual_notes(self, painter: QPainter):
-        for v_n in self.visual_notes:
-            if isinstance(v_n.inner_note, Note):
-                self.draw_note(painter, v_n)                
-            if isinstance(v_n.inner_note, Rest):                
-                self.draw_rest(painter, v_n)
-                
+                vis_note = VisualNote(note, (x_0, res_y))
+                self.visual_notes.append(vis_note)
+            
+            # for n_no, note in enumerate(bar.time_holders):
+            #     x_0 = x_start + int((n_no * b_w)/4)
+            #     if isinstance(note, Note):
+            #         res_y = int( (-note.get_pitch() * self.line_spacing) / 2) + self.line_spacing * 8
+            #     elif isinstance(note, Rest):
+            #         res_y = int( (0) / 2) + self.line_spacing * 8
+                    
+            #     vis_note = VisualNote(note, (x_0, res_y))
+            #     self.visual_notes.append(vis_note)
+                                    
     def draw_staff_lines(self, painter: QPainter):
         for y_offset in self.get_staff_line_infos():
             painter.drawRect(QRect(0, y_offset, self.width(), 1))
@@ -135,16 +141,6 @@ class StaffWidget(QWidget):
             curr_x = s
             painter.drawRect(QRect(curr_x, self.staff_offset, 1, 4*self.line_spacing))
                     
-    def draw_note(self, painter: QPainter, vis_note: VisualNote):
-        m_paint_visual(vis_note)
-        q_rect_args = vis_note.point[0] - self.note_size, vis_note.point[1] - self.note_size, self.note_size * 2, self.note_size * 2
-        painter.drawText(QRect(*q_rect_args), Qt.AlignCenter, Glyphs.EighthNote) 
-
-    def draw_rest(self, painter, vis_note: VisualNote):
-        m_paint_visual(vis_note)
-        text_rect = QRect(vis_note.point[0] - self.note_size, vis_note.point[1] - self.note_size, self.note_size * 2, self.note_size * 2)
-        painter.drawText(text_rect, Qt.AlignCenter, Glyphs.Rest_Eighth) 
-
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             click_pos = event.pos()
@@ -152,9 +148,9 @@ class StaffWidget(QWidget):
                 x, y = (v_n.point[0], v_n.point[1])
                 if (x - click_pos.x())**2 + (y - click_pos.y())**2 <= (self.note_size // 2)**2:
                     m = v_n.inner_note.measure
-                    rest = Rest(0, m)
-                    inner_note_idx = m.notes.index(v_n.inner_note)
-                    m.notes[inner_note_idx] = rest
+                    rest = Rest(duration=v_n.inner_note.duration, measure=m)
+                    inner_note_idx = m.time_holders.index(v_n.inner_note)
+                    m.time_holders[inner_note_idx] = rest
                     idx = self.visual_notes.index(v_n)
                     new_vis_note = VisualNote(rest, v_n.point)
                     print(new_vis_note)

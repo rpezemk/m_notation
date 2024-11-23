@@ -12,7 +12,7 @@ class Duration(Enum):
     SIXTY_FOURTH = "SixtyFourth"   # 1/64 of a whole note
 
     @property
-    def duration_in_beats(self):
+    def to_beats(self) -> float:
         """Returns the note duration in terms of whole note beats"""
         durations = {
             Duration.LONGA: 4,
@@ -27,6 +27,21 @@ class Duration(Enum):
         }
         return durations[self]
 
+    def get_all_durations():
+        all_durations = [
+            Duration.LONGA,
+            Duration.BREVE,
+            Duration.WHOLE,
+            Duration.HALF,
+            Duration.QUARTER,
+            Duration.EIGHTH,
+            Duration.SIXTEENTH,
+            Duration.THIRTY_SECOND,
+            Duration.SIXTY_FOURTH,
+        ]
+        return all_durations
+    
+    
 # Example usage:
 note = Duration.QUARTER
-print(f"Duration of {note.value} in beats: {note.duration_in_beats}")
+print(f"Duration of {note.value} in beats: {note.to_beats}")
