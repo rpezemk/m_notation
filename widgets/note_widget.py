@@ -106,7 +106,6 @@ class StaffWidget(QWidget):
                 return
             x_start = seg_start
             x_end = seg_end
-            b_w = x_end - x_start
             ruler = get_single_ruler(list([th.duration.to_beats for th in bar.time_holders]))
             ruler = map_to(ruler, x_start, x_end)
             
@@ -119,17 +118,7 @@ class StaffWidget(QWidget):
                     
                 vis_note = VisualNote(note, (x_0, res_y))
                 self.visual_notes.append(vis_note)
-            
-            # for n_no, note in enumerate(bar.time_holders):
-            #     x_0 = x_start + int((n_no * b_w)/4)
-            #     if isinstance(note, Note):
-            #         res_y = int( (-note.get_pitch() * self.line_spacing) / 2) + self.line_spacing * 8
-            #     elif isinstance(note, Rest):
-            #         res_y = int( (0) / 2) + self.line_spacing * 8
-                    
-            #     vis_note = VisualNote(note, (x_0, res_y))
-            #     self.visual_notes.append(vis_note)
-                                    
+                                                
     def draw_staff_lines(self, painter: QPainter):
         for y_offset in self.get_staff_line_infos():
             painter.drawRect(QRect(0, y_offset, self.width(), 1))
