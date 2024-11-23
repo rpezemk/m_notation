@@ -9,6 +9,8 @@ from model.piece import Measure, Part
 from model.structure import Note, Rest
 from widgets.widget_utils import VisualNote
 
+from widgets.painters.paint_manager import m_paint_visual
+
 class PartWidget(QWidget):
     def __init__(self, parent=None, flags=None):
         super().__init__(parent, flags or Qt.WindowFlags())
@@ -134,10 +136,12 @@ class StaffWidget(QWidget):
             painter.drawRect(QRect(curr_x, self.staff_offset, 1, 4*self.line_spacing))
                     
     def draw_note(self, painter: QPainter, vis_note: VisualNote):
+        m_paint_visual(vis_note)
         q_rect_args = vis_note.point[0] - self.note_size, vis_note.point[1] - self.note_size, self.note_size * 2, self.note_size * 2
         painter.drawText(QRect(*q_rect_args), Qt.AlignCenter, Glyphs.EighthNote) 
 
     def draw_rest(self, painter, vis_note: VisualNote):
+        m_paint_visual(vis_note)
         text_rect = QRect(vis_note.point[0] - self.note_size, vis_note.point[1] - self.note_size, self.note_size * 2, self.note_size * 2)
         painter.drawText(text_rect, Qt.AlignCenter, Glyphs.Rest_Eighth) 
 
