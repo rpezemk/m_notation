@@ -10,5 +10,7 @@ import model.piece
 if __name__ == "__main__":
     app = QApplication(sys.argv)
     window = MainWindow()
-    window.show()
+    window.showMaximized()
+    piece = model.piece.generate_sample_piece(4, 8)
+    window.load_piece(piece)
     sys.exit(app.exec_())
