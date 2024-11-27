@@ -14,6 +14,12 @@ class Rest(TimeHolder):
     def __init__(self, duration: Duration = None, measure: 'Measure' = None):
         self.duration = duration if duration is not None else Duration.QUARTER
         self.measure = measure
+
+class Triplet(TimeHolder):
+    def __init__(self, duration: Duration = None, measure: 'Measure' = None, notes: list[TimeHolder]=None, parent=None):
+        self.duration = duration if duration is not None else Duration.QUARTER
+        self.notes = notes if notes is not None else []
+        self.measure = measure
     
 class Note():
     def __init__(self, time, pitch, duration = None, measure: 'Measure' = None):
@@ -39,7 +45,7 @@ class Note():
           
             
 class Measure():
-    def __init__(self, notes: list[Note]=None, parent=None):
+    def __init__(self, notes: list[TimeHolder]=None, parent=None):
         self.time_holders = [] if notes is None else notes
 
 class Part():
