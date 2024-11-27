@@ -1,4 +1,4 @@
-from PyQt5.QtWidgets import QMainWindow, QHBoxLayout, QVBoxLayout, QWidget, QPushButton
+from PyQt5.QtWidgets import QWidget
 
 class MyCompound():
     def __init__(self, t: type):

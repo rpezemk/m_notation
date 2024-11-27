@@ -5,9 +5,9 @@ from PyQt5.QtGui import QPainter, QColor
 
 from fonts.glyphs import Glyphs
 import fonts.loader
-from model.piece import Measure, Part
+from model.piece import Measure
 from model.structure import Note, Rest
-from widgets.compound.stack_panels import HStack, VStack
+from widgets.compound.stack_panels import VStack
 from widgets.widget_utils import VisualNote
 
 from widgets.painters.paint_manager import m_paint_visual
@@ -128,17 +128,17 @@ class StaffWidget(QWidget):
             for v_n in self.visual_notes:
                 x, y = (v_n.point[0], v_n.point[1])
                 if (x - click_pos.x())**2 + (y - click_pos.y())**2 <= (self.note_size // 2)**2:
-                    m = v_n.inner_note.measure
-                    rest = Rest(duration=v_n.inner_note.duration, measure=m)
-                    inner_note_idx = m.time_holders.index(v_n.inner_note)
-                    m.time_holders[inner_note_idx] = rest
-                    idx = self.visual_notes.index(v_n)
-                    new_vis_note = VisualNote(rest, v_n.point)
-                    print(new_vis_note)
-                    print(new_vis_note.inner_note)
-                    self.visual_notes[idx] = new_vis_note
-                    self.update()  
-                    break  
+                    self.remove_note(v_n)  
+                    break 
+
+    def remove_note(self, v_n):
+        m = v_n.inner_note.measure
+        rest = Rest(duration=v_n.inner_note.duration, measure=m)
+        inner_note_idx = m.time_holders.index(v_n.inner_note)
+        m.time_holders[inner_note_idx] = rest
+        idx = self.visual_notes.index(v_n)
+        self.visual_notes[idx] = VisualNote(rest, v_n.point)
+        self.update() 
 
     def get_y_offsets(self) -> list[int]:
         av_space = self.width() - self.clef_margin

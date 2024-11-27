@@ -33,7 +33,7 @@ class MainWindow(MyStyledWindow):
                     .widget]
                 ).widget)
         
-        self.part_layouts = scores_stack.layout
+        self.stack_panel = scores_stack.layout
     
     def button_click(self):
         piece = model.piece.generate_sample_piece(4, 8)
@@ -45,18 +45,18 @@ class MainWindow(MyStyledWindow):
         super().resizeEvent(event)  
     
     def load_piece(self, piece: Piece):
-        w_utils.clear_layout(self.part_layouts)
+        w_utils.clear_layout(self.stack_panel)
         self.part_widgets.clear()
         
         for part in piece.parts:
             part_widget = PartWidget()
             part_widget.setFixedHeight(120)  
-            self.part_layouts.addWidget(part_widget)
+            self.stack_panel.addWidget(part_widget)
             self.part_widgets.append(part_widget)
             part_widget.staff_widget.set_bars(part.measures[:4])
             part_widget.staff_widget.update()
                 
-        self.part_layouts.addStretch()
-        self.part_layouts.parentWidget().update()
-        self.part_layouts.update()
+        self.stack_panel.addStretch()
+        self.stack_panel.parentWidget().update()
+        self.stack_panel.update()
         
