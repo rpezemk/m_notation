@@ -7,6 +7,7 @@ from fonts.glyphs import Glyphs
 import fonts.loader
 from model.piece import Measure, Part
 from model.structure import Note, Rest
+from widgets.compound.stack_panels import HStack, VStack
 from widgets.widget_utils import VisualNote
 
 from widgets.painters.paint_manager import m_paint_visual
@@ -17,37 +18,28 @@ class PartWidget(QWidget):
     def __init__(self, parent=None, flags=None):
         super().__init__(parent, flags or Qt.WindowFlags())
         
-        self.left_area_width = 100  # Fixed width for the left area
+        self.left_area_width = 100
         layout = QHBoxLayout(self)
-        self.setStyleSheet("background-color: lightblue; border: 1px solid black;")
+        
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
+
+        layout.addWidget(
+            VStack(margin=(0, 0, 0, 0), 
+                         children=[QLabel("Label")], 
+                         black_on_white=True)          \
+                  .fixed_width(self.left_area_width)   \
+                  .widget)
         
-        # Left area with a label
-        left_area = QWidget()
-        left_area.setFixedWidth(self.left_area_width)
-        left_area.setStyleSheet("background-color: lightgray; border-right: 1px solid black;")
-        label = QLabel("Label", left_area)
-        label.setAlignment(Qt.AlignCenter)
-        left_layout = QVBoxLayout(left_area)
-        left_layout.setContentsMargins(0, 0, 0, 0)
-        left_layout.addWidget(label)
-        
-        # Right area with StaffWidget
         self.staff_widget = StaffWidget(foreground=99)
-        layout.addWidget(left_area)
         layout.addWidget(self.staff_widget)
 
 class StaffWidget(QWidget):
     def __init__(self, foreground: int = 99):
         super().__init__()
         self.notes = []  
-        self.note_size = 120 
-        self.stem_height = 15  
-        self.flag_width = 7  
-        self.foreground = foreground        
+        self.note_size = 120    
         res, self.bravura_font = fonts.loader.try_get_music_font()
-        self.left_area_width = 100 
         self.line_spacing = 10
         self.staff_offset = 30
         self.no_of_measures = 4

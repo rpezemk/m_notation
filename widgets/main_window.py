@@ -1,50 +1,39 @@
 from PyQt5.QtWidgets import QMainWindow, QHBoxLayout, QVBoxLayout, QWidget, QPushButton
-from PyQt5.QtGui import QFont
+
 
 from model.piece import Piece
 import model.piece
+from widgets.compound.stack_panels import HStack, VStack
+from widgets.my_button import MyButton
 from widgets.note_widget import PartWidget
 import widgets.widget_utils as w_utils
 
 
-
-class MainWindow(QMainWindow):
+class MyStyledWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.part_widgets = []
         self.setWindowTitle("Stacked Panels")
         self.setStyleSheet("background-color: black;")
         
-        all_widget = QWidget()
-        all_layout = QVBoxLayout(all_widget)
-        top_button = QPushButton("top button")
-        top_button.setStyleSheet("color: white;")
-        font = QFont("Courier New") 
-        font.setStyleHint(QFont.Monospace)  
-        top_button.setFont(font)
-        top_button.clicked.connect(self.button_click)
-        top_button.setFixedHeight(30)
+class MainWindow(MyStyledWindow):
+    def __init__(self):
+        super().__init__()
+        self.part_widgets = []
+            
+        scores_stack = VStack().add_stretch()        
+        self.setCentralWidget(
+            VStack(children=[
+                    MyButton("top button", self.button_click), 
+                    HStack(children=[
+                            VStack().fixed_width(120), 
+                            scores_stack],
+                        spacing=0, 
+                        margin=(0, 0, 0, 0), 
+                        )
+                    .widget]
+                ).widget)
         
-        pane_and_scores_widget = QWidget()
-        pane_and_scores_widget.setStyleSheet("background-color: black;")
-        
-        pane_and_scores_layout =  QHBoxLayout(pane_and_scores_widget)
-        pane_and_scores_layout.setSpacing(0)
-        pane_and_scores_layout.setContentsMargins(0, 0, 0, 0)
-
-        left_pane_widget = QWidget()
-        left_pane_widget.setFixedWidth(120)  
-        
-        scores_widget = QWidget()
-        self.part_layouts = QVBoxLayout(scores_widget)
-        self.part_layouts.addStretch()
-                    
-        pane_and_scores_layout.addWidget(left_pane_widget)
-        pane_and_scores_layout.addWidget(scores_widget)
-        
-        all_layout.addWidget(top_button)
-        all_layout.addWidget(pane_and_scores_widget)        
-        self.setCentralWidget(all_widget)
+        self.part_layouts = scores_stack.layout
     
     def button_click(self):
         piece = model.piece.generate_sample_piece(4, 8)
