@@ -1,5 +1,4 @@
-import random
-from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLabel, QVBoxLayout
+from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLabel
 from PyQt5.QtCore import Qt, QRect
 from PyQt5.QtGui import QPainter, QColor
 
@@ -9,7 +8,6 @@ from model.piece import Measure
 from model.structure import Note, Rest
 from widgets.compound.stack_panels import VStack
 from widgets.widget_utils import VisualNote
-
 from widgets.painters.paint_manager import m_paint_visual
 from utils.space import get_single_ruler, map_to
 
@@ -17,19 +15,19 @@ from utils.space import get_single_ruler, map_to
 class PartWidget(QWidget):
     def __init__(self, parent=None, flags=None):
         super().__init__(parent, flags or Qt.WindowFlags())
-        
-        self.left_area_width = 100
+
         layout = QHBoxLayout(self)
         
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
 
         layout.addWidget(
-            VStack(margin=(0, 0, 0, 0), 
-                         children=[QLabel("Label")], 
-                         black_on_white=True)          \
-                  .fixed_width(self.left_area_width)   \
-                  .widget)
+            VStack(
+                margin=(0, 0, 0, 0), 
+                children=[QLabel("Label")], 
+                black_on_white=True,
+                fixed_width=100)
+            .widget)
         
         self.staff_widget = StaffWidget(foreground=99)
         layout.addWidget(self.staff_widget)
@@ -46,7 +44,6 @@ class StaffWidget(QWidget):
         self.dark_gray = QColor(100, 100, 100)
         self.light_gray = QColor(140, 140, 140)
         self.measures = []
-        self.measure_width = 100
         self.clef_margin = 30
         self.bar_left_margin = 25
         self.bar_right_margin = 5
@@ -59,18 +56,19 @@ class StaffWidget(QWidget):
     def paintEvent(self, event):
         if self.width() < 30 or self.height() < 30:
             return
+        self.y_offsets = self.get_x_offsets()
+        self.place_vis_notes()
         self.draw_content()
         
     def draw_content(self):
         painter = QPainter(self)
-        self.y_offsets = self.get_y_offsets()
         painter.setFont(self.bravura_font)
         painter.setPen(self.dark_gray)
         painter.setBrush(self.dark_gray)
+        
         self.draw_clef(painter) 
         self.draw_staff_lines(painter)
         self.draw_bar_lines(painter)
-        self.calculate_vis_notes(painter)
         painter.setPen(self.light_gray)
         painter.setBrush(self.light_gray)
         for v_n in self.visual_notes:
@@ -87,19 +85,16 @@ class StaffWidget(QWidget):
         areas_2 = [[a[0] + l_mar, a[1] - r_mar] for a in areas]
         return areas_2
         
-    def calculate_vis_notes(self, painter: QPainter):
+    def place_vis_notes(self):
         bar_segments = self.get_y_segments()
         self.visual_notes = []
         for m_no, bar in enumerate(self.measures):
             seg_start = bar_segments[m_no][0]
             seg_end = bar_segments[m_no][1]
-            av_width = seg_end - seg_start
-            if av_width < 10:
+            if seg_end - seg_start < 10:
                 return
-            x_start = seg_start
-            x_end = seg_end
             ruler = get_single_ruler(list([th.duration.to_beats for th in bar.time_holders]))
-            ruler = map_to(ruler, x_start, x_end)
+            ruler = map_to(ruler, seg_start, seg_end)
             
             for idx, note in enumerate(bar.time_holders):
                 x_0 = int(ruler[idx])
@@ -112,15 +107,13 @@ class StaffWidget(QWidget):
                 self.visual_notes.append(vis_note)
                                                 
     def draw_staff_lines(self, painter: QPainter):
-        for y_offset in self.get_staff_line_infos():
+        for y_offset in self.get_staff_line_offsets():
             painter.drawRect(QRect(0, y_offset, self.width(), 1))
 
     def draw_bar_lines(self, painter):
-        self.measure_width = int(self.width()/self.no_of_measures)
         painter.drawRect(QRect(0, self.staff_offset, 1, 4*self.line_spacing))
-        for s in self.y_offsets[1:]:
-            curr_x = s
-            painter.drawRect(QRect(curr_x, self.staff_offset, 1, 4*self.line_spacing))
+        for x in self.y_offsets[1:]:
+            painter.drawRect(QRect(x, self.staff_offset, 1, 4*self.line_spacing))
                     
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
@@ -140,17 +133,17 @@ class StaffWidget(QWidget):
         self.visual_notes[idx] = VisualNote(rest, v_n.point)
         self.update() 
 
-    def get_y_offsets(self) -> list[int]:
+    def get_x_offsets(self) -> list[int]:
         av_space = self.width() - self.clef_margin
         if av_space < 10:
             return [0, 10]
-        self.measure_width = int(av_space/self.no_of_measures)
+        measure_width = int(av_space/self.no_of_measures)
         infos = []
         for i in range(0, self.no_of_measures + 1):
-            infos.append(self.clef_margin + self.measure_width * i)
+            infos.append(self.clef_margin + measure_width * i)
         return infos
     
-    def get_staff_line_infos(self):
+    def get_staff_line_offsets(self):
         offsets = []
         for i in range(0, 5):
             offsets.append(self.staff_offset + i*self.line_spacing)

@@ -14,23 +14,23 @@ class MyStyledWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("Stacked Panels")
         self.setStyleSheet("background-color: black;")
-        
+
 class MainWindow(MyStyledWindow):
     def __init__(self):
         super().__init__()
         self.part_widgets = []
             
-        scores_stack = VStack().add_stretch()        
+        scores_stack = VStack(stretch=True)
         self.setCentralWidget(
-            VStack(children=[
+            VStack(
+                children=[
                     MyButton("top button", self.button_click), 
-                    HStack(children=[
-                            VStack().fixed_width(120), 
+                    HStack(
+                        children=[
+                            VStack(fixed_width=120), 
                             scores_stack],
                         spacing=0, 
-                        margin=(0, 0, 0, 0), 
-                        )
-                    .widget]
+                        margin=(0, 0, 0, 0))]
                 ).widget)
         
         self.stack_panel = scores_stack.layout
