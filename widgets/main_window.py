@@ -19,7 +19,12 @@ class MainWindow(MyStyledWindow):
     def __init__(self):
         super().__init__()
         self.part_widgets = []
-            
+        
+        left_pane_buttons = [
+                MyButton("CSOUND_TEST", self.button_click), 
+                MyButton("top button", self.button_click)
+            ]
+        
         scores_stack = VStack(stretch=True)
         self.setCentralWidget(
             VStack(
@@ -27,7 +32,9 @@ class MainWindow(MyStyledWindow):
                     MyButton("top button", self.button_click), 
                     HStack(
                         children=[
-                            VStack(fixed_width=120), 
+                            VStack(fixed_width=120, 
+                                   children=left_pane_buttons, 
+                                   stretch=True), 
                             scores_stack],
                         spacing=0, 
                         margin=(0, 0, 0, 0))]
@@ -59,4 +66,6 @@ class MainWindow(MyStyledWindow):
         self.stack_panel.addStretch()
         self.stack_panel.parentWidget().update()
         self.stack_panel.update()
+        
+    def csound_test(self):
         
