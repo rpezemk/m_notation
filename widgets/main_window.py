@@ -22,7 +22,7 @@ class MainWindow(MyStyledWindow):
         self.part_widgets = []
         
         left_pane_buttons = [
-                AsyncBlockingButton("CSOUND_TEST", self.csound_test), 
+                AsyncBlockingButton("CSOUND_START", run_example), 
                 GuiButton("top button", self.button_click)
             ]
         
@@ -40,7 +40,7 @@ class MainWindow(MyStyledWindow):
                         spacing=0, 
                         margin=(0, 0, 0, 0))]
                 ).widget)
-        # sdf
+
         self.stack_panel = scores_stack.layout
     
     def button_click(self):
@@ -68,6 +68,6 @@ class MainWindow(MyStyledWindow):
         self.stack_panel.parentWidget().update()
         self.stack_panel.update()
         
-    def csound_test(self):
+    def csound_start(self):
         t1 = threading.Thread(target=run_example, args=[])
         t1.start()
