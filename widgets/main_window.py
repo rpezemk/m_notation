@@ -68,4 +68,4 @@ class MainWindow(MyStyledWindow):
         self.stack_panel.update()
         
     def csound_test(self):
-        
+        pass
