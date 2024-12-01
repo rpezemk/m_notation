@@ -8,7 +8,7 @@ from widgets.compound.stack_panels import HStack, VStack
 from widgets.my_button import AsyncBlockingButton, GuiButton
 from widgets.note_widget import PartWidget
 import widgets.widget_utils as w_utils
-from csound_tweaking.examples.csound_py_test import run_example
+from csound_tweaking.examples.csound_py_test import run_example_start_CSOUND
 
 class MyStyledWindow(QMainWindow):
     def __init__(self):
@@ -22,7 +22,7 @@ class MainWindow(MyStyledWindow):
         self.part_widgets = []
         
         left_pane_buttons = [
-                AsyncBlockingButton("CSOUND_START", run_example), 
+                AsyncBlockingButton("CSOUND_START", run_example_start_CSOUND), 
                 GuiButton("top button", self.button_click)
             ]
         
@@ -69,5 +69,5 @@ class MainWindow(MyStyledWindow):
         self.stack_panel.update()
         
     def csound_start(self):
-        t1 = threading.Thread(target=run_example, args=[])
+        t1 = threading.Thread(target=run_example_start_CSOUND, args=[])
         t1.start()

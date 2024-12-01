@@ -15,7 +15,7 @@ def try_save_in_temp(content: str):
         # Write the string to the file
         file.write(content)
     
-def run_example():
+def run_example_start_CSOUND():
     csd_file = "/home/przemek/n_commander/csound_tweaking/instruments/test_instrument.csd"
     with open(csd_file, 'r') as file:
         generated_content = file.read()
