@@ -1,3 +1,4 @@
+import threading
 from PyQt5.QtWidgets import QMainWindow
 
 
@@ -7,7 +8,7 @@ from widgets.compound.stack_panels import HStack, VStack
 from widgets.my_button import MyButton
 from widgets.note_widget import PartWidget
 import widgets.widget_utils as w_utils
-
+from csound_tweaking.examples.csound_py_test import run_example
 
 class MyStyledWindow(QMainWindow):
     def __init__(self):
@@ -21,7 +22,7 @@ class MainWindow(MyStyledWindow):
         self.part_widgets = []
         
         left_pane_buttons = [
-                MyButton("CSOUND_TEST", self.button_click), 
+                MyButton("CSOUND_TEST", self.csound_test), 
                 MyButton("top button", self.button_click)
             ]
         
@@ -68,4 +69,5 @@ class MainWindow(MyStyledWindow):
         self.stack_panel.update()
         
     def csound_test(self):
-        pass
+        t1 = threading.Thread(target=run_example, args=[])
+        t1.start()
