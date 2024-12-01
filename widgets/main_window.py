@@ -1,3 +1,4 @@
+import threading
 from PyQt5.QtWidgets import QMainWindow
 
 
@@ -21,8 +22,8 @@ class MainWindow(MyStyledWindow):
         self.part_widgets = []
         
         left_pane_buttons = [
-                AsyncBlockingButton("CSOUND_TEST", self.csound_test), 
-                AsyncBlockingButton("top button", self.button_click)
+                MyButton("CSOUND_TEST", self.button_click), 
+                MyButton("top button", self.button_click)
             ]
         
         scores_stack = VStack(stretch=True)
@@ -39,7 +40,7 @@ class MainWindow(MyStyledWindow):
                         spacing=0, 
                         margin=(0, 0, 0, 0))]
                 ).widget)
-        
+        # sdf
         self.stack_panel = scores_stack.layout
     
     def button_click(self):
@@ -68,4 +69,5 @@ class MainWindow(MyStyledWindow):
         self.stack_panel.update()
         
     def csound_test(self):
-        run_example()
+        t1 = threading.Thread(target=run_example, args=[])
+        t1.start()
