@@ -39,7 +39,7 @@ class MainWindow(MyStyledWindow):
                         spacing=0, 
                         margin=(0, 0, 0, 0))]
                 ).widget)
-        
+        # sdf
         self.stack_panel = scores_stack.layout
     
     def button_click(self):
