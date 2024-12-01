@@ -5,7 +5,7 @@ from PyQt5.QtWidgets import QMainWindow
 from model.piece import Piece
 import model.piece
 from widgets.compound.stack_panels import HStack, VStack
-from widgets.my_button import AsyncBlockingButton
+from widgets.my_button import AsyncBlockingButton, GuiButton
 from widgets.note_widget import PartWidget
 import widgets.widget_utils as w_utils
 from csound_tweaking.examples.csound_py_test import run_example
@@ -22,15 +22,15 @@ class MainWindow(MyStyledWindow):
         self.part_widgets = []
         
         left_pane_buttons = [
-                MyButton("CSOUND_TEST", self.button_click), 
-                MyButton("top button", self.button_click)
+                AsyncBlockingButton("CSOUND_TEST", self.csound_test), 
+                GuiButton("top button", self.button_click)
             ]
         
         scores_stack = VStack(stretch=True)
         self.setCentralWidget(
             VStack(
                 children=[
-                    AsyncBlockingButton("top button", self.button_click), 
+                    GuiButton("top button", self.button_click), 
                     HStack(
                         children=[
                             VStack(fixed_width=120, 
