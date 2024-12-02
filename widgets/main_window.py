@@ -12,6 +12,10 @@ from widgets.note_widget import PartWidget
 from widgets.text_box import TextBox, Label
 import widgets.widget_utils as w_utils
 from csound_tests.test_methods import quit_csound, run_example_start_CSOUND
+from utils.logger import Log, MLogger
+    
+    
+
 
 class MyStyledWindow(QMainWindow):
     def __init__(self):
@@ -19,9 +23,12 @@ class MyStyledWindow(QMainWindow):
         self.setWindowTitle("Stacked Panels")
         self.setStyleSheet("background-color: black;")
 
+        
 class MainWindow(MyStyledWindow):
     def __init__(self):
         super().__init__()
+        global Log
+        Log = MLogger(lambda msg: self.label.append_log(msg))
         self.part_widgets = []
         self.label = TextBox(read_only=True)
         self.label.setFixedHeight(40)
@@ -89,4 +96,4 @@ class MainWindow(MyStyledWindow):
         else:
             msg = f"Key: {event.text()}"
             
-        self.label.append_log(msg)
+        Log.log(msg)
