@@ -13,7 +13,7 @@ from widgets.text_box import TextBox, Label
 import widgets.widget_utils as w_utils
 from csound_tests.test_methods import quit_csound, run_example_start_CSOUND
 from utils.logger import Log, MLogger
-    
+from utils.kbd_resolver import KbdResolver    
     
 
 
@@ -27,12 +27,14 @@ class MyStyledWindow(QMainWindow):
 class MainWindow(MyStyledWindow):
     def __init__(self):
         super().__init__()
+        self.kbd_resolver = KbdResolver()
+        
         global Log
-        Log = MLogger(lambda msg: self.label.append_log(msg))
+        Log = MLogger(lambda msg: self.status_bar.append_log(msg))
         self.part_widgets = []
-        self.label = TextBox(read_only=True)
-        self.label.setFixedHeight(40)
-        self.label.setStyleSheet("color: white;")
+        self.status_bar = TextBox(read_only=True)
+        self.status_bar.setFixedHeight(80)
+        self.status_bar.setStyleSheet("color: white;")
         left_pane_buttons = [
                 AsyncBlockingButton("CSOUND START", run_example_start_CSOUND), 
                 AsyncBlockingButton("CSOUND STOP", quit_csound)
@@ -51,7 +53,7 @@ class MainWindow(MyStyledWindow):
                         spacing=0, 
                         margin=(0, 0, 0, 0)),
                     Stretch(),
-                    self.label]
+                    self.status_bar]
                 )
         self.setCentralWidget(central_v_stack.widget)
 
@@ -87,13 +89,17 @@ class MainWindow(MyStyledWindow):
         t1.start()
     
     def keyPressEvent(self, event: QKeyEvent):
-        msg = ""
-        if event.key() == Qt.Key_S and event.modifiers() == Qt.ControlModifier:
-            msg = "Ctrl+S detected!"
-        elif event.key() == Qt.Key_Q and event.modifiers() == Qt.ControlModifier:
-            msg = "Ctrl+Q detected!"
-            QApplication.quit()
-        else:
-            msg = f"Key: {event.text()}"
-            
-        Log.log(msg)
+        res, keys = self.kbd_resolver.try_resolve_new_kbd_press(event)
+        self.report_kbd(res, keys, "press:")
+
+        
+    def keyReleaseEvent(self, event: QKeyEvent):
+        res, keys = self.kbd_resolver.try_resolve_new_kbd_release(event)
+        self.report_kbd(res, keys, "rel:  ")
+    
+    def report_kbd(self, res, keys, op_name):
+        ms = [str(k) for k in keys]
+        msg =  op_name + ", ".join(ms) 
+        if res:
+            Log.log(msg)
+        
