@@ -16,7 +16,10 @@ class HStack(MyCompound):
                          children=children, 
                          stretch=stretch, 
                          black_on_white=black_on_white)
-
+    def add_stretch(self, Stretch):
+        self.widget.setfi
+        ...
+        
 class VStack(MyCompound):
     def __init__(self, 
                  margin: tuple|list = None, 
@@ -33,4 +36,7 @@ class VStack(MyCompound):
                          black_on_white=black_on_white)
         if fixed_width >= 0:
             self.widget.setFixedWidth(fixed_width)  
-            
+    
+    def add_stretch(self, Stretch):
+        ...
+        

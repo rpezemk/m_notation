@@ -10,7 +10,7 @@ from widgets.compound.stack_panels import VStack
 from widgets.widget_utils import VisualNote
 from widgets.painters.paint_manager import m_paint_visual
 from utils.space import get_single_ruler, map_to
-
+from widgets.text_box import TextBox, Label
 
 class PartWidget(QWidget):
     def __init__(self, parent=None, flags=None):
@@ -20,12 +20,12 @@ class PartWidget(QWidget):
         
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
-
+        self.setStyleSheet("color: white; background-color: black;")
         layout.addWidget(
             VStack(
                 margin=(0, 0, 0, 0), 
-                children=[QLabel("Label")], 
-                black_on_white=True,
+                children=[Label("Label")], 
+                black_on_white=False,
                 fixed_width=100)
             .widget)
         
