@@ -9,10 +9,6 @@ my_set = [Qt.Key_Control, Qt.Key_Shift, Qt.Key_Alt]
 class KbdResolver():
     def __init__(self):
         self.curr_keys = []
-
-    def is_machine_time(self, t1, t2):
-        diff = t1 - t2
-        return abs(diff) < 0.01
     
     def try_resolve_new_kbd_press(self, event: QKeyEvent):
         key = event.key()  
