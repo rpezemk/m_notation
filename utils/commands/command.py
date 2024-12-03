@@ -1,7 +1,7 @@
 from typing import Any, Callable
 from PyQt5.QtCore import Qt
 
-class MCmd():
+class SingleCmd():
     def __init__(self, name: str, keys: list[Qt.Key|str|Qt.MouseButton], func: Callable[[Any], Any]):
         self.name = name, 
         self.func = func

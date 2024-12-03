@@ -13,7 +13,7 @@ from widgets.text_box import TextBox, Label
 import widgets.widget_utils as w_utils
 from csound_tests.test_methods import quit_csound, run_example_start_CSOUND
 from utils.logger import Log, MLogger
-from utils.kbd_resolver import KbdResolver    
+from utils.commands.kbd_resolver import KbdResolver    
     
 
 
