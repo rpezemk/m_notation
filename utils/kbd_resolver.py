@@ -1,10 +1,5 @@
-import time
-from typing import Any, Callable, Tuple
-from PyQt5.QtWidgets import QApplication 
 from PyQt5.QtGui import QKeyEvent
 from PyQt5.QtCore import Qt
-from PyQt5.QtGui import QKeySequence
-my_set = [Qt.Key_Control, Qt.Key_Shift, Qt.Key_Alt]
 
 class KbdResolver():
     def __init__(self):
