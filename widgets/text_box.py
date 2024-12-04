@@ -14,13 +14,13 @@ class TextBox(QTextEdit):
             self.setReadOnly(True)
             
     def append_text(self, txt: str = ""):
-        self.txt += txt
+        self.txt += f"{txt}"
         self.setText(self.txt)  
         self.moveCursor(self.textCursor().End)
         self.ensureCursorVisible()
         
     def append_log(self, txt: str = ""):
-        self.txt += "\n" + txt
+        self.txt += f"\n{txt}"
         self.setText(self.txt)
         self.moveCursor(self.textCursor().End)
         self.ensureCursorVisible()

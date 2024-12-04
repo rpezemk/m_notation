@@ -1,7 +1,7 @@
 import threading
 from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QTextEdit
 from PyQt5.QtGui import QKeyEvent
-from PyQt5.QtCore import Qt
+
 
 from model.piece import Piece
 import model.piece
@@ -14,7 +14,7 @@ import widgets.widget_utils as w_utils
 from csound_tests.test_methods import quit_csound, run_example_start_CSOUND
 from utils.logger import Log, MLogger
 from utils.commands.kbd_resolver import KbdResolver    
-    
+from widgets.cmd_wiring import my_wirings
 
 
 class MyStyledWindow(QMainWindow):
@@ -22,19 +22,21 @@ class MyStyledWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("Stacked Panels")
         self.setStyleSheet("background-color: black;")
+        
 
         
 class MainWindow(MyStyledWindow):
     def __init__(self):
         super().__init__()
-        self.kbd_resolver = KbdResolver()
-        
         global Log
-        Log = MLogger(lambda msg: self.status_bar.append_log(msg))
+        
         self.part_widgets = []
         self.status_bar = TextBox(read_only=True)
-        self.status_bar.setFixedHeight(80)
+        self.status_bar.setFixedHeight(200)
         self.status_bar.setStyleSheet("color: white;")
+        Log = MLogger(lambda msg: self.status_bar.append_log(msg))
+        self.kbd_resolver = KbdResolver(my_wirings, lambda s: Log.log(s))
+        
         left_pane_buttons = [
                 AsyncBlockingButton("CSOUND START", run_example_start_CSOUND), 
                 AsyncBlockingButton("CSOUND STOP", quit_csound)
@@ -89,17 +91,9 @@ class MainWindow(MyStyledWindow):
         t1.start()
     
     def keyPressEvent(self, event: QKeyEvent):
-        res, keys = self.kbd_resolver.try_resolve_new_kbd_press(event)
-        self.report_kbd(res, keys, "press:")
+        self.kbd_resolver.accept_press(event.key(), event.isAutoRepeat())
 
         
     def keyReleaseEvent(self, event: QKeyEvent):
-        res, keys = self.kbd_resolver.try_resolve_new_kbd_release(event)
-        self.report_kbd(res, keys, "rel:  ")
+        self.kbd_resolver.accept_release(event.key(), event.isAutoRepeat())
     
-    def report_kbd(self, res, keys, op_name):
-        ms = [str(k) for k in keys]
-        msg =  op_name + ", ".join(ms) 
-        if res:
-            Log.log(msg)
-        
