@@ -78,6 +78,29 @@ gihandle OSCinit 8002
     endin
 
 
+    ; I_NAME: HEARTBEAT 
+    ; INSTR_NO: 9999 
+    instr 9999
+
+            ktime init 0
+            kvalue init 0
+
+            ; Toggle the value between 0 and 1
+            if ktime > 1 then
+                kvalue = 1
+                ktime = 0
+            else
+                kvalue = 0
+            endif
+
+            OSCsend 1, "", 8012, "/heartbeat", "i", 1
+
+            ; Increment time counter
+            ktime = ktime + 0.01
+        
+    endin
+
+
 ;  EO INSTRUMENTS
 </CsInstruments>
 <CsScore>
@@ -90,6 +113,9 @@ gihandle OSCinit 8002
   
   ; ################# INSTR_NO: 9997 ####################
   i 9997   0  7200 ;
+  
+  ; ################# INSTR_NO: 9999 ####################
+  i 9999   0  7200 ;
   
 </CsScore>
 </CsoundSynthesizer>

@@ -70,3 +70,29 @@ class TestInstr(CsdInstrument):
         """
         
         self.eternal_events = [{"p1":0, "p2":max_time}]
+        
+        
+class CsHeartBeatToPy(CsdInstrument):
+    def __init__(self, freq:int, port:int, **kwargs):
+        super().__init__(**kwargs)
+        self.freq = freq
+        self.port = port
+        
+        self.body_str = f"""
+            ktime init 0
+            kvalue init 0
+
+            ; Toggle the value between 0 and 1
+            if ktime > 1 then
+                kvalue = 0
+            else
+                kvalue = 1
+            endif
+
+            OSCsend 1, "", {self.port}, "/heartbeat", "i", 1
+
+            ; Increment time counter
+            ktime = ktime + 0.01
+        """
+        
+        self.eternal_events = [{"p1":0, "p2":max_time}]
