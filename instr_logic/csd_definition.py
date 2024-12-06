@@ -21,8 +21,7 @@ def get_built_instrument():
             "nchnls = 2",
             "0dbfs = 1",
     ]
-
-
+    
     events = [
         {
             "i_no":i.i_no,
@@ -33,7 +32,6 @@ def get_built_instrument():
         if len(i.eternal_events) > 0]
 
     global_variables = [osc_handle]
-        
     
     numbered_instruments = [{"i_no":i.i_no, "i_name":i.i_name, "body":i.body_str} for idx, i in enumerate(instruments)]
     
