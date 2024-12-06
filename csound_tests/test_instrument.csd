@@ -43,7 +43,7 @@ gihandle OSCinit 8002
         km  OSClisten gihandle, "/metro", "if", kino, kfdur
         if (km != 0) then
             printks "QUITTING\n", 0
-            event "i", 7, 0, kfdur
+            event "i", kino, 0, kfdur
         endif
 
     endin
