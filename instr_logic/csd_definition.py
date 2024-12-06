@@ -1,4 +1,4 @@
-from cs_generator.exit_instr import ExitInstr, OscMetro, OscPanic, BeepInstr, TestInstr, CsdInstrument, OscHandle
+from cs_generator.simple_instruments import OscHandle, ExitInstr, TestInstr, OscMetro, CsdInstrument, BeepInstr, OscPanic
 from cs_generator.templates import get_whole_body
 from instr_logic.csd_instr_numbers import panic_i_no, beep_i_no, py_to_cs_port
 
