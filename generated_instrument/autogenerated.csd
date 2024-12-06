@@ -84,19 +84,13 @@ gihandle OSCinit 8002
 
             ktime init 0
             kvalue init 0
-
-            ; Toggle the value between 0 and 1
-            if ktime > 1 then
-                kvalue = 1
-                ktime = 0
-            else
-                kvalue = 0
+            ktrig metro 5
+            kprevTrig init 0
+            if ktrig == 1 && kprevTrig == 0 then
+                kvalue = 1 - kvalue
             endif
-
-            OSCsend 1, "", 8012, "/heartbeat", "i", 1
-
-            ; Increment time counter
-            ktime = ktime + 0.01
+            OSCsend kvalue, "", 8012, "/heartbeat", "i", kvalue
+            kprevTrig = ktrig
         
     endin
 

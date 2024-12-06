@@ -81,18 +81,13 @@ class CsHeartBeatToPy(CsdInstrument):
         self.body_str = f"""
             ktime init 0
             kvalue init 0
-
-            ; Toggle the value between 0 and 1
-            if ktime > 1 then
-                kvalue = 0
-            else
-                kvalue = 1
+            ktrig metro {self.freq}
+            kprevTrig init 0
+            if ktrig == 1 && kprevTrig == 0 then
+                kvalue = 1 - kvalue
             endif
-
-            OSCsend 1, "", {self.port}, "/heartbeat", "i", 1
-
-            ; Increment time counter
-            ktime = ktime + 0.01
+            OSCsend kvalue, "", {self.port}, "/heartbeat", "i", kvalue
+            kprevTrig = ktrig
         """
         
         self.eternal_events = [{"p1":0, "p2":max_time}]

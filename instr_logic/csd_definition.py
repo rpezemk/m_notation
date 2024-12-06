@@ -12,7 +12,7 @@ def get_built_instrument():
         panic_instr,
         OscMetroReceive(osc_handle, i_no=7, i_name="OSC_METRO"),
         OscPanicReceive(osc_handle, panic_i_no, i_no=9997, i_name="OSC_PANIC"),
-        CsHeartBeatToPy(1, cs_to_py_port, i_no=9999, i_name="HEARTBEAT"),
+        CsHeartBeatToPy(5, cs_to_py_port, i_no=9999, i_name="HEARTBEAT"),
         ]
     options = ["-odac"]
 
