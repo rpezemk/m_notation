@@ -25,8 +25,6 @@ def try_save_in_temp(content: str):
         # Write the string to the file
         file.write(content)
     
-
-    
 def start_CSOUND():
     csd_file = "./csound_tests/test_instrument.csd"
     with open(csd_file, 'r') as file:
@@ -34,8 +32,6 @@ def start_CSOUND():
         try_save_in_temp(generated_content)
     process = subprocess.Popen(["csound", path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = process.communicate()
-
-
 
 
 def quit_csound_nonsense():
@@ -59,7 +55,7 @@ def quit_csound():
 
 def beep():
     try:
-        client.send_message("/metro", [7, 0.1]) 
+        client.send_message("/metro", [7, 0.03]) 
     except KeyboardInterrupt:
         print("Something went wrong")
     
