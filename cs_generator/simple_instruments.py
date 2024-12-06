@@ -19,7 +19,7 @@ class ExitInstr(CsdInstrument):
         exitnow;
         """
 
-class OscPanic(CsdInstrument):
+class OscPanicReceive(CsdInstrument):
     def __init__(self, osc_handle:OscHandle, panic_i_no, **kwargs):
         super().__init__(**kwargs)
         self.global_variables.append(osc_handle)
@@ -34,7 +34,7 @@ class OscPanic(CsdInstrument):
     
     
 
-class OscMetro(CsdInstrument):
+class OscMetroReceive(CsdInstrument):
     def __init__(self, osc_handle:OscHandle, **kwargs):
         super().__init__(**kwargs)
         self.global_variables.append(osc_handle)
