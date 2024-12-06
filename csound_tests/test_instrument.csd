@@ -24,6 +24,11 @@ gihandle OSCinit 8002
         exitnow  ; 
     endin
 
+    instr 7
+        a1 oscili 0.5, 4*440
+        outs 0.1*a1, 0.1*a1
+    endin
+
     instr   1199
         kf1 init 0
         kk  OSClisten gihandle, "/panic", ""
@@ -31,16 +36,16 @@ gihandle OSCinit 8002
             printks "QUITTING\n", 0
             event "i", 2, 0, p3
         endif
-    endin
 
-    instr   2099
-        kf1 init 0
-        kf2 init 0
-        kk  OSClisten gihandle, "/panic", "ff", kf1, kf2
-        if (kk != 0) then
+        kino init 0
+        kfdur init 0.1
+
+        km  OSClisten gihandle, "/metro", "if", kino, kfdur
+        if (km != 0) then
             printks "QUITTING\n", 0
-            event "i", 2, 0, p3
+            event "i", 7, 0, kfdur
         endif
+
     endin
 
 </CsInstruments>

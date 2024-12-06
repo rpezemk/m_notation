@@ -11,7 +11,7 @@ from widgets.my_button import AsyncBlockingButton, GuiButton
 from widgets.note_widget import PartWidget
 from widgets.text_box import TextBox, Label
 import widgets.widget_utils as w_utils
-from csound_tests.test_methods import quit_csound, run_example_start_CSOUND
+from csound_tests.test_methods import quit_csound, start_CSOUND, beep
 from utils.logger import Log, MLogger
 from utils.commands.kbd_resolver import KbdResolver    
 from widgets.cmd_wiring import my_wirings
@@ -38,7 +38,8 @@ class MainWindow(MyStyledWindow):
         self.kbd_resolver = KbdResolver(my_wirings, lambda s: Log.log(s))
         
         left_pane_buttons = [
-                AsyncBlockingButton("CSOUND START", run_example_start_CSOUND), 
+                AsyncBlockingButton("CSOUND START", start_CSOUND), 
+                AsyncBlockingButton("beep", beep), 
                 AsyncBlockingButton("CSOUND STOP", quit_csound)
                 ]
         
@@ -88,7 +89,7 @@ class MainWindow(MyStyledWindow):
         self.stack_panel.update()
         
     def csound_start(self):
-        t1 = threading.Thread(target=run_example_start_CSOUND, args=[])
+        t1 = threading.Thread(target=start_CSOUND, args=[])
         t1.start()
     
     def keyPressEvent(self, event: QKeyEvent):

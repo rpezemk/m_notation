@@ -25,9 +25,9 @@ def try_save_in_temp(content: str):
         # Write the string to the file
         file.write(content)
     
+
     
-    
-def run_example_start_CSOUND():
+def start_CSOUND():
     csd_file = "./csound_tests/test_instrument.csd"
     with open(csd_file, 'r') as file:
         generated_content = file.read()
@@ -57,4 +57,10 @@ def quit_csound():
         print("Something went wrong")
 
 
+def beep():
+    try:
+        client.send_message("/metro", [7, 0.1]) 
+    except KeyboardInterrupt:
+        print("Something went wrong")
+    
 
