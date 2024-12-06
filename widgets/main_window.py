@@ -23,8 +23,9 @@ class MyStyledWindow(QMainWindow):
         self.setWindowTitle("Stacked Panels")
         self.setStyleSheet("background-color: black;")
         
-
-        
+    def closeEvent(self, event):
+            quit_csound()
+            
 class MainWindow(MyStyledWindow):
     def __init__(self):
         super().__init__()
