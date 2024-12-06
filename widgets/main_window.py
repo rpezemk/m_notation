@@ -66,6 +66,7 @@ class MainWindow(MyStyledWindow):
         self.load_piece(piece)
         
     def resizeEvent(self, event):
+        self.kbd_resolver.clear()
         size = event.size()  
         self.setWindowTitle(f"Window resized to: {size.width()} x {size.height()}")
         super().resizeEvent(event)  

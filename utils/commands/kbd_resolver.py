@@ -4,6 +4,12 @@ from PyQt5.QtCore import Qt
 from utils.commands.command import CompoundCommand, SubCmdState
 from typing import Callable
 
+modifiers = [Qt.Key_Shift, Qt.Key_Control, Qt.Key_Alt, Qt.Key_Meta]
+
+def is_modifier(key: int):
+    res = key in modifiers
+    return res
+
 class CmdState(Enum):
     ResetNoAction = 0
     CmdFired = 1
@@ -99,30 +105,42 @@ class KbdResolver():
         self.notify_func = notify_func
         self.state = None
         self.automaton = Automaton(commands, notify_func)
-        self.keys = set()
-        self.accept_token(KbdOption.PRESS, [16777249, 84])
-        self.accept_token(KbdOption.PRESS, [16777249, 88])
+        self.curr_keys = set()
+        self.curr_modifiers = set()
+        self.prev_keys = set()
+        self.accept_press(16777249)
+        self.accept_press(84)
+        self.accept_press(16777249)
+        self.accept_press(88)
+        
+    def clear(self):
+        self.curr_keys = set()
+        self.automaton.reset()
         
     def accept_token(self, option: KbdOption, keys: list[int]):
-        if self.automaton.try_resolve(keys):
-            self.keys = set()
-            self.notify_func(f"resolved some")
-            self.notify_func(f"{self.automaton}")
-            return 
-        self.notify_func("not resolved")
-        self.notify_func(f"{self.automaton}")
+        ...
         
-    def accept_press(self, key: int, autorepeat: bool):
+        success = self.automaton.try_resolve(keys)
+        if success:
+            print("success")
+        
+    def accept_press(self, key: int, autorepeat: bool = False):
         if autorepeat:
             return
-        if key not in self.keys:
-            self.keys.add(key)
-        self.accept_token(KbdOption.PRESS, self.keys)
+        if key not in self.curr_keys: 
+            self.curr_keys.add(key)
+            self.notify_func(f"added: {key}")
         
-    def accept_release(self, key: int, autorepeat: bool):
+        if is_modifier(key):
+            return
+        
+        self.accept_token(KbdOption.PRESS, self.curr_keys)     
+            
+    def accept_release(self, key: int, autorepeat: bool = False):
         if autorepeat:
             return
-        if key in self.keys:
-            self.keys.remove(key)
-        # self.accept_token(KbdOption.RELEASE, self.keys)
+        
+        if key in self.curr_keys: 
+            self.curr_keys.remove(key)
+            self.notify_func(f"removed: {key}")
         
