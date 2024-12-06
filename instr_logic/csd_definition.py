@@ -1,11 +1,9 @@
-from cs_generator.basic.exit_instr import ExitInstr, OscMetro, OscPanic, BeepInstr, TestInstr, CsdInstrument, OscHandle
-from cs_generator.basic.templates import get_whole_body
-from instr_logic.csd_instr_numbers import panic_i_no, beep_i_no
-
-
+from cs_generator.exit_instr import ExitInstr, OscMetro, OscPanic, BeepInstr, TestInstr, CsdInstrument, OscHandle
+from cs_generator.templates import get_whole_body
+from instr_logic.csd_instr_numbers import panic_i_no, beep_i_no, py_to_cs_port
 
 def get_built_instrument():
-    osc_handle = OscHandle(8002, "gihandle")
+    osc_handle = OscHandle(py_to_cs_port, "gihandle")
     panic_instr = ExitInstr(i_no=panic_i_no, i_name="exit_instr")
     beep_instr = BeepInstr(i_no=beep_i_no, i_name="beep_instr")
     instruments: list[CsdInstrument] = [    
@@ -40,5 +38,6 @@ def get_built_instrument():
     numbered_instruments = [{"i_no":i.i_no, "i_name":i.i_name, "body":i.body_str} for idx, i in enumerate(instruments)]
     
     res = get_whole_body(options, runtime_data, numbered_instruments, events, global_variables)
-    print(res)
+    # print(res)
+    
     return res

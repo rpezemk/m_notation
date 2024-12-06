@@ -4,17 +4,13 @@ import os
 import subprocess
 from typing import Any
 
-from instr_logic.csd_instr_numbers import panic_i_no, beep_i_no
-
+from instr_logic.csd_instr_numbers import panic_i_no, beep_i_no, py_to_cs_port
 
 # OSC server details
 ip = "127.0.0.1"
-port = 8002       
+port = py_to_cs_port       
 
 client = SimpleUDPClient(ip, port)
-
-# Send test OSC messages
-
 
 # general path of csd file generated (TODO generated)
 path = "/tmp/n_file.csd"

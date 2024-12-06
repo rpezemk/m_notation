@@ -1,4 +1,6 @@
-from cs_generator.model.cs_model import CsdInstrument, GlobalVariable
+from cs_generator.cs_model import CsdInstrument, GlobalVariable
+
+max_time = 7200 # two hours
 
 class OscHandle(GlobalVariable):
     def __init__(self, port, name):
@@ -28,7 +30,7 @@ class OscPanic(CsdInstrument):
             event "i", {panic_i_no}, 0, p3
         endif
     """
-        self.eternal_events = [{"p1":0, "p2":7200}]
+        self.eternal_events = [{"p1":0, "p2":max_time}]
     
     
 
@@ -47,7 +49,7 @@ class OscMetro(CsdInstrument):
             event "i", kino, 0, kfdur
         endif
     """
-        self.eternal_events = [{"p1":0, "p2":7200}]
+        self.eternal_events = [{"p1":0, "p2":max_time}]
     
     
 class BeepInstr(CsdInstrument):
@@ -63,8 +65,8 @@ class TestInstr(CsdInstrument):
         super().__init__(**kwargs)
         self.body_str = """
         a1 oscili 0.5, 440
-        outs 0.02*a1, 0.02*a1
+        outs 0.07*a1, 0.07*a1
         event_i "i", 2, 60, p3
         """
         
-        self.eternal_events = [{"p1":0, "p2":20}, {"p1":99, "p2":2320}]
+        self.eternal_events = [{"p1":0, "p2":max_time}]

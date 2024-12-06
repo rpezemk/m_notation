@@ -23,7 +23,7 @@ gihandle OSCinit 8002
     instr 1
 
         a1 oscili 0.5, 440
-        outs 0.02*a1, 0.02*a1
+        outs 0.07*a1, 0.07*a1
         event_i "i", 2, 60, p3
         
     endin
@@ -83,8 +83,7 @@ gihandle OSCinit 8002
 <CsScore>
 
   ; ################# INSTR_NO: 1 ####################
-  i 1   0  20 ;
-  i 1   99  2320 ;
+  i 1   0  7200 ;
   
   ; ################# INSTR_NO: 7 ####################
   i 7   0  7200 ;

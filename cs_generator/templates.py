@@ -1,6 +1,6 @@
 from jinja2 import Template
 
-from cs_generator.model.cs_model import GlobalVariable
+from cs_generator.cs_model import GlobalVariable
 
 
 synth = """
