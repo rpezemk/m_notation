@@ -1,4 +1,4 @@
-from cs_generator.simple_instruments import OscHandle, ExitInstr, TestInstr, OscMetro, CsdInstrument, BeepInstr, OscPanic
+from cs_generator.simple_instruments import OscHandle, ExitInstr, TestInstr, OscMetroReceive, CsdInstrument, BeepInstr, OscPanicReceive
 from cs_generator.templates import get_whole_body
 from instr_logic.csd_instr_numbers import panic_i_no, beep_i_no, py_to_cs_port
 
@@ -10,8 +10,8 @@ def get_built_instrument():
         TestInstr(i_no=1, i_name="test_instr"),
         beep_instr,
         panic_instr,
-        OscMetro(osc_handle, i_no=7, i_name="OSC_METRO"),
-        OscPanic(osc_handle, panic_i_no, i_no=9997, i_name="OSC_PANIC"),
+        OscMetroReceive(osc_handle, i_no=7, i_name="OSC_METRO"),
+        OscPanicReceive(osc_handle, panic_i_no, i_no=9997, i_name="OSC_PANIC"),
         ]
     options = ["-odac"]
 
