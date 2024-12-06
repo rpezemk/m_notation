@@ -15,7 +15,7 @@ from csound_tests.test_methods import quit_csound, start_CSOUND, beep
 from utils.logger import Log, MLogger
 from utils.commands.kbd_resolver import KbdResolver    
 from widgets.cmd_wiring import my_wirings
-
+from instr_logic.csd_definition import get_built_instrument
 
 class MyStyledWindow(QMainWindow):
     def __init__(self):
@@ -41,7 +41,8 @@ class MainWindow(MyStyledWindow):
         left_pane_buttons = [
                 AsyncBlockingButton("CSOUND START", start_CSOUND), 
                 AsyncBlockingButton("beep", beep), 
-                AsyncBlockingButton("CSOUND STOP", quit_csound)
+                AsyncBlockingButton("CSOUND STOP", quit_csound),
+                AsyncBlockingButton("GENERATE CSD", get_built_instrument)
                 ]
         
         scores_stack = VStack(stretch=True)
