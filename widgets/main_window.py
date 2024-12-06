@@ -15,8 +15,6 @@ from utils.logger import Log, MLogger
 from utils.commands.kbd_resolver import KbdResolver    
 from widgets.cmd_wiring import my_wirings
 
-# Get the current working directory
-
 class MyStyledWindow(QMainWindow):
     def __init__(self):
         super().__init__()
