@@ -14,7 +14,7 @@ from utils.commands.kbd_resolver import KbdResolver
 from widgets.compound.stack_panels import HStack, VStack
 from widgets.compound.stretch import Stretch
 from widgets.my_button import AsyncButton, SyncButton, IndicatorButton
-from widgets.note_widget import PartWidget
+from widgets.note_widget import AudioWidget, PartWidget, StaffWidget
 from widgets.text_box import TextBox
 import widgets.widget_utils as w_utils
 from wirings.cmd_wiring import my_wirings
@@ -35,62 +35,35 @@ class MainWindow(MyStyledWindow):
         global Log
         Log = MLogger(lambda msg: self.status_bar.append_log(msg))
         self.part_widgets = []
+        self.status_bar = TextBox(read_only=True, set_fixed_height=200)    
+        self.indicator = IndicatorButton("<>", ..., )
         
-        self.set_notes_view()
+        left_pane_buttons = [AsyncButton("CSOUND START", start_CSOUND), AsyncButton("beep", play_ding), 
+                             AsyncButton("CSOUND STOP", quit_csound), AsyncButton("GENERATE CSD", save_file),
+                             self.indicator]
+        
+        scores_stack = VStack(stretch=True)
+        top_tools = [SyncButton("load piece", self.load_piece_click), SyncButton("load DAW", self.load_daw)]
+        horizontal_toolbar = HStack((0, 0, 0, 0), spacing=0, children=top_tools, stretch=True)
+        central_v_stack = VStack(
+                children=[
+                    horizontal_toolbar, 
+                    HStack(
+                        children=[
+                            VStack(fixed_width=120, 
+                                   children=left_pane_buttons, 
+                                   stretch=True), 
+                            scores_stack],
+                        spacing=0, 
+                        margin=(0, 0, 0, 0)),
+                    Stretch(),
+                    self.status_bar]
+                )
+        
+        self.setCentralWidget(central_v_stack.widget)
 
-        
-        
-    def set_notes_view(self):
-        self.status_bar = TextBox(read_only=True, set_fixed_height=200)    
-        self.indicator = IndicatorButton("<>", ..., )
-        
-        self.stack_panel = VStack(stretch=True)
-        notes_view_left_pane_buttons = [AsyncButton("CSOUND START", start_CSOUND), AsyncButton("beep", play_ding), 
-                             AsyncButton("CSOUND STOP", quit_csound), AsyncButton("GENERATE CSD", save_file),
-                             self.indicator]
-        central_v_stack = VStack(
-                children=[
-                    SyncButton("top button", self.button_click), 
-                    HStack(
-                        children=[
-                            VStack(fixed_width=120, 
-                                   children=notes_view_left_pane_buttons, 
-                                   stretch=True), 
-                            self.stack_panel],
-                        spacing=0, 
-                        margin=(0, 0, 0, 0)),
-                    Stretch(),
-                    self.status_bar]
-                )
-        self.setCentralWidget(central_v_stack.widget)
-        self.wire_up()  
-        
-    def set_daw_view(self):
-        self.status_bar = TextBox(read_only=True, set_fixed_height=200)    
-        self.indicator = IndicatorButton("<>", ..., )
-        
-        daw_view_left_pane_buttons = [AsyncButton("CSOUND START", start_CSOUND), AsyncButton("beep", play_ding), 
-                             AsyncButton("CSOUND STOP", quit_csound), AsyncButton("GENERATE CSD", save_file),
-                             self.indicator]
-        self.stack_panel = VStack(stretch=True)
-        
-        central_v_stack = VStack(
-                children=[
-                    SyncButton("top button", self.button_click), 
-                    HStack(
-                        children=[
-                            VStack(fixed_width=120, 
-                                   children=daw_view_left_pane_buttons, 
-                                   stretch=True), 
-                            self.stack_panel],
-                        spacing=0, 
-                        margin=(0, 0, 0, 0)),
-                    Stretch(),
-                    self.status_bar]
-                )
-        
-        self.setCentralWidget(central_v_stack.widget)
-        
+        self.stack_panel = scores_stack.layout
+        self.wire_up()
         
     def wire_up(self):
         self.mosc_server = MOscServer(local_ip, cs_to_py_port, 
@@ -99,25 +72,45 @@ class MainWindow(MyStyledWindow):
         self.heartbeat_checker = HeartbeatChecker(0.5).bind_to(self.indicator).start()
         self.kbd_resolver = KbdResolver(my_wirings, lambda s: Log.log(s))
 
-    def button_click(self):
+    def load_piece_click(self):
         piece = generate_sample_piece(4, 8)
         self.load_piece(piece)
         
+    def load_daw_click(self):
+        piece = generate_sample_piece(4, 8)
+        self.load_piece(piece)
+    
+    def load_daw(self):
+        w_utils.clear_layout(self.stack_panel)
+        self.part_widgets.clear()
+        
+        for track_no in range(0, 5):
+            part_widget = PartWidget(widget_type=AudioWidget)
+            part_widget.setFixedHeight(120)  
+            part_widget.staff_widget.set_content(None)
+            part_widget.staff_widget.update()
+            self.stack_panel.addWidget(part_widget)
+            self.part_widgets.append(part_widget)
+                
+        self.stack_panel.addStretch()
+        self.stack_panel.parentWidget().update()
+        self.stack_panel.update()
+        
     def load_piece(self, piece: Piece):
-        w_utils.clear_layout(self.stack_panel.layout)
+        w_utils.clear_layout(self.stack_panel)
         self.part_widgets.clear()
         
         for part in piece.parts:
-            part_widget = PartWidget()
+            part_widget = PartWidget(widget_type=StaffWidget)
             part_widget.setFixedHeight(120)  
-            self.stack_panel.layout.addWidget(part_widget)
-            self.part_widgets.append(part_widget)
-            part_widget.staff_widget.set_bars(part.measures[:4])
+            part_widget.staff_widget.set_content(part.measures[:4])
             part_widget.staff_widget.update()
+            self.stack_panel.addWidget(part_widget)
+            self.part_widgets.append(part_widget)
                 
-        self.stack_panel.layout.addStretch()
-        self.stack_panel.layout.parentWidget().update()
-        self.stack_panel.layout.update()
+        self.stack_panel.addStretch()
+        self.stack_panel.parentWidget().update()
+        self.stack_panel.update()
   
     @override
     def resizeEvent(self, event):

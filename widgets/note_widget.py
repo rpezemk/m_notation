@@ -1,3 +1,4 @@
+from typing import Any, override
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLabel
 from PyQt5.QtCore import Qt, QRect
 from PyQt5.QtGui import QPainter, QColor
@@ -13,7 +14,7 @@ from utils.space import get_single_ruler, map_to
 from widgets.text_box import TextBox, Label
 
 class PartWidget(QWidget):
-    def __init__(self, parent=None, flags=None):
+    def __init__(self, parent=None, flags=None, widget_type: type = None):
         super().__init__(parent, flags or Qt.WindowFlags())
 
         layout = QHBoxLayout(self)
@@ -29,20 +30,96 @@ class PartWidget(QWidget):
                 fixed_width=100)
             .widget)
         
-        self.staff_widget = StaffWidget(foreground=99)
+        self.staff_widget = widget_type()
         layout.addWidget(self.staff_widget)
 
-class StaffWidget(QWidget):
-    def __init__(self, foreground: int = 99):
+
+class LaneWidget(QWidget):
+    def __init__(self):
+        super().__init__()
+        res, self.bravura_font = fonts.loader.try_get_music_font()
+        self.dark_gray = QColor(100, 100, 100)
+        self.light_gray = QColor(140, 140, 140)
+        self.light_black = QColor(13, 13, 13)
+        self.black = QColor(0, 0, 0)
+        
+    def set_content(self, data: Any):
+        ...
+        
+    @override
+    def mousePressEvent(self, event):
+        super().mousePressEvent(event)
+
+    @override
+    def paintEvent(self, event):
+        super().mousePressEvent(event)
+        
+        
+
+audio_ranges = [(11, 12.3), (13, 16), (17, 19.7)]
+        
+class AudioWidget(LaneWidget):
+    def __init__(self):
+        super().__init__()
+        self.view_time_start = 10 # sec
+        self.view_time_end = 20 # sec
+        
+    @override
+    def set_content(self, data: Any):
+        ...
+        
+    @override
+    def mousePressEvent(self, event):
+        super().mousePressEvent(event)
+        
+    @override    
+    def paintEvent(self, event):
+        self.draw_content()
+        
+    def draw_content(self):
+        painter = QPainter(self)
+        painter.setFont(self.bravura_font)
+        painter.setPen(self.dark_gray)
+        painter.setBrush(self.black)
+        
+        self.draw_frame(painter)
+        # super().paintEvent(event)
+        self.draw_ranges(painter)
+        painter.end()
+        
+    def draw_frame(self, painter: QPainter):
+        w = self.width()
+        h = self.height()
+        rect = QRect(0, 0, w-1, h-1)
+        painter.drawRect(rect)
+        
+    def draw_ranges(self, painter: QPainter):
+        w = self.width()
+        h = self.height()
+        painter.setBrush(self.black)
+        
+        for rng in audio_ranges:
+            start = rng[0]    
+            end = rng[1]
+            time_range = self.view_time_end - self.view_time_start
+            
+            x0 = int(((start - self.view_time_start)/time_range) * w)
+            y0 = 5
+            r_w = int(((end - start)/time_range) * w)
+            r_h = h - 10
+            
+            rect = QRect(x0, y0, r_w, r_h)
+            painter.drawRect(rect)
+            
+            
+class StaffWidget(LaneWidget):
+    def __init__(self):
         super().__init__()
         self.notes = []  
         self.note_size = 120    
-        res, self.bravura_font = fonts.loader.try_get_music_font()
         self.line_spacing = 10
         self.staff_offset = 30
         self.no_of_measures = 4
-        self.dark_gray = QColor(100, 100, 100)
-        self.light_gray = QColor(140, 140, 140)
         self.measures = []
         self.clef_margin = 30
         self.bar_left_margin = 25
@@ -50,7 +127,7 @@ class StaffWidget(QWidget):
         self.visual_notes = []
         self.y_offsets = None
         
-    def set_bars(self, measures: list[Measure]):
+    def set_content(self, measures: list[Measure]):
         self.measures = measures
         
     def paintEvent(self, event):
