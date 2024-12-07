@@ -4,7 +4,7 @@ from typing import Callable
 
 
 class HeartbeatChecker():
-    def __init__(self, period_s: float, report_func: Callable[[bool], None] = None):
+    def __init__(self, period_s: float, logger_func: Callable[[bool], None] = None, report_state_changed_func: Callable[[bool], None] = None):
         self.period_s = period_s
         self.can_run = False
         self.history = [0, 0, 0]
@@ -12,8 +12,10 @@ class HeartbeatChecker():
         self.t1: threading.Thread = None
         self.hb_working = False
         self.flag = 0
-        self.report_func = report_func if report_func is not None else lambda s: print(s)
-    
+        self.report_func = logger_func if logger_func is not None else lambda s: print(s)
+        self.report_state_changed_func = report_state_changed_func if report_state_changed_func is not None else lambda s: ...
+        self.report_state_changed_func(False)
+        
     def start(self):
         self.can_run = True
         self.t1 = threading.Thread(target=self.bckg_check, args=[])
@@ -34,6 +36,8 @@ class HeartbeatChecker():
             self.history = [self.history[1], self.history[2], self.flag]
             hb_working = not self.are_same_lists(self.history, self.prev_history)
             self.report_func(hb_working)
+            if self.hb_working != hb_working:
+                self.report_state_changed_func(hb_working)
             self.hb_working = hb_working
             self.prev_history = list(self.history)
             time.sleep(self.period_s)

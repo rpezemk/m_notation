@@ -13,14 +13,14 @@ import widgets.widget_utils as w_utils
 from instr_logic.test_methods import quit_csound, save_file, start_CSOUND, beep
 from utils.logger import Log, MLogger
 from utils.commands.kbd_resolver import KbdResolver    
-from widgets.cmd_wiring import my_wirings
+from wirings.cmd_wiring import my_wirings
 
 class MyStyledWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Stacked Panels")
         self.setStyleSheet("background-color: black;")
-        
+
     def closeEvent(self, event):
             quit_csound()
             
