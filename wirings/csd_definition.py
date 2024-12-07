@@ -1,6 +1,6 @@
 from cs_generator.simple_instruments import OscHandle, ExitInstr, TestInstr, OscMetroReceive, CsdInstrument, BeepInstr, OscPanicReceive, CsHeartBeatToPy
 from cs_generator.templates import get_whole_body
-from instr_logic.csd_instr_numbers import panic_i_no, beep_i_no, py_to_cs_port, cs_to_py_port
+from wirings.csd_instr_numbers import panic_i_no, beep_i_no, py_to_cs_port, cs_to_py_port
 
 def get_built_instrument():
     osc_handle = OscHandle(py_to_cs_port, "gihandle")

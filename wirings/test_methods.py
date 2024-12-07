@@ -4,8 +4,8 @@ import os
 import subprocess
 from typing import Any
 
-from instr_logic.csd_definition import get_built_instrument
-from instr_logic.csd_instr_numbers import panic_i_no, beep_i_no, py_to_cs_port, local_ip
+from wirings.csd_definition import get_built_instrument
+from wirings.csd_instr_numbers import panic_i_no, beep_i_no, py_to_cs_port, local_ip
 
 # OSC server details
 port = py_to_cs_port       

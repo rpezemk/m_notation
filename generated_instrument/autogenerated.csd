@@ -89,7 +89,7 @@ gihandle OSCinit 8002
             if ktrig == 1 && kprevTrig == 0 then
                 kvalue = 1 - kvalue
             endif
-            OSCsend kvalue, "", 8015, "/heartbeat", "i", kvalue
+            OSCsend kvalue, "", 8012, "/heartbeat", "i", kvalue
             kprevTrig = ktrig
         
     endin
