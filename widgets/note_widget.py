@@ -1,7 +1,7 @@
 from typing import Any, override
 from PyQt5.QtWidgets import QWidget, QHBoxLayout, QLabel
 from PyQt5.QtCore import Qt, QRect
-from PyQt5.QtGui import QPainter, QColor
+from PyQt5.QtGui import QPainter, QColor, QPen
 
 from fonts.glyphs import Glyphs
 import fonts.loader
@@ -40,6 +40,7 @@ class LaneWidget(QWidget):
         res, self.bravura_font = fonts.loader.try_get_music_font()
         self.dark_gray = QColor(100, 100, 100)
         self.light_gray = QColor(140, 140, 140)
+        self.very_light_gray = QColor(160, 160, 160)
         self.light_black = QColor(13, 13, 13)
         self.black = QColor(0, 0, 0)
         
@@ -91,6 +92,9 @@ class AudioWidget(LaneWidget):
         w = self.width()
         h = self.height()
         rect = QRect(0, 0, w-1, h-1)
+        pen = QPen(self.very_light_gray)  # Set the pen color to black
+        pen.setWidth(2)       # Set the stroke thickness to 5 pixels
+        painter.setPen(pen)
         painter.drawRect(rect)
         
     def draw_ranges(self, painter: QPainter):
