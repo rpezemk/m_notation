@@ -7,7 +7,7 @@ from utils.async_utils import WrappedJob
 from utils.informable import Informable
 
 
-class GuiButton(QPushButton):
+class SyncButton(QPushButton):
     def __init__(self, text, sync_click_func=None):
         super().__init__(text)
         self.setStyleSheet("color: white;")
@@ -18,7 +18,7 @@ class GuiButton(QPushButton):
         self.clicked.connect(sync_click_func)
     
     
-class AsyncBlockingButton(QPushButton):
+class AsyncButton(QPushButton):
     def __init__(self, text, sync_click_func=None):
         super().__init__(text)
         self.setStyleSheet("color: white;")

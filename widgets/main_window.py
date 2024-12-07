@@ -8,7 +8,7 @@ from utils.osc_udp.heartbeat_checker import HeartbeatChecker
 from utils.osc_udp.m_osc_server import MOscServer
 from widgets.compound.stack_panels import HStack, VStack
 from widgets.compound.stretch import Stretch
-from widgets.my_button import AsyncBlockingButton, GuiButton, IndicatorButton
+from widgets.my_button import AsyncButton, SyncButton, IndicatorButton
 from widgets.note_widget import PartWidget
 from widgets.text_box import TextBox, Label
 import widgets.widget_utils as w_utils
@@ -33,26 +33,19 @@ class MainWindow(MyStyledWindow):
         super().__init__()
         global Log
         Log = MLogger(lambda msg: self.status_bar.append_log(msg))
-        
         self.part_widgets = []
-        self.status_bar = TextBox(read_only=True, set_fixed_height=200)
-        
-        
-        
-        
+        self.status_bar = TextBox(read_only=True, set_fixed_height=200)    
         self.indicator = IndicatorButton("<>", ..., )
-        left_pane_buttons = [
-                AsyncBlockingButton("CSOUND START", start_CSOUND), 
-                AsyncBlockingButton("beep", beep), 
-                AsyncBlockingButton("CSOUND STOP", quit_csound),
-                AsyncBlockingButton("GENERATE CSD", save_file),
-                self.indicator
-                ]
+        
+        left_pane_buttons = [AsyncButton("CSOUND START", start_CSOUND), AsyncButton("beep", beep), 
+                             AsyncButton("CSOUND STOP", quit_csound), AsyncButton("GENERATE CSD", save_file),
+                             self.indicator]
         
         scores_stack = VStack(stretch=True)
+        
         central_v_stack = VStack(
                 children=[
-                    GuiButton("top button", self.button_click), 
+                    SyncButton("top button", self.button_click), 
                     HStack(
                         children=[
                             VStack(fixed_width=120, 
@@ -64,6 +57,7 @@ class MainWindow(MyStyledWindow):
                     Stretch(),
                     self.status_bar]
                 )
+        
         self.setCentralWidget(central_v_stack.widget)
 
         self.stack_panel = scores_stack.layout
