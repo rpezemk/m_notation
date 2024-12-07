@@ -1,3 +1,5 @@
+from typing import override
+
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtGui import QKeyEvent
 
@@ -21,7 +23,8 @@ class MyStyledWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("Stacked Panels")
         self.setStyleSheet("background-color: black;")
-
+        
+    @override
     def closeEvent(self, event):
             quit_csound()
             
@@ -87,19 +90,22 @@ class MainWindow(MyStyledWindow):
         self.stack_panel.parentWidget().update()
         self.stack_panel.update()
   
-    # QMainWindow overriden methods:    
+    @override
     def resizeEvent(self, event):
         self.kbd_resolver.clear()
         size = event.size()  
         self.setWindowTitle(f"Window resized to: {size.width()} x {size.height()}")
         super().resizeEvent(event)  
             
+    @override
     def keyPressEvent(self, event: QKeyEvent):
         self.kbd_resolver.accept_press(event.key(), event.isAutoRepeat())
 
+    @override
     def keyReleaseEvent(self, event: QKeyEvent):
         self.kbd_resolver.accept_release(event.key(), event.isAutoRepeat())
     
+    @override
     def closeEvent(self, event):
         self.heartbeat_checker.stop()
         self.mosc_server.very_gently_close()
