@@ -2,6 +2,7 @@ from typing import override
 
 from PyQt5.QtWidgets import QMainWindow
 from PyQt5.QtGui import QKeyEvent
+from PyQt5.QtCore import Qt
 
 from model.piece import Piece, generate_sample_piece
 from instr_logic.test_methods import quit_csound, save_file, start_CSOUND, play_ding
@@ -99,6 +100,8 @@ class MainWindow(MyStyledWindow):
             
     @override
     def keyPressEvent(self, event: QKeyEvent):
+        if event.key() == Qt.Key_Space:
+            print("Space key pressed!")
         self.kbd_resolver.accept_press(event.key(), event.isAutoRepeat())
 
     @override
