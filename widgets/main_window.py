@@ -32,23 +32,15 @@ class MainWindow(MyStyledWindow):
     def __init__(self):
         super().__init__()
         global Log
+        Log = MLogger(lambda msg: self.status_bar.append_log(msg))
         
         self.part_widgets = []
-        self.status_bar = TextBox(read_only=True)
-        self.status_bar.setFixedHeight(200)
-        self.status_bar.setStyleSheet("color: white;")
-        Log = MLogger(lambda msg: self.status_bar.append_log(msg))
-        self.kbd_resolver = KbdResolver(my_wirings, lambda s: Log.log(s))
+        self.status_bar = TextBox(read_only=True, set_fixed_height=200)
         
-        self.mosc_server = MOscServer("127.0.0.1", cs_to_py_port, 
-                                      [
-                                          ("/heartbeat", self.heartbeat_handler)
-                                    ]).start_async()
+        
+        
         
         self.indicator = IndicatorButton("<>", ..., )
-        
-        self.heartbeat_checker = HeartbeatChecker(0.5).bind_to(self.indicator).start()
-        
         left_pane_buttons = [
                 AsyncBlockingButton("CSOUND START", start_CSOUND), 
                 AsyncBlockingButton("beep", beep), 
@@ -75,22 +67,19 @@ class MainWindow(MyStyledWindow):
         self.setCentralWidget(central_v_stack.widget)
 
         self.stack_panel = scores_stack.layout
+        self.wire_up()
         
-    def heartbeat_handler(self, address, *args):
-        self.heartbeat_checker.handle_flag(args[0])
-        print("main window heartbeat_handler fired")
-        print(args)
-        
+    def wire_up(self):
+        self.mosc_server = MOscServer("127.0.0.1", cs_to_py_port, 
+                                       [("/heartbeat", lambda addr, args: self.heartbeat_checker.handle_flag(args))]
+                                      ).start_async()
+        self.heartbeat_checker = HeartbeatChecker(0.5).bind_to(self.indicator).start()
+        self.kbd_resolver = KbdResolver(my_wirings, lambda s: Log.log(s))
+
     def button_click(self):
         piece = model.piece.generate_sample_piece(4, 8)
         self.load_piece(piece)
         
-    def resizeEvent(self, event):
-        self.kbd_resolver.clear()
-        size = event.size()  
-        self.setWindowTitle(f"Window resized to: {size.width()} x {size.height()}")
-        super().resizeEvent(event)  
-    
     def load_piece(self, piece: Piece):
         w_utils.clear_layout(self.stack_panel)
         self.part_widgets.clear()
@@ -106,7 +95,14 @@ class MainWindow(MyStyledWindow):
         self.stack_panel.addStretch()
         self.stack_panel.parentWidget().update()
         self.stack_panel.update()
-        
+  
+  
+    # QMainWindow overriden methods:    
+    def resizeEvent(self, event):
+        self.kbd_resolver.clear()
+        size = event.size()  
+        self.setWindowTitle(f"Window resized to: {size.width()} x {size.height()}")
+        super().resizeEvent(event)  
             
     def keyPressEvent(self, event: QKeyEvent):
         self.kbd_resolver.accept_press(event.key(), event.isAutoRepeat())

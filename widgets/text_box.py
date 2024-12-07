@@ -2,10 +2,13 @@ from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QTextEdit
 from PyQt5.QtGui import QFont
 
 class TextBox(QTextEdit):
-    def __init__(self, txt: str = "", read_only: bool = False):
+    def __init__(self, txt: str = "", read_only: bool = False, set_fixed_height = -1):
         super().__init__(txt)
         self.txt = txt
-        self.setFixedHeight(40)
+        if set_fixed_height > 0:
+            self.setFixedHeight(set_fixed_height)
+        else:
+            self.setFixedHeight(40)
         self.setStyleSheet("color: white;")
         font = QFont("Courier New") 
         font.setStyleHint(QFont.Monospace)  
