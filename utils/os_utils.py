@@ -48,3 +48,8 @@ def get_nice_dir_content(path='.') -> tuple[bool, list[str], list[str], str]:
         return (False, [*dirs], [*files], f"Directory '{path}' not found.")
     except PermissionError:
         return (False, [*dirs], [*files], f"Permission denied to access '{path}'.")
+    
+    
+def get_absolute_path(relative_path: str) -> str:
+    current_dir = os.getcwd()
+    return os.path.abspath(os.path.join(current_dir, relative_path))
