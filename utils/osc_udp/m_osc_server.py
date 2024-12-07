@@ -32,6 +32,18 @@ class MOscServer():
         self.can_run = False
         self.server.server_close()
 
+    def start_async(self):
+        t1 = threading.Thread(target=self.start_server, args=[])
+        print('defined "start"')
+        t1.start()
+        return self
+    
+    def stop_async(self):
+        t2 = threading.Thread(target=self.very_gently_close, args=[])
+        print('gently stop')
+        t2.start()
+        return self
+    
 def all_message_handler(address, *args):
     print(args)
     ...
@@ -45,16 +57,21 @@ msg_handlers = [
     ("/heartbeat", heartbeat_handler)
     ]
 
-msg_handlers = []
-m_osc_server = MOscServer("127.0.0.1", 8012, msg_handlers)
+def test_hb_checker():
+    msg_handlers = []
+    m_osc_server = MOscServer("127.0.0.1", 8012, msg_handlers)
 
-t1 = threading.Thread(target=m_osc_server.start_server, args=[])
-print('defined "start"')
-t1.start()
-print('started')
-print('(sleep 10)')
-time.sleep(10)
-t2 = threading.Thread(target=m_osc_server.very_gently_close, args=[])
-print('gently stop')
-t2.start()
-print('stopped?')
+    t1 = threading.Thread(target=m_osc_server.start_server, args=[])
+    print('defined "start"')
+    t1.start()
+    print('started')
+    print('(sleep 10)')
+    time.sleep(10)
+    t2 = threading.Thread(target=m_osc_server.very_gently_close, args=[])
+    print('gently stop')
+    t2.start()
+    print('stopped?')
+
+if __name__ == "__main__":
+    test_hb_checker()        
+        

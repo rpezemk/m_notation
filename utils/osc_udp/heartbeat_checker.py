@@ -1,10 +1,11 @@
 import threading
 import time
 from typing import Callable
+from utils.informable import Informer
 
-
-class HeartbeatChecker():
+class HeartbeatChecker(Informer):
     def __init__(self, period_s: float, logger_func: Callable[[bool], None] = None, report_state_changed_func: Callable[[bool], None] = None):
+        super().__init__()
         self.period_s = period_s
         self.can_run = False
         self.history = [0, 0, 0]
@@ -21,22 +22,29 @@ class HeartbeatChecker():
         self.t1 = threading.Thread(target=self.bckg_check, args=[])
         self.t1.start()
         self.report_func('HeartbeatChecker started')
+        return self
     
     def stop(self):
         self.can_run = False
         if self.t1.is_alive():
             self.t1.join(2)
+        return self
         
     def are_same_lists(self, list1: list[int], list2: list[int]):
         are_same = len([1 for idx, k in enumerate(list1) if k == list2[idx]]) == len(list1) == len(list2)
         return are_same
         
     def bckg_check(self):
+        hb_working = not self.are_same_lists(self.history, self.prev_history)
+        self.set_state(hb_working)
+        self.report_state_changed_func(hb_working)
+        
         while self.can_run:
             self.history = [self.history[1], self.history[2], self.flag]
             hb_working = not self.are_same_lists(self.history, self.prev_history)
             self.report_func(hb_working)
             if self.hb_working != hb_working:
+                self.set_state(hb_working)
                 self.report_state_changed_func(hb_working)
             self.hb_working = hb_working
             self.prev_history = list(self.history)
@@ -46,6 +54,7 @@ class HeartbeatChecker():
         return len(set(self.history)) < len(self.history)
     
     def handle_flag(self, flag: int):
+        self.report_func(flag)
         self.flag = flag
         
 def test_hb_checker():

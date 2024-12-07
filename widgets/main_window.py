@@ -4,9 +4,11 @@ from PyQt5.QtGui import QKeyEvent
 
 from model.piece import Piece
 import model.piece
+from utils.osc_udp.heartbeat_checker import HeartbeatChecker
+from utils.osc_udp.m_osc_server import MOscServer
 from widgets.compound.stack_panels import HStack, VStack
 from widgets.compound.stretch import Stretch
-from widgets.my_button import AsyncBlockingButton, GuiButton
+from widgets.my_button import AsyncBlockingButton, GuiButton, IndicatorButton
 from widgets.note_widget import PartWidget
 from widgets.text_box import TextBox, Label
 import widgets.widget_utils as w_utils
@@ -14,6 +16,8 @@ from instr_logic.test_methods import quit_csound, save_file, start_CSOUND, beep
 from utils.logger import Log, MLogger
 from utils.commands.kbd_resolver import KbdResolver    
 from wirings.cmd_wiring import my_wirings
+from instr_logic.csd_instr_numbers import panic_i_no, beep_i_no, py_to_cs_port, cs_to_py_port
+
 
 class MyStyledWindow(QMainWindow):
     def __init__(self):
@@ -36,11 +40,21 @@ class MainWindow(MyStyledWindow):
         Log = MLogger(lambda msg: self.status_bar.append_log(msg))
         self.kbd_resolver = KbdResolver(my_wirings, lambda s: Log.log(s))
         
+        self.mosc_server = MOscServer("127.0.0.1", cs_to_py_port, 
+                                      [
+                                          ("/heartbeat", self.heartbeat_handler)
+                                    ]).start_async()
+        
+        self.indicator = IndicatorButton("<>", ..., )
+        
+        self.heartbeat_checker = HeartbeatChecker(0.5).bind_to(self.indicator).start()
+        
         left_pane_buttons = [
                 AsyncBlockingButton("CSOUND START", start_CSOUND), 
                 AsyncBlockingButton("beep", beep), 
                 AsyncBlockingButton("CSOUND STOP", quit_csound),
-                AsyncBlockingButton("GENERATE CSD", save_file)
+                AsyncBlockingButton("GENERATE CSD", save_file),
+                self.indicator
                 ]
         
         scores_stack = VStack(stretch=True)
@@ -61,7 +75,12 @@ class MainWindow(MyStyledWindow):
         self.setCentralWidget(central_v_stack.widget)
 
         self.stack_panel = scores_stack.layout
-    
+        
+    def heartbeat_handler(self, address, *args):
+        self.heartbeat_checker.handle_flag(args[0])
+        print("main window heartbeat_handler fired")
+        print(args)
+        
     def button_click(self):
         piece = model.piece.generate_sample_piece(4, 8)
         self.load_piece(piece)
@@ -95,3 +114,7 @@ class MainWindow(MyStyledWindow):
     def keyReleaseEvent(self, event: QKeyEvent):
         self.kbd_resolver.accept_release(event.key(), event.isAutoRepeat())
     
+    def closeEvent(self, event):
+        self.heartbeat_checker.stop()
+        self.mosc_server.very_gently_close()
+        return super().closeEvent(event)
