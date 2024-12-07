@@ -44,7 +44,7 @@ class HeartbeatChecker():
     def handle_flag(self, flag: int):
         self.flag = flag
         
-def main():
+def test_hb_checker():
     def change_state(hb: HeartbeatChecker):
         flag = 1
         cnt = 0
@@ -63,5 +63,5 @@ def main():
     hb.stop()      
         
 if __name__ == "__main__":
-    main()        
+    test_hb_checker()        
         
