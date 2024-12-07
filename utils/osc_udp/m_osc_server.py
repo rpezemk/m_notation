@@ -32,12 +32,20 @@ class MOscServer():
         self.can_run = False
         self.server.server_close()
 
-def server_message_handler(address, *args):
+def all_message_handler(address, *args):
     print(args)
     ...
     
-msg_handlers = [("/*", server_message_handler)]
-msg_handlers = [("/heartbeat", server_message_handler)]
+def heartbeat_handler(address, *args):
+    print(args)
+    ...
+    
+msg_handlers = [
+    ("/*", all_message_handler),
+    ("/heartbeat", heartbeat_handler)
+    ]
+
+msg_handlers = []
 m_osc_server = MOscServer("127.0.0.1", 8012, msg_handlers)
 
 t1 = threading.Thread(target=m_osc_server.start_server, args=[])
