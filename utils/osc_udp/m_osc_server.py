@@ -1,11 +1,7 @@
 import time
 import threading
 from typing import Callable, NoReturn, Tuple
-from pythonosc.dispatcher import Dispatcher
-from pythonosc.osc_server import BlockingOSCUDPServer
-from pythonosc import osc_server
-from pythonosc import dispatcher
-from pythonosc import udp_client
+from pythonosc import osc_server, dispatcher
 from pythonosc.osc_server import OSCUDPServer
 import select
         
@@ -15,21 +11,25 @@ class MOscServer():
         self.port = port
         self.handlers = handlers
         self.server: OSCUDPServer = None
+        self.can_run = False
                 
     def start_server(self) -> NoReturn:
+        self.can_run = True
         disp = dispatcher.Dispatcher()
         for handler in self.handlers:
             disp.map(*handler)  
         self.server = osc_server.ThreadingOSCUDPServer((self.ip, self.port), disp)
         self.server.timeout = 0.01
         sock = self.server.socket
-        while True:
+        while self.can_run:
             ready_to_read, _, _ = select.select([sock], [], [], 0.1)  
-            if ready_to_read:    
+            if self.can_run and ready_to_read:    
                 self.server.handle_request()  
             time.sleep(0.11)  
-
-    def gently_close(self):
+        print("server finished")
+        
+    def very_gently_close(self):
+        self.can_run = False
         self.server.server_close()
 
 def server_message_handler(address, *args):
@@ -46,7 +46,7 @@ t1.start()
 print('started')
 print('(sleep 10)')
 time.sleep(10)
-t2 = threading.Thread(target=m_osc_server.gently_close, args=[])
+t2 = threading.Thread(target=m_osc_server.very_gently_close, args=[])
 print('gently stop')
 t2.start()
 print('stopped?')
