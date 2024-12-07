@@ -5,13 +5,12 @@ import subprocess
 from typing import Any
 
 from instr_logic.csd_definition import get_built_instrument
-from instr_logic.csd_instr_numbers import panic_i_no, beep_i_no, py_to_cs_port
+from instr_logic.csd_instr_numbers import panic_i_no, beep_i_no, py_to_cs_port, local_ip
 
 # OSC server details
-ip = "127.0.0.1"
 port = py_to_cs_port       
 
-client = SimpleUDPClient(ip, port)
+client = SimpleUDPClient(local_ip, port)
 
 # general path of csd file generated (TODO generated)
 path = "/tmp/n_file.csd"
@@ -33,30 +32,18 @@ def start_CSOUND():
     process = subprocess.Popen(["csound", path], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     stdout, stderr = process.communicate()
 
-
-def quit_csound_nonsense():
-    try:
-        for i in range(10):  
-            kf1 = i * 0.1    
-            kf2 = i * 0.2    
-            client.send_message("/panic", []) 
-            print(f"Sent: /panic [{kf1}]")
-            time.sleep(0.5)  
-    except KeyboardInterrupt:
-        print("Test interrupted by user.")
-        
         
 def quit_csound():
     try:
         client.send_message("/panic", []) 
-    except KeyboardInterrupt:
+    except:
         print("Something went wrong")
 
 
-def beep():
+def play_ding():
     try:
         client.send_message("/metro", [beep_i_no, 0.03]) 
-    except KeyboardInterrupt:
+    except:
         print("Something went wrong")
     
 
