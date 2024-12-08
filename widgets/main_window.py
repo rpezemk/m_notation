@@ -1,38 +1,22 @@
-from typing import override
 
-from PyQt5.QtWidgets import QMainWindow, QComboBox, QLabel
-from PyQt5.QtGui import QKeyEvent
+from PyQt5.QtWidgets import QComboBox, QLabel
 from PyQt5.QtCore import Qt
 
 from model.piece import Piece, generate_sample_piece
+from widgets.base_window import MyStyledWindow
 from wirings.test_methods import quit_csound, save_file, start_CSOUND, play_ding, play_file
-from wirings.csd_instr_numbers import cs_to_py_port, local_ip
-from utils.logger import Log, MLogger
-from utils.osc_udp.heartbeat_checker import HeartbeatChecker
-from utils.osc_udp.m_osc_server import MOscServer
-from utils.commands.kbd_resolver import KbdResolver    
+from utils.logger import MLogger
 from widgets.compound.stack_panels import HStack, VStack
 from widgets.compound.stretch import Stretch
-from widgets.my_button import AsyncButton, SyncButton, IndicatorButton
+from widgets.my_button import AsyncButton, SyncButton
 from widgets.note_widget import AudioWidget, PartWidget, StaffWidget, ConductorWidget
 from widgets.text_box import TextBox
 import widgets.widget_utils as w_utils
-from wirings.cmd_wiring import my_wirings
 from widgets.comboBox import ComboBox
 from widgets.label import Label
 from utils.audio_utils import list_audio_devices
 
 
-class MyStyledWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
-        self.setWindowTitle("Stacked Panels")
-        self.setStyleSheet("background-color: black;")
-        
-    @override
-    def closeEvent(self, event):
-            quit_csound()
-            
 class MainWindow(MyStyledWindow):
     def __init__(self):
         super().__init__()
@@ -40,7 +24,7 @@ class MainWindow(MyStyledWindow):
         Log = MLogger(lambda msg: self.status_bar.append_log(msg))
         self.part_widgets = []
         self.status_bar = TextBox(read_only=True, set_fixed_height=200)    
-        self.indicator = IndicatorButton("<>", ..., )
+
         devices = list_audio_devices()        
         devcs_combo = ComboBox(devices, lambda s: print(s), dict_to_str_func=lambda d: d["name"])
         
@@ -77,14 +61,6 @@ class MainWindow(MyStyledWindow):
         self.setCentralWidget(central_v_stack.widget)
 
         self.stack_panel = scores_stack.layout
-        self.wire_up()
-        
-    def wire_up(self):
-        self.mosc_server = MOscServer(local_ip, cs_to_py_port, 
-                                       [("/heartbeat", lambda addr, args: self.heartbeat_checker.handle_flag(args))]
-                                      ).start_async()
-        self.heartbeat_checker = HeartbeatChecker(0.5).bind_to(self.indicator).start()
-        self.kbd_resolver = KbdResolver(my_wirings, lambda s: Log.log(s))
 
     def load_piece_click(self):
         piece = generate_sample_piece(4, 8)
@@ -129,31 +105,8 @@ class MainWindow(MyStyledWindow):
         self.stack_panel.addStretch()
         self.stack_panel.parentWidget().update()
         self.stack_panel.update()
-        
-    def on_selection_change(self, index):
-        # Get the current text and display it
-        selected_value = self.combo_box.currentText()
-        Log.log(selected_value)
-        
-    @override
-    def resizeEvent(self, event):
-        self.kbd_resolver.clear()
-        size = event.size()  
-        self.setWindowTitle(f"Window resized to: {size.width()} x {size.height()}")
-        super().resizeEvent(event)  
-            
-    @override
-    def keyPressEvent(self, event: QKeyEvent):
-        if event.key() == Qt.Key_Space:
-            print("Space key pressed!")
-        self.kbd_resolver.accept_press(event.key(), event.isAutoRepeat())
+                
 
-    @override
-    def keyReleaseEvent(self, event: QKeyEvent):
-        self.kbd_resolver.accept_release(event.key(), event.isAutoRepeat())
+            
+
     
-    @override
-    def closeEvent(self, event):
-        self.heartbeat_checker.stop()
-        self.mosc_server.very_gently_close()
-        return super().closeEvent(event)
