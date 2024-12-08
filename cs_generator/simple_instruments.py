@@ -19,6 +19,7 @@ class ExitInstr(CsdInstrument):
         exitnow;
         """
 
+
 class OscPanicReceive(CsdInstrument):
     def __init__(self, osc_handle:OscHandle, panic_i_no, **kwargs):
         super().__init__(**kwargs)
@@ -33,7 +34,6 @@ class OscPanicReceive(CsdInstrument):
         self.eternal_events = [{"p1":0, "p2":max_time}]
     
     
-
 class OscMetroReceive(CsdInstrument):
     def __init__(self, osc_handle:OscHandle, **kwargs):
         super().__init__(**kwargs)
@@ -91,6 +91,7 @@ class CsHeartBeatToPy(CsdInstrument):
         """
         
         self.eternal_events = [{"p1":0, "p2":max_time}]
+        
         
 class TapeNoiseInstr(CsdInstrument):
     def __init__(self, **kwargs):
