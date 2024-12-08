@@ -1,6 +1,6 @@
 from typing import override
 
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QComboBox
 from PyQt5.QtGui import QKeyEvent
 from PyQt5.QtCore import Qt
 
@@ -18,6 +18,7 @@ from widgets.note_widget import AudioWidget, PartWidget, StaffWidget
 from widgets.text_box import TextBox
 import widgets.widget_utils as w_utils
 from wirings.cmd_wiring import my_wirings
+
 
 class MyStyledWindow(QMainWindow):
     def __init__(self):
@@ -37,10 +38,15 @@ class MainWindow(MyStyledWindow):
         self.part_widgets = []
         self.status_bar = TextBox(read_only=True, set_fixed_height=200)    
         self.indicator = IndicatorButton("<>", ..., )
+        self.combo_box = QComboBox()
+        self.combo_box.addItems(["44100", "48000", "96000"])  # Add values
+        self.combo_box.currentIndexChanged.connect(self.on_selection_change)  # Connect signal
+        self.combo_box.setStyleSheet("background-color: black;")
+        self.combo_box.setStyleSheet("color: white;")
         
         left_pane_buttons = [AsyncButton("CSOUND START", start_CSOUND), AsyncButton("beep", play_ding), 
                              AsyncButton("CSOUND STOP", quit_csound), AsyncButton("GENERATE CSD", save_file),
-                             self.indicator]
+                             self.indicator, self.combo_box]
         
         scores_stack = VStack(stretch=True)
         top_tools = [SyncButton("load piece", self.load_piece_click), SyncButton("load DAW", self.load_daw)]
@@ -111,7 +117,12 @@ class MainWindow(MyStyledWindow):
         self.stack_panel.addStretch()
         self.stack_panel.parentWidget().update()
         self.stack_panel.update()
-  
+        
+    def on_selection_change(self, index):
+        # Get the current text and display it
+        selected_value = self.combo_box.currentText()
+        Log.log(selected_value)
+        
     @override
     def resizeEvent(self, event):
         self.kbd_resolver.clear()
