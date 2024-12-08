@@ -17,12 +17,6 @@ def list_audio_devices():
         
     return res_dicts
 
-
-
-devices = list_audio_devices()
-for dev in devices:
-    print(dev)
-
 def calculate_simplified_rms(samples, chunk_size=10):
     # Ensure that the samples array is a NumPy array
     samples = np.array(samples)
