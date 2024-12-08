@@ -18,12 +18,13 @@ from model.audiofile import AudioFile
 class PartWidget(QWidget):
     def __init__(self, parent=None, flags=None, widget_type: type = None):
         super().__init__(parent, flags or Qt.WindowFlags())
-
         layout = QHBoxLayout(self)
         
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
         self.setStyleSheet("color: white; background-color: black;")
+
+        
         layout.addWidget(
             VStack(
                 margin=(0, 0, 0, 0), 
@@ -45,6 +46,7 @@ class LaneWidget(QWidget):
         self.very_light_gray = QColor(160, 160, 160)
         self.light_black = QColor(13, 13, 13)
         self.black = QColor(0, 0, 0)
+        self.setFixedHeight(120) 
         
     def set_content(self, data: Any):
         ...
@@ -55,11 +57,39 @@ class LaneWidget(QWidget):
 
     @override
     def paintEvent(self, event):
-        super().mousePressEvent(event)
+        super().paintEvent(event)
         
-        
-
+    
 audio_ranges = [(11, 12.3), (13, 16), (17, 19.7)]
+
+class ConductorWidget(LaneWidget):
+    def __init__(self):
+        super().__init__()
+        self.setFixedHeight(40) 
+        
+    @override    
+    def paintEvent(self, event):
+        self.draw_content()
+        
+    def draw_content(self):
+        painter = QPainter(self)
+        painter.setFont(self.bravura_font)
+        painter.setPen(self.dark_gray)
+        painter.setBrush(self.black)
+        pen = QPen(self.very_light_gray)  # Set the pen color to black
+        painter.setPen(pen)
+        self.draw_frame(painter)
+        # super().paintEvent(event)
+        pen = QPen(QColor(255, 255, 255, 80))  # Set the pen color to black
+        painter.setPen(pen)
+        pen.setWidth(1)       # Set the stroke thickness to 5 pixels
+        painter.end()    
+        
+    def draw_frame(self, painter: QPainter):
+        w = self.width()
+        h = self.height()
+        rect = QRect(0, 0, w-1, h-1)
+        painter.drawRect(rect)
         
 class AudioWidget(LaneWidget):
     def __init__(self):
