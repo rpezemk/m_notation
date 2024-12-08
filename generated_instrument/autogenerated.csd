@@ -10,7 +10,7 @@ nchnls = 2
 0dbfs = 1
 ;  GLOBAL VARIABLES
 
-gihandle OSCinit 8044; global def
+gihandle OSCinit 8047; global def
 
 gSpath init "" ; ; global def
 
@@ -80,7 +80,7 @@ gSpath init "" ; ; global def
             if ktrig == 1 && kprevTrig == 0 then
                 kvalue = 1 - kvalue
             endif
-            OSCsend kvalue, "", 8022, "/heartbeat", "i", kvalue
+            OSCsend kvalue, "", 8025, "/heartbeat", "i", kvalue
             kprevTrig = ktrig
         
     endin

@@ -30,7 +30,8 @@ class MOscServer():
         
     def very_gently_close(self):
         self.can_run = False
-        self.server.server_close()
+        if self.server: 
+            self.server.server_close()
 
     def start_async(self):
         t1 = threading.Thread(target=self.start_server, args=[])
