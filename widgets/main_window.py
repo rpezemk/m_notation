@@ -15,8 +15,15 @@ import widgets.widget_utils as w_utils
 from widgets.comboBox import ComboBox
 from widgets.label import Label
 from utils.audio_utils import list_audio_devices
+import wirings.layouts.general as general
 
 
+class ScoreView(VStack):
+    def __init__(self, margin = None, spacing = None, children = None, black_on_white=False, stretch=False, fixed_width=-1):
+        super().__init__(margin, spacing, children, black_on_white, stretch, fixed_width)
+
+
+    
 class MainWindow(MyStyledWindow):
     def __init__(self):
         super().__init__()
@@ -24,21 +31,6 @@ class MainWindow(MyStyledWindow):
         Log = MLogger(lambda msg: self.status_bar.append_log(msg))
         self.part_widgets = []
         self.status_bar = TextBox(read_only=True, set_fixed_height=200)    
-
-        devices = list_audio_devices()        
-        devcs_combo = ComboBox(devices, lambda s: print(s), dict_to_str_func=lambda d: d["name"])
-        
-        rates_combo = ComboBox(["44100", "48000", "96000"], lambda s: print(s))
-
-        
-        left_pane_buttons = [AsyncButton("CSOUND START", start_CSOUND), AsyncButton("beep", play_ding), AsyncButton("play file", play_file),
-                             AsyncButton("CSOUND STOP", quit_csound), AsyncButton("GENERATE CSD", save_file),
-                             self.indicator, 
-                             Label("devices"),
-                             devcs_combo,
-                             Label("rates"),
-                             rates_combo
-                             ]
         
         scores_stack = VStack(stretch=True)
         top_tools = [SyncButton("load piece", self.load_piece_click), SyncButton("load DAW", self.load_daw)]
@@ -49,7 +41,7 @@ class MainWindow(MyStyledWindow):
                     HStack(
                         children=[
                             VStack(fixed_width=120, 
-                                   children=left_pane_buttons, 
+                                   children=general.get_left_pane_buttons(), 
                                    stretch=True), 
                             scores_stack],
                         spacing=0, 
@@ -65,11 +57,7 @@ class MainWindow(MyStyledWindow):
     def load_piece_click(self):
         piece = generate_sample_piece(4, 8)
         self.load_piece(piece)
-        
-    def load_daw_click(self):
-        piece = generate_sample_piece(4, 8)
-        self.load_piece(piece)
-    
+            
     def load_daw(self):
         w_utils.clear_layout(self.stack_panel)
         self.part_widgets.clear()
