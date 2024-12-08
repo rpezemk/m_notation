@@ -1,4 +1,5 @@
-from cs_generator.simple_instruments import GlobalTempPath, FilePlayerOscRecevier, FilePlayerInstr, OscHandle, ExitInstr, TapeNoiseInstr, TestInstr, OscMetroReceive, CsdInstrument, BeepInstr, OscPanicReceive, CsHeartBeatToPy
+from cs_generator.file_player import FilePlayerInstr, FilePlayerOscRecevier
+from cs_generator.simple_instruments import GlobalTempPath, OscHandle, ExitInstr, TapeNoiseInstr, TestInstr, OscMetroReceive, CsdInstrument, BeepInstr, OscPanicReceive, CsHeartBeatToPy
 from cs_generator.templates import get_whole_body
 from wirings.csd_instr_numbers import panic_i_no, beep_i_no, py_to_cs_port, cs_to_py_port, file_play_instr_no
 
