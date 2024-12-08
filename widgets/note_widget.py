@@ -12,6 +12,8 @@ from widgets.widget_utils import VisualNote
 from widgets.painters.paint_manager import m_paint_visual
 from utils.space import get_single_ruler, map_to
 from widgets.text_box import TextBox, Label
+from utils.os_utils import get_absolute_path
+from model.audiofile import AudioFile
 
 class PartWidget(QWidget):
     def __init__(self, parent=None, flags=None, widget_type: type = None):
@@ -64,6 +66,10 @@ class AudioWidget(LaneWidget):
         super().__init__()
         self.view_time_start = 10 # sec
         self.view_time_end = 20 # sec
+        self.sample_file_path = "./audio_samples/harvard.wav"
+        self.abs_path_sample = get_absolute_path(self.sample_file_path)
+        self.audiofile = AudioFile(self.abs_path_sample)
+        self.simple = self.audiofile.get_simplified(10, 10)
         
     @override
     def set_content(self, data: Any):

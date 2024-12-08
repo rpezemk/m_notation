@@ -1,6 +1,24 @@
 from pathlib import Path
 from scipy.io import wavfile
 import os
+import numpy as np
+from scipy import stats
+
+def calculate_simplified_rms(samples, chunk_size=10):
+    # Ensure that the samples array is a NumPy array
+    samples = np.array(samples)
+
+    # Compute the number of chunks
+    n_chunks = len(samples) // chunk_size
+    
+    # Reshape the samples array into chunks
+    chunks = samples[:n_chunks * chunk_size].reshape(-1, chunk_size)
+    
+    # Compute the maximum absolute value for each chunk
+    max_abs = np.max(np.abs(chunks), axis=1)
+    
+    return max_abs.tolist()
+
 
 def load_audio_file(full_path: Path|str) -> tuple[bool, int, int, int, list]:
     
@@ -8,8 +26,8 @@ def load_audio_file(full_path: Path|str) -> tuple[bool, int, int, int, list]:
         return False, -1, -1, -1, []
     
     try:
-        sample_rate, data = wavfile.read("example.wav")
-        n_channels = data.shape
+        sample_rate, data = wavfile.read(full_path)
+        n_channels = data.shape[1]
         bit_depth = data.dtype.itemsize * 8
         channels = []
         for idx in range(0, n_channels):
