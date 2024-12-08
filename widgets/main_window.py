@@ -47,7 +47,7 @@ class MainWindow(MyStyledWindow):
         rates_combo = ComboBox(["44100", "48000", "96000"], lambda s: print(s))
 
         
-        left_pane_buttons = [AsyncButton("CSOUND START", start_CSOUND), AsyncButton("beep", play_ding), AsyncButton("play file", lambda f: play_file("")),
+        left_pane_buttons = [AsyncButton("CSOUND START", start_CSOUND), AsyncButton("beep", play_ding), AsyncButton("play file", play_file),
                              AsyncButton("CSOUND STOP", quit_csound), AsyncButton("GENERATE CSD", save_file),
                              self.indicator, 
                              Label("devices"),

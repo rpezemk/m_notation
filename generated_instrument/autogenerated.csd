@@ -119,8 +119,9 @@ gSpath init "" ; ; global def
         Spath init ""
         km  OSClisten gihandle, "/playfile", "iffs", kino, kfdur, koffset, Spath
         if (km != 0) then
-            printks "file: %s\n", 0, Spath
-            gSpath = Spath
+            printks "Spath: %s\n", 0, Spath
+            gSpath strcpyk Spath
+            printks "gSpath: %s\n", 0, gSpath
             event "i", kino, 0, kfdur, koffset
         endif
     

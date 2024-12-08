@@ -137,8 +137,9 @@ class FilePlayerOscRecevier(CsdInstrument):
         Spath init ""
         km  OSClisten {osc_handle.name}, "/playfile", "iffs", kino, kfdur, koffset, Spath
         if (km != 0) then
-            printks "file: %s\\n", 0, Spath
-            {global_path.name} = Spath
+            printks "Spath: %s\\n", 0, Spath
+            {global_path.name} strcpyk Spath
+            printks "gSpath: %s\\n", 0, {global_path.name}
             event "i", kino, 0, kfdur, koffset
         endif
     """

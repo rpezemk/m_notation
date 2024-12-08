@@ -48,9 +48,9 @@ def play_ding():
     
     
 
-def play_file(path: str, ):
+def play_file():
     try:
-        client.send_message("/playfile", [file_play_instr_no, 10, 2, "/home/przemek/m_notation/audio_samples/harvard.wav"]) 
+        client.send_message("/playfile", [file_play_instr_no, 10.0, 0.0, "/home/przemek/m_notation/audio_samples/harvard.wav"]) 
     except:
         print("Something went wrong")
 
