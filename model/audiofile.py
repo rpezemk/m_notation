@@ -24,6 +24,8 @@ class AudioFile():
             sub_res = [(r*height)/max__ for r in sub_res]
             self.simplified.append(sub_res)
         
-        self.simplified = [(sum([self.simplified[ch_no][i] for ch_no in range(0, self.n_channels)])) for i in range(0, n_little_samples)]
+        self.simplified = [
+            sum([self.simplified[ch_no][i] for ch_no in range(0, self.n_channels)])
+            for i in range(0, n_little_samples)]
             
         return self.simplified
