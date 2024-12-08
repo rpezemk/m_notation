@@ -5,7 +5,7 @@ import subprocess
 from typing import Any
 
 from wirings.csd_definition import get_built_instrument
-from wirings.csd_instr_numbers import panic_i_no, beep_i_no, py_to_cs_port, local_ip
+from wirings.csd_instr_numbers import panic_i_no, beep_i_no, py_to_cs_port, local_ip, file_play_instr_no
 
 # OSC server details
 port = py_to_cs_port       
@@ -46,6 +46,13 @@ def play_ding():
     except:
         print("Something went wrong")
     
+    
+
+def play_file(path: str, ):
+    try:
+        client.send_message("/playfile", [file_play_instr_no, 10, 2, "/home/przemek/m_notation/audio_samples/harvard.wav"]) 
+    except:
+        print("Something went wrong")
 
 def save_file():
     content = get_built_instrument()

@@ -16,7 +16,7 @@ synth = """
 {% endfor -%}
 ;  GLOBAL VARIABLES
 {% for global_var in global_variables %}
-{{ global_var.get_variable_def() }}
+{{ global_var.get_variable_def() }}; global def
 {% endfor %}
 ; EO GLOBAL VARIABLES
 

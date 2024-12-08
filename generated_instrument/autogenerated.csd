@@ -10,7 +10,9 @@ nchnls = 2
 0dbfs = 1
 ;  GLOBAL VARIABLES
 
-gihandle OSCinit 8002
+gihandle OSCinit 8002; global def
+
+gSpath init "" ; ; global def
 
 ; EO GLOBAL VARIABLES
 
@@ -95,6 +97,36 @@ gihandle OSCinit 8002
     endin
 
 
+    ; I_NAME: FILE_PLAYER 
+    ; INSTR_NO: 39 
+    instr 39
+
+        Spath strcpy gSpath
+        a_L, a_R diskin2 Spath, 1, p3;
+        outs a_L, a_R    
+        
+    endin
+
+
+    ; I_NAME: FIRE_FILE_PLAY 
+    ; INSTR_NO: 15 
+    instr 15
+
+        kf1 init 0
+        kino init 0
+        kfdur init 0.1
+        koffset init 0
+        Spath init ""
+        km  OSClisten gihandle, "/playfile", "iffs", kino, kfdur, koffset, Spath
+        if (km != 0) then
+            printks "file: %s\n", 0, Spath
+            gSpath = Spath
+            event "i", kino, 0, kfdur, koffset
+        endif
+    
+    endin
+
+
 ;  EO INSTRUMENTS
 </CsInstruments>
 <CsScore>
@@ -110,6 +142,9 @@ gihandle OSCinit 8002
   
   ; ################# INSTR_NO: 12 ####################
   i 12   0  7200 ;
+  
+  ; ################# INSTR_NO: 15 ####################
+  i 15   0  7200 ;
   
 </CsScore>
 </CsoundSynthesizer>

@@ -5,7 +5,7 @@ from PyQt5.QtGui import QKeyEvent
 from PyQt5.QtCore import Qt
 
 from model.piece import Piece, generate_sample_piece
-from wirings.test_methods import quit_csound, save_file, start_CSOUND, play_ding
+from wirings.test_methods import quit_csound, save_file, start_CSOUND, play_ding, play_file
 from wirings.csd_instr_numbers import cs_to_py_port, local_ip
 from utils.logger import Log, MLogger
 from utils.osc_udp.heartbeat_checker import HeartbeatChecker
@@ -47,7 +47,7 @@ class MainWindow(MyStyledWindow):
         rates_combo = ComboBox(["44100", "48000", "96000"], lambda s: print(s))
 
         
-        left_pane_buttons = [AsyncButton("CSOUND START", start_CSOUND), AsyncButton("beep", play_ding), 
+        left_pane_buttons = [AsyncButton("CSOUND START", start_CSOUND), AsyncButton("beep", play_ding), AsyncButton("play file", lambda f: play_file("")),
                              AsyncButton("CSOUND STOP", quit_csound), AsyncButton("GENERATE CSD", save_file),
                              self.indicator, 
                              Label("devices"),
