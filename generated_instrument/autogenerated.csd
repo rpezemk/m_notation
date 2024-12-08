@@ -18,17 +18,6 @@ gihandle OSCinit 8002
 
 
 
-    ; I_NAME: test_instr 
-    ; INSTR_NO: 1 
-    instr 1
-
-        a1 oscili 0.5, 440
-        outs 0.07*a1, 0.07*a1
-        event_i "i", 2, 60, p3
-        
-    endin
-
-
     ; I_NAME: beep_instr 
     ; INSTR_NO: 13 
     instr 13
@@ -95,13 +84,21 @@ gihandle OSCinit 8002
     endin
 
 
+    ; I_NAME: TAPE_NOISE 
+    ; INSTR_NO: 12 
+    instr 12
+
+            aNoise rand -1, 1           
+            aOut = aNoise * 0.002
+            outs aOut, aOut             
+        
+    endin
+
+
 ;  EO INSTRUMENTS
 </CsInstruments>
 <CsScore>
 
-  ; ################# INSTR_NO: 1 ####################
-  i 1   0  7200 ;
-  
   ; ################# INSTR_NO: 7 ####################
   i 7   0  7200 ;
   
@@ -110,6 +107,9 @@ gihandle OSCinit 8002
   
   ; ################# INSTR_NO: 9999 ####################
   i 9999   0  7200 ;
+  
+  ; ################# INSTR_NO: 12 ####################
+  i 12   0  7200 ;
   
 </CsScore>
 </CsoundSynthesizer>

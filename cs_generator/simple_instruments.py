@@ -91,3 +91,15 @@ class CsHeartBeatToPy(CsdInstrument):
         """
         
         self.eternal_events = [{"p1":0, "p2":max_time}]
+        
+class TapeNoiseInstr(CsdInstrument):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        
+        self.body_str = f"""
+            aNoise rand -1, 1           
+            aOut = aNoise * 0.002
+            outs aOut, aOut             
+        """
+        
+        self.eternal_events = [{"p1":0, "p2":max_time}]

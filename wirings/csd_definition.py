@@ -1,4 +1,4 @@
-from cs_generator.simple_instruments import OscHandle, ExitInstr, TestInstr, OscMetroReceive, CsdInstrument, BeepInstr, OscPanicReceive, CsHeartBeatToPy
+from cs_generator.simple_instruments import OscHandle, ExitInstr, TapeNoiseInstr, TestInstr, OscMetroReceive, CsdInstrument, BeepInstr, OscPanicReceive, CsHeartBeatToPy
 from cs_generator.templates import get_whole_body
 from wirings.csd_instr_numbers import panic_i_no, beep_i_no, py_to_cs_port, cs_to_py_port
 
@@ -7,12 +7,13 @@ def get_built_instrument():
     panic_instr = ExitInstr(i_no=panic_i_no, i_name="exit_instr")
     beep_instr = BeepInstr(i_no=beep_i_no, i_name="beep_instr")
     instruments: list[CsdInstrument] = [    
-        TestInstr(i_no=1, i_name="test_instr"),
+        # TestInstr(i_no=1, i_name="test_instr"),
         beep_instr,
         panic_instr,
         OscMetroReceive(osc_handle, i_no=7, i_name="OSC_METRO"),
         OscPanicReceive(osc_handle, panic_i_no, i_no=9997, i_name="OSC_PANIC"),
         CsHeartBeatToPy(5, cs_to_py_port, i_no=9999, i_name="HEARTBEAT"),
+        TapeNoiseInstr(i_no=12, i_name="TAPE_NOISE")
         ]
     options = ["-odac"]
 
