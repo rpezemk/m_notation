@@ -1,6 +1,6 @@
 
-from PyQt5.QtWidgets import QComboBox, QLabel
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QComboBox, QLabel, QFrame
+from PyQt5.QtCore import Qt, QRect
 
 from model.piece import Piece, generate_sample_piece
 from widgets.base_window import MyStyledWindow
@@ -32,8 +32,13 @@ class ScoreView(VStack):
         self.layout.addStretch()
         self.layout.parentWidget().update()
         self.layout.update()
-    
-    
+        
+        line = QFrame(self.widget)
+        line.setFrameShape(QFrame.HLine)  # Horizontal line
+        line.setFrameShadow(QFrame.Sunken)
+        line.setGeometry(QRect(500, 100, 1, 1000))  # Set position and size
+        line.setStyleSheet("background-color: white;")
+        
 class DawView(VStack):
     def __init__(self, margin = None, spacing = None, children = None, black_on_white=False, stretch=False, fixed_width=-1):
         super().__init__(margin, spacing, children, black_on_white, stretch, fixed_width)
