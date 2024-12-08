@@ -1,6 +1,6 @@
 from typing import override
 
-from PyQt5.QtWidgets import QMainWindow, QComboBox
+from PyQt5.QtWidgets import QMainWindow, QComboBox, QLabel
 from PyQt5.QtGui import QKeyEvent
 from PyQt5.QtCore import Qt
 
@@ -18,6 +18,8 @@ from widgets.note_widget import AudioWidget, PartWidget, StaffWidget
 from widgets.text_box import TextBox
 import widgets.widget_utils as w_utils
 from wirings.cmd_wiring import my_wirings
+from widgets.comboBox import ComboBox
+from utils.audio_utils import list_audio_devices
 
 
 class MyStyledWindow(QMainWindow):
@@ -38,15 +40,31 @@ class MainWindow(MyStyledWindow):
         self.part_widgets = []
         self.status_bar = TextBox(read_only=True, set_fixed_height=200)    
         self.indicator = IndicatorButton("<>", ..., )
-        self.combo_box = QComboBox()
-        self.combo_box.addItems(["44100", "48000", "96000"])  # Add values
-        self.combo_box.currentIndexChanged.connect(self.on_selection_change)  # Connect signal
-        self.combo_box.setStyleSheet("background-color: black;")
-        self.combo_box.setStyleSheet("color: white;")
+        devices = list_audio_devices()        
+        print(type(devices))
+        dev_label = QLabel("devices:")
+        dev_label.setStyleSheet("background-color: black;")
+        dev_label.setStyleSheet("color: white;")
+        devcs_combo = ComboBox(devices, lambda s: print(s), dict_to_str_func=lambda d: d["name"])
+        rate_label = QLabel("smplrate")
+        rate_label.setStyleSheet("background-color: black;")
+        rate_label.setStyleSheet("color: white;")
+        rates_combo = ComboBox(["44100", "48000", "96000"], lambda s: print(s))
+        
+        # self.combo_box = QComboBox()
+        # self.combo_box.addItems(["44100", "48000", "96000"])  # Add values
+        # self.combo_box.currentIndexChanged.connect(self.on_selection_change)  # Connect signal
+        # self.combo_box.setStyleSheet("background-color: black;")
+        # self.combo_box.setStyleSheet("color: white;")
         
         left_pane_buttons = [AsyncButton("CSOUND START", start_CSOUND), AsyncButton("beep", play_ding), 
                              AsyncButton("CSOUND STOP", quit_csound), AsyncButton("GENERATE CSD", save_file),
-                             self.indicator, self.combo_box]
+                             self.indicator, 
+                             dev_label,
+                             devcs_combo,
+                             rate_label,
+                             rates_combo
+                             ]
         
         scores_stack = VStack(stretch=True)
         top_tools = [SyncButton("load piece", self.load_piece_click), SyncButton("load DAW", self.load_daw)]

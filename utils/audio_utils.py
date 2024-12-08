@@ -3,6 +3,25 @@ from scipy.io import wavfile
 import os
 import numpy as np
 from scipy import stats
+import sounddevice as sd
+
+def list_audio_devices():
+    devices = list(sd.query_devices())
+    keys = ["index", "name", "default_samplerate", "max_input_channels", "max_output_channels"]
+    res_dicts = []
+    for dev in devices:
+        new_dict = {}
+        for k in keys:
+            new_dict[k] = dev[k]
+        res_dicts.append(new_dict)
+        
+    return res_dicts
+
+
+
+devices = list_audio_devices()
+for dev in devices:
+    print(dev)
 
 def calculate_simplified_rms(samples, chunk_size=10):
     # Ensure that the samples array is a NumPy array
