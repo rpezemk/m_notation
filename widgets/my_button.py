@@ -15,7 +15,8 @@ class SyncButton(QPushButton):
         font.setStyleHint(QFont.Monospace)  
         self.setFont(font)
         self.setFixedHeight(30)
-        self.clicked.connect(sync_click_func)
+        if sync_click_func:
+            self.clicked.connect(sync_click_func)
     
     
 class AsyncButton(QPushButton):

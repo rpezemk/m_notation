@@ -6,10 +6,10 @@ from widgets.compound.base_compound import MyCompound
 class HStack(MyCompound):
     def __init__(self, 
                  margin: tuple|list = None, 
-                 spacing: int = None,
+                 spacing: int = 0,
                  children: list[MyCompound] = None, 
                  black_on_white = False, 
-                 stretch = False, 
+                 stretch = True, 
                  fixed_height = -1):
         super().__init__(QHBoxLayout, 
                          margin=margin, 
@@ -25,10 +25,10 @@ class HStack(MyCompound):
 class VStack(MyCompound):
     def __init__(self, 
                  margin: tuple|list = None, 
-                 spacing: int = None,
+                 spacing: int = 0,
                  children: list[MyCompound] = None, 
                  black_on_white = False, 
-                 stretch = False,
+                 stretch = True,
                  fixed_width=-1):
         super().__init__(QVBoxLayout, 
                          margin=margin, 

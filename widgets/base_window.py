@@ -6,7 +6,7 @@ from widgets.my_button import IndicatorButton
 from wirings.cmd_wiring import my_wirings
 from wirings.csd_instr_numbers import cs_to_py_port, local_ip
 from wirings.test_methods import quit_csound
-
+from PyQt5.QtCore import Qt
 
 from PyQt5.QtGui import QKeyEvent
 from PyQt5.QtWidgets import QMainWindow
@@ -27,7 +27,8 @@ class MyStyledWindow(QMainWindow):
                                       ).start_async()
         self.indicator = IndicatorButton("<>", ..., )
         self.heartbeat_checker = HeartbeatChecker(0.5).bind_to(self.indicator).start()
-
+        self.setWindowFlags(Qt.FramelessWindowHint)
+        
     @override
     def closeEvent(self, event):
         quit_csound()
