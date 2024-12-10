@@ -109,14 +109,6 @@ class MainWindow(MyStyledWindow):
                     self.status_bar]
                 )
         
-        # w_utils.clear_layout(self.stack_panel)
-        # self.part_widgets.clear()
-        
-        # part_widget = PartWidget(widget_type=ConductorWidget)
-        # part_widget.staff_widget.set_content(None)
-        # part_widget.staff_widget.update()
-        # self.stack_panel.addWidget(part_widget)
-        # self.part_widgets.append(part_widget)
         self.setCentralWidget(central_v_stack.widget)
 
     def load_piece(self):
