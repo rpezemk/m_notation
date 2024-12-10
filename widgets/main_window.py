@@ -1,6 +1,6 @@
 
-from PyQt5.QtWidgets import QComboBox, QLabel, QFrame
-from PyQt5.QtCore import Qt, QRect
+from PyQt5.QtWidgets import QComboBox, QLabel, QFrame, QWidget
+from PyQt5.QtCore import Qt, QRect, QTimer
 
 from model.piece import Piece, generate_sample_piece
 from widgets.base_window import MyStyledWindow
@@ -23,6 +23,9 @@ class ScoreView(VStack):
     def __init__(self, margin = None, spacing = None, children = None, black_on_white=False, stretch=False, fixed_width=-1):
         super().__init__(margin, spacing, children, black_on_white, stretch, fixed_width)
         piece = generate_sample_piece(4, 8)
+        
+        self.back = QWidget(self.widget)
+        
         for part in piece.parts:
             part_widget = PartWidget(widget_type=StaffWidget)
             part_widget.staff_widget.set_content(part.measures[:4])
@@ -32,12 +35,33 @@ class ScoreView(VStack):
         self.layout.addStretch()
         self.layout.parentWidget().update()
         self.layout.update()
+        self.delta = 2
+        self.line_x0 = 100
+        self.line_pos = self.line_x0
+        self.timer = QTimer(self.widget)
+        self.timer.timeout.connect(self.update_counter)  # Call update_counter every interval
+        self.timer.start(100)  # Interval set to 1000ms (1 second)
+        self.line = QFrame(self.back)
+        self.widget.resizeEvent = self.resizeEvent
+        self.draw_line(0)
+
+    def draw_line(self, x0):
+        self.line.setFrameShape(QFrame.HLine)  # Horizontal line
+        self.line.setFrameShadow(QFrame.Sunken)
+        self.line.setGeometry(QRect(x0, 100, 1, 1000))  # Set position and size
+        self.line.setStyleSheet("background-color: gray;")
         
-        line = QFrame(self.widget)
-        line.setFrameShape(QFrame.HLine)  # Horizontal line
-        line.setFrameShadow(QFrame.Sunken)
-        line.setGeometry(QRect(500, 100, 1, 1000))  # Set position and size
-        line.setStyleSheet("background-color: white;")
+    def update_counter(self):
+        w = self.widget.width()
+        self.line_pos = (self.line_pos + self.delta) % (w - self.line_x0)
+        self.draw_line(self.line_pos + self.line_x0)
+    
+    def resizeEvent(self, event):
+        h = self.widget.height()
+        w = self.widget.width()
+        if w - 100 > 0:
+            self.back.setGeometry(0, 0, w, h)
+        
         
 class DawView(VStack):
     def __init__(self, margin = None, spacing = None, children = None, black_on_white=False, stretch=False, fixed_width=-1):
