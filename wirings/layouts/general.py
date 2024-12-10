@@ -37,3 +37,23 @@ def get_left_pane_buttons():
     
     return left_pane_buttons
 
+def get_left_pane_buttons2():
+    devices = list_audio_devices()   
+    devcs_combo = ComboBox(devices, lambda s: print(s), dict_to_str_func=lambda d: d["name"])
+    rates_combo = ComboBox(["44100", "48000", "96000"], lambda s: print(s))
+
+
+    left_pane_buttons = [
+        AsyncButton("CSOUND START", start_CSOUND), 
+        AsyncButton("beep", play_ding), 
+        AsyncButton("play file", play_file),
+        AsyncButton("CSOUND STOP", quit_csound), 
+        AsyncButton("GENERATE CSD", save_file),
+        Label("devices"),
+        devcs_combo,
+        Label("rates"),
+        rates_combo
+        ]
+    
+    return left_pane_buttons
+

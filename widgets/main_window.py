@@ -1,4 +1,5 @@
 
+from typing import Callable
 from PyQt5.QtWidgets import QComboBox, QLabel, QFrame, QWidget
 from PyQt5.QtCore import Qt, QRect, QTimer
 
@@ -24,7 +25,7 @@ class ScoreView(VStack):
         super().__init__(margin, spacing, children, black_on_white, stretch, fixed_width)
         piece = generate_sample_piece(4, 8)
         
-        self.back = QWidget(self.widget)
+        # self.back = QWidget(self.widget)
         
         for part in piece.parts:
             part_widget = PartWidget(widget_type=StaffWidget)
@@ -36,31 +37,31 @@ class ScoreView(VStack):
         self.layout.parentWidget().update()
         self.layout.update()
         self.delta = 2
-        self.line_x0 = 100
-        self.line_pos = self.line_x0
-        self.timer = QTimer(self.widget)
-        self.timer.timeout.connect(self.update_counter)  # Call update_counter every interval
-        self.timer.start(100)  # Interval set to 1000ms (1 second)
-        self.line = QFrame(self.back)
-        self.widget.resizeEvent = self.resizeEvent
-        self.draw_line(0)
+        # self.line_x0 = 100
+        # self.line_pos = self.line_x0
+        # self.timer = QTimer(self.widget)
+        # self.timer.timeout.connect(self.update_counter)  # Call update_counter every interval
+        # self.timer.start(100)  # Interval set to 1000ms (1 second)
+        # self.line = QFrame(self.back)
+        # self.widget.resizeEvent = self.resizeEvent
+        # self.draw_line(0)
 
-    def draw_line(self, x0):
-        self.line.setFrameShape(QFrame.HLine)  # Horizontal line
-        self.line.setFrameShadow(QFrame.Sunken)
-        self.line.setGeometry(QRect(x0, 100, 1, 1000))  # Set position and size
-        self.line.setStyleSheet("background-color: gray;")
+    # def draw_line(self, x0):
+    #     h = self.widget.height()
+    #     self.line.setFrameShape(QFrame.HLine)  # Horizontal line
+    #     self.line.setGeometry(QRect(x0, 0, 1, h))  # Set position and size
+    #     self.line.setStyleSheet("background-color: gray;")
         
-    def update_counter(self):
-        w = self.widget.width()
-        self.line_pos = (self.line_pos + self.delta) % (w - self.line_x0)
-        self.draw_line(self.line_pos + self.line_x0)
+    # def update_counter(self):
+    #     w = self.widget.width()
+    #     self.line_pos = (self.line_pos + self.delta) % (w - self.line_x0)
+    #     self.draw_line(self.line_pos + self.line_x0)
     
-    def resizeEvent(self, event):
-        h = self.widget.height()
-        w = self.widget.width()
-        if w - 100 > 0:
-            self.back.setGeometry(0, 0, w, h)
+    # def resizeEvent(self, event):
+    #     h = self.widget.height()
+    #     w = self.widget.width()
+    #     if w - 100 > 0:
+    #         self.back.setGeometry(0, 0, w, h)
         
         
 class DawView(VStack):
@@ -76,14 +77,21 @@ class DawView(VStack):
         self.layout.addStretch()
         self.layout.parentWidget().update()
         self.layout.update()
+      
+
+def get_buttons(defs: list[tuple[str, Callable]]):
+    res = []
+    for d in defs:
+        b = AsyncButton(d[0])    
+        b.setFixedWidth(100)
+        res.append(b)
+        
+    return res
             
 class MainWindow(MyStyledWindow):
     def __init__(self):
         super().__init__()
-        global Log
-        Log = MLogger(lambda msg: self.status_bar.append_log(msg))
-        self.part_widgets = []
-        self.status_bar = TextBox(read_only=True, set_fixed_height=200)    
+
         
         self.score_view = ScoreView()
         self.daw_view = DawView()
@@ -92,8 +100,13 @@ class MainWindow(MyStyledWindow):
     
     def set_central(self, compound: MyCompound):
 
+        
+        status_panel = HStack(
+            children=[SyncButton("load piece", self.load_piece), SyncButton("load DAW", self.load_daw)], 
+            stretch=True)
+        
         top_tools = [SyncButton("load piece", self.load_piece), SyncButton("load DAW", self.load_daw)]
-        horizontal_toolbar = HStack((0, 0, 0, 0), spacing=0, children=top_tools, stretch=True)
+        horizontal_toolbar = HStack(spacing=0, children=top_tools)
         central_v_stack = VStack(
                 children=[
                     horizontal_toolbar, 
@@ -103,10 +116,10 @@ class MainWindow(MyStyledWindow):
                                    children=general.get_left_pane_buttons(), 
                                    stretch=True), 
                             compound],
-                        spacing=0, 
-                        margin=(0, 0, 0, 0)),
-                    Stretch(),
-                    self.status_bar]
+                        spacing=0),
+                    SyncButton("load piece", self.load_piece),
+                    status_panel, 
+                    ]
                 )
         
         self.setCentralWidget(central_v_stack.widget)

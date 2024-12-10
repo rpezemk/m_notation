@@ -30,7 +30,7 @@ class PartWidget(QWidget):
                 margin=(0, 0, 0, 0), 
                 children=[Label("Label")], 
                 black_on_white=False,
-                fixed_width=100)
+                fixed_width=100, stretch=False)
             .widget)
         
         self.staff_widget = widget_type()
