@@ -1,5 +1,5 @@
-cs_to_py_port = 8025
-py_to_cs_port = 8047
+cs_to_py_port = 8012
+py_to_cs_port = 8043
 panic_i_no = 997
 beep_i_no = 13
 file_play_instr_no = 39

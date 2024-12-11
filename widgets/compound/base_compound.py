@@ -22,10 +22,8 @@ class MyCompound():
         if children is not None:
             for c in children:
                 if isinstance(c, MyCompound):
-                    c.widget.setParent(self.widget)
                     self.layout.addWidget(c.widget)
                 elif isinstance(c, QWidget):
-                    c.setParent(self.widget)
                     self.layout.addWidget(c)
                 elif isinstance(c, Stretch):
                     self.add_stretch(c)
