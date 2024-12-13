@@ -1,6 +1,7 @@
 from pathlib import Path
 from utils.audio_utils import load_audio_file, calculate_simplified_rms
 import numpy as np
+import os
 
 class AudioFile():
     def __init__(self, full_path: Path|str):
@@ -8,6 +9,7 @@ class AudioFile():
         self.ok, self.n_channels, self.rate, self.bit_depth, self.channels_data = load_audio_file(full_path)
         self.n_samples = len(self.channels_data[0]) if self.channels_data else 0
         self.simplified = []
+        self.only_filename = file_name = os.path.basename(full_path)
         
     def get_simplified(self, height: int, width: int):
         

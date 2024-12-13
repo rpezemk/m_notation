@@ -1,3 +1,4 @@
+from widgets.views.filelist_view import FileListView
 from widgets.views.daw_view import DawView
 from widgets.views.score_view import ScoreView
 from widgets.base_window import MyStyledWindow
@@ -20,6 +21,9 @@ class MainWindow(MyStyledWindow):
     def load_daw(self):
         self.set_central(DawView())
         
+    def load_file_view(self):
+        self.set_central(FileListView())
+        
 
     def set_central(self, compound: MyCompound):
 
@@ -30,7 +34,8 @@ class MainWindow(MyStyledWindow):
                     children=
                     [
                         SyncButton("load piece", self.load_piece), 
-                        SyncButton("load DAW", self.load_daw)
+                        SyncButton("load DAW", self.load_daw),
+                        SyncButton("load file view", self.load_file_view)
                     ]), 
                 HStack(
                     children=
