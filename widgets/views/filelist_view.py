@@ -8,35 +8,23 @@ from widgets.compound.stack_panels import HStack, VStack
 from widgets.my_button import SyncButton
 from widgets.note_widget import PartWidget, StaffWidget
 from widgets.text_box import TextBox
-
+from utils.file_utils.fs_model import DirModel, get_tree
 
 class FileListView(VStack):
     def __init__(self, margin = None, spacing = 0, children = None, black_on_white=False, stretch=True, fixed_width=-1):
         super().__init__(margin, spacing, children, black_on_white, False, fixed_width)
         current_dir = "."
         resolved_path = os.path.abspath(current_dir)
+        
         self.current_path = resolved_path
+        self.dir_model = DirModel(abs_path=self.current_path)
+        self.dir_children = get_tree(self.dir_model)
         
         path_box = TextBox("")
+        path_box.setStyleSheet("border: 1px solid white;")
         path_box.setText(self.current_path)
         
-        self.upper_bar = HStack(fixed_height=40, 
-                                children=
-                                    [
-                                        SyncButton("UP", None), 
-                                        path_box
-                                    ]
-                                )
-            
-        self.lower_bar = HStack(fixed_height=40, 
-                                children=
-                                    [
-                                        SyncButton("load piece", None), 
-                                        SyncButton("load piece", None), 
-                                        SyncButton("load piece", None), 
-                                    ]
-                                )
-        
+                    
         self.table_view = QTableView()
         self.model = QStandardItemModel()
         self.model.setHorizontalHeaderLabels(["Name", "Age", "City"])
@@ -64,7 +52,7 @@ class FileListView(VStack):
         self.table_view.horizontalHeader().setStretchLastSection(True)
 
         # Set layout
+        self.upper_bar = HStack(fixed_height=40, children=[SyncButton("UP", None), path_box])
         self.layout.addWidget(self.upper_bar.widget)
         self.layout.addWidget(self.table_view)
-        self.layout.addWidget(self.lower_bar.widget)
         
