@@ -1,4 +1,4 @@
-from utils.transform2d import Transform2D
+from utils.geometry.transform2d import Transform2D
 from PyQt5.QtCore import Qt, QRect
 from PyQt5.QtGui import QPainter, QColor
 

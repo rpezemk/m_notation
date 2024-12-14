@@ -1,7 +1,7 @@
 import threading
 import time
 from typing import Callable
-from utils.informable import Informer
+from utils.hierarchy.informable import Informer
 
 class HeartbeatChecker(Informer):
     def __init__(self, period_s: float, logger_func: Callable[[bool], None] = None, report_state_changed_func: Callable[[bool], None] = None):

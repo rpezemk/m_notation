@@ -1,5 +1,6 @@
 from widgets.compound.stack_panels import VStack
-from widgets.note_widget import AudioWidget, PartWidget
+from widgets.musical.PartWidget import PartWidget
+from widgets.lanes.AudioWidget import AudioWidget
 
 
 class DawView(VStack):

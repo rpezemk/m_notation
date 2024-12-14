@@ -5,9 +5,9 @@ from PyQt5.QtGui import QStandardItemModel, QStandardItem
 
 from model.piece import generate_sample_piece
 from widgets.compound.stack_panels import HStack, VStack
-from widgets.my_button import SyncButton
-from widgets.note_widget import PartWidget, StaffWidget
-from widgets.text_box import TextBox
+from widgets.basics.my_button import SyncButton
+from widgets.musical.PartWidget import PartWidget
+from widgets.basics.text_box import TextBox
 from utils.file_utils.fs_model import DirModel, get_tree
 
 class FileListView(VStack):

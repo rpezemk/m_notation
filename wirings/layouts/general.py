@@ -3,17 +3,20 @@ from PyQt5.QtWidgets import QComboBox, QLabel
 from PyQt5.QtCore import Qt
 
 from model.piece import Piece, generate_sample_piece
+from widgets.lanes.AudioWidget import AudioWidget
+from widgets.lanes.ConductorWidget import ConductorWidget
+from widgets.lanes.StaffWidget import StaffWidget
 from widgets.base_window import MyStyledWindow
 from wirings.test_methods import quit_csound, save_file, start_CSOUND, play_ding, play_file
 from utils.logger import MLogger
 from widgets.compound.stack_panels import HStack, VStack
 from widgets.compound.stretch import Stretch
-from widgets.my_button import AsyncButton, SyncButton
-from widgets.note_widget import AudioWidget, PartWidget, StaffWidget, ConductorWidget
-from widgets.text_box import TextBox
-import widgets.widget_utils as w_utils
-from widgets.comboBox import ComboBox
-from utils.audio_utils import list_audio_devices
+from widgets.basics.my_button import AsyncButton, SyncButton
+from widgets.musical.PartWidget import PartWidget
+from widgets.basics.text_box import TextBox
+import utils.widget_utils as w_utils
+from widgets.basics.comboBox import ComboBox
+from utils.audio.audio_utils import list_audio_devices
 
 
 def get_left_pane_buttons():

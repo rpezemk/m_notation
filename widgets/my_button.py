@@ -4,7 +4,7 @@ from PyQt5.QtGui import QFont
 from typing import Callable
 from enum import Enum
 from utils.async_utils import WrappedJob
-from utils.informable import Informable
+from utils.hierarchy.informable import Informable
 
 
 class SyncButton(QPushButton):

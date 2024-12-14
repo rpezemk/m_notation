@@ -2,10 +2,10 @@ from PyQt5.QtGui import QPainter
 
 from model.duration import Duration
 from widgets.painters.painter_definitions import get_painter_definitions
-from widgets.widget_utils import VisualNote
+from widgets.note_widgets.VisualNote import VisualNote
 from model.structure import TimeHolder
 from widgets.painters.elementary_painter import ElementaryPainter, HeadPainter, StemPainter, FlagPainter
-from utils.transform2d import Transform2D
+from utils.geometry.transform2d import Transform2D
 painter_data_list = get_painter_definitions()
 
 head_painter = HeadPainter()

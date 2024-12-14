@@ -1,7 +1,9 @@
 from pathlib import Path
-from utils.audio_utils import load_audio_file, calculate_simplified_rms
+from utils.audio.audio_utils import calculate_simplified_rms
 import numpy as np
 import os
+
+from utils.file_utils.load_audio_file import load_audio_file
 
 class AudioFile():
     def __init__(self, full_path: Path|str):

@@ -1,4 +1,4 @@
-from widgets.widget_utils import VisualNote
+from widgets.note_widgets.VisualNote import VisualNote
 from model.structure import TimeHolder, Note, Rest
 from model.duration import Duration
 from fonts.glyphs import Glyphs

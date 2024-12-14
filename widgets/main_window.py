@@ -5,7 +5,7 @@ from widgets.base_window import MyStyledWindow
 from widgets.compound.base_compound import MyCompound
 from widgets.compound.stack_panels import HStack, VStack
 from widgets.compound.stretch import Stretch
-from widgets.my_button import AsyncButton, SyncButton
+from widgets.basics.my_button import AsyncButton, SyncButton
 import wirings.layouts.general as general
 
      

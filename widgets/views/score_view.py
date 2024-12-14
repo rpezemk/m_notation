@@ -2,8 +2,9 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QFrame, QWidget
 
 from model.piece import generate_sample_piece
+from widgets.lanes.StaffWidget import StaffWidget
 from widgets.compound.stack_panels import VStack
-from widgets.note_widget import PartWidget, StaffWidget
+from widgets.musical.PartWidget import PartWidget
 
 class ScoreView(VStack):
     def __init__(self, margin = None, spacing = None, children = None, stretch=False, fixed_width=-1):

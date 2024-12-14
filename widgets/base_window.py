@@ -2,7 +2,7 @@ from utils.commands.kbd_resolver import KbdResolver
 from utils.logger import MLogger
 from utils.osc_udp.heartbeat_checker import HeartbeatChecker
 from utils.osc_udp.m_osc_server import MOscServer
-from widgets.my_button import IndicatorButton
+from widgets.basics.indicator_button import IndicatorButton
 from wirings.cmd_wiring import my_wirings
 from wirings.csd_instr_numbers import cs_to_py_port, local_ip
 from wirings.test_methods import quit_csound
@@ -24,20 +24,21 @@ class MyStyledWindow(QMainWindow):
                 background-color: #121212;
                 color: #999999;
             }
+            QFrame {
+                background-color: gray;
+                color: white;
+            }
             QPushButton {
                 border: 1px solid #999999;
                 color: white;
             }
             QLabel {
-                background-color: #121212;
-                border: 1px solid #999999;
+                background-color: black;
+                border: 1px solid white;
+                padding: 5px;
             }
             QComboBox {
                 background-color: #121212;
-                color: white;
-            }
-            QFrame {
-                background-color: gray;
                 color: white;
             }
             QTextEdit {
