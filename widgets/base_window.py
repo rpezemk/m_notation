@@ -21,16 +21,18 @@ class MyStyledWindow(QMainWindow):
         self.setWindowTitle("m_notator")
         self.setStyleSheet("""
             QWidget {
-                background-color: #121212;
+                background-color: black;
                 color: #999999;
             }
             QFrame {
-                background-color: gray;
+                background-color: black;
                 color: white;
             }
-            QPushButton {
+            QPushButton, AsyncButton, SyncButton {
                 border: 1px solid #999999;
+                background-color: #121212;
                 color: white;
+                padding: 1px 12px 1px 12px;
             }
             QLabel {
                 background-color: black;
@@ -49,6 +51,7 @@ class MyStyledWindow(QMainWindow):
                 background-color: #121212;
                 color: white;
             }
+            
         """)
         Log = MLogger(print)
         self.kbd_resolver = KbdResolver(my_wirings, lambda s: Log.log(s))

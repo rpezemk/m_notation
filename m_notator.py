@@ -1,9 +1,7 @@
 import sys
-from PyQt5.QtWidgets import QApplication, QMainWindow, QPushButton, QVBoxLayout, QWidget
+from PyQt5.QtWidgets import QApplication
 
-from widgets.main_window import MainWindow
-from widgets.musical.PartWidget import PartWidget
-import model.piece 
+from main_window import MainWindow
 
 if __name__ == "__main__":
     app = QApplication(sys.argv)

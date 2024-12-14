@@ -28,6 +28,7 @@ class AsyncButton(QPushButton):
         self.wrapped_job = WrappedJob(job_func=sync_click_func)
         self.clicked.connect(self.wrapped_job.try_run)
     
+
 class IndicatorButton(QPushButton, Informable):
     def __init__(self, text, sync_click_func=None, bool_func: Callable[[bool], None] = None):
         super().__init__(text)
