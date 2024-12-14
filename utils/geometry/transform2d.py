@@ -21,10 +21,10 @@ class Transform2D:
         return f"x={self.x}, y={self.y}"
 
 
-t1 = Transform2D(10, 2)
+# t1 = Transform2D(10, 2)
 
-t2 = Transform2D(20, 9)
+# t2 = Transform2D(20, 9)
 
-t3 = t1 * 100
+# t3 = t1 * 100
 
-print(t3)
+# print(t3)

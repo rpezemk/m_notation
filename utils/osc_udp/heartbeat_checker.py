@@ -42,7 +42,7 @@ class HeartbeatChecker(Informer):
         while self.can_run:
             self.history = [self.history[1], self.history[2], self.flag]
             hb_working = not self.are_same_lists(self.history, self.prev_history)
-            self.report_func(hb_working)
+            # self.report_func(hb_working)
             if self.hb_working != hb_working:
                 self.set_state(hb_working)
                 self.report_state_changed_func(hb_working)

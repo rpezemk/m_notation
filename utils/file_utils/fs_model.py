@@ -11,7 +11,7 @@ class FsItem():
         self.rel_path = os.path.basename(abs_path)
         self.ext = ""
         self.sel = False
-        pass
+
         
 class FileModel(FsItem):
     def __init__(self, *, abs_path:str=None):
@@ -22,7 +22,7 @@ class FileModel(FsItem):
             self.size = utils.file_utils.os_utils.get_file_size(abs_path)
         else:            
             self.size = 0
-        pass
+
         
 class ParentDirModel(FsItem):
     def __init__(self, abs_path:str=None):

@@ -50,6 +50,7 @@ class MyStyledWindow(QMainWindow):
             QTableView {
                 background-color: #121212;
                 color: white;
+                gridline-color: #555555; 
             }
             
         """)
@@ -63,11 +64,6 @@ class MyStyledWindow(QMainWindow):
         self.setWindowFlags(Qt.FramelessWindowHint)
         
     @override
-    def closeEvent(self, event):
-        quit_csound()
-
-
-    @override
     def resizeEvent(self, event):
         self.kbd_resolver.clear()
         size = event.size()
@@ -78,6 +74,7 @@ class MyStyledWindow(QMainWindow):
     def closeEvent(self, event):
         self.heartbeat_checker.stop()
         self.mosc_server.very_gently_close()
+        quit_csound()
         return super().closeEvent(event)
 
     @override
