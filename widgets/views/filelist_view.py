@@ -51,7 +51,6 @@ class FileListView(VStack):
                 
         self.table_view.setSelectionMode(QTableView.SingleSelection) 
         sel_model = self.table_view.selectionModel().selectionChanged.connect(self.on_selection_changed)
-        sel_model.setSele
         self.table_view.setItemDelegateForColumn(2, ButtonDelegate())
         # Set layout
         self.upper_bar = HStack(fixed_height=40, children=[SyncButton("UP", None), path_box])
