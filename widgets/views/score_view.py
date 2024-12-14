@@ -6,8 +6,8 @@ from widgets.compound.stack_panels import VStack
 from widgets.note_widget import PartWidget, StaffWidget
 
 class ScoreView(VStack):
-    def __init__(self, margin = None, spacing = None, children = None, black_on_white=False, stretch=False, fixed_width=-1):
-        super().__init__(margin, spacing, children, black_on_white, stretch, fixed_width)
+    def __init__(self, margin = None, spacing = None, children = None, stretch=False, fixed_width=-1):
+        super().__init__(margin, spacing, children, stretch, fixed_width)
         piece = generate_sample_piece(4, 8)
 
         self.back = QWidget(self.widget)
@@ -41,7 +41,6 @@ class ScoreView(VStack):
         h = self.widget.height()
         self.line.setFrameShape(QFrame.HLine)  # Horizontal line
         self.line.setGeometry(x0, 0, 1, h)  # Set position and size
-        self.line.setStyleSheet("background-color: gray;")
         
     def resizeEvent(self, event):
         h = self.widget.height()

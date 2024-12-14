@@ -8,11 +8,9 @@ class MyCompound():
                  margin: tuple|list = None, 
                  spacing: int=None, 
                  children: list['MyCompound'] = None,
-                 black_on_white=False, 
                  stretch = None
                  ):
         self.widget = QWidget()
-        self.widget.setStyleSheet("background-color: black;")
         self.layout = t(self.widget)
         if spacing is not None:
             self.layout.setSpacing(spacing)
@@ -35,10 +33,7 @@ class MyCompound():
             self.layout.setContentsMargins(*margin)
         else:
             self.layout.setContentsMargins(0, 0, 0, 0)
-        if black_on_white:
-            self.widget.setStyleSheet("background-color: lightgray; border-right: 1px solid black;")
-
-        
+                
     def add_stretch(self, Stretch):
         self.layout.addStretch()   
 

@@ -9,7 +9,6 @@ class TextBox(QTextEdit):
             self.setFixedHeight(set_fixed_height)
         else:
             self.setFixedHeight(40)
-        self.setStyleSheet("color: white;")
         font = QFont("Courier New") 
         font.setStyleHint(QFont.Monospace)  
         self.setFont(font)
@@ -28,12 +27,3 @@ class TextBox(QTextEdit):
         self.moveCursor(self.textCursor().End)
         self.ensureCursorVisible()
         
-class Label(QLabel):
-    def __init__(self, txt: str = ""):
-        super().__init__(txt)
-        self.txt = txt
-        self.setFixedHeight(40)
-        self.setStyleSheet("color: white; background-color: black;")
-        font = QFont("Courier New", 14) 
-        font.setStyleHint(QFont.Monospace)  
-        self.setFont(font)

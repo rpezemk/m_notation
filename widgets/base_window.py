@@ -18,8 +18,37 @@ from typing import override
 class MyStyledWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Stacked Panels")
-        self.setStyleSheet("background-color: black;")
+        self.setWindowTitle("m_notator")
+        self.setStyleSheet("""
+            QWidget {
+                background-color: #121212;
+                color: #999999;
+            }
+            QPushButton {
+                border: 1px solid #999999;
+                color: white;
+            }
+            QLabel {
+                background-color: #121212;
+                border: 1px solid #999999;
+            }
+            QComboBox {
+                background-color: #121212;
+                color: white;
+            }
+            QFrame {
+                background-color: gray;
+                color: white;
+            }
+            QTextEdit {
+                background-color: #121212;
+                color: white;
+            }
+            QTableView {
+                background-color: #121212;
+                color: white;
+            }
+        """)
         Log = MLogger(print)
         self.kbd_resolver = KbdResolver(my_wirings, lambda s: Log.log(s))
         self.mosc_server = MOscServer(local_ip, cs_to_py_port,

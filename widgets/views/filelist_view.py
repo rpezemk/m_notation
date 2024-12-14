@@ -11,8 +11,8 @@ from widgets.text_box import TextBox
 from utils.file_utils.fs_model import DirModel, get_tree
 
 class FileListView(VStack):
-    def __init__(self, margin = None, spacing = 0, children = None, black_on_white=False, stretch=True, fixed_width=-1):
-        super().__init__(margin, spacing, children, black_on_white, False, fixed_width)
+    def __init__(self, margin = None, spacing = 0, children = None, stretch=True, fixed_width=-1):
+        super().__init__(margin, spacing, children, False, fixed_width)
         current_dir = "."
         resolved_path = os.path.abspath(current_dir)
         
@@ -21,21 +21,14 @@ class FileListView(VStack):
         self.dir_children = get_tree(self.dir_model)
         
         path_box = TextBox("")
-        path_box.setStyleSheet("border: 1px solid white;")
+        # path_box.setStyleSheet("border: 1px solid white;")
         path_box.setText(self.current_path)
         
                     
         self.table_view = QTableView()
         self.model = QStandardItemModel()
         self.model.setHorizontalHeaderLabels(["Name", "Age", "City"])
-        self.table_view.setStyleSheet("background-color: black;")
-        self.widget.setStyleSheet("""
-            QWidget {
-                background-color: black;
-                color: white;
-            }
-        """)
-        
+                
         # Add data to the model
         data = [
             ["Alice", 25, "New York"],

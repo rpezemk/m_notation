@@ -8,7 +8,6 @@ def emit_score_view(parent_widget: QMainWindow = None, type = None) -> Tuple[QWi
     layout = type(widget)
     layout.setSpacing(0)  
     layout.setContentsMargins(0, 0, 0, 0)  
-    parent_widget.setStyleSheet("background-color: black;")
     return widget, layout
 
 

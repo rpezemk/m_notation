@@ -5,7 +5,6 @@ from PyQt5.QtGui import QFont
 class ComboBox(QComboBox):
     def __init__(self, values, func: Callable[[str], None], dict_to_str_func: Callable[[dict], str] = None):
         super().__init__()
-        self.setStyleSheet("color: white;")
         font = QFont("Courier New", 12) 
         font.setStyleHint(QFont.Monospace)  
         self.setFont(font)

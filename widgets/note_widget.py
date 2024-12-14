@@ -11,7 +11,7 @@ from widgets.compound.stack_panels import VStack
 from widgets.widget_utils import VisualNote
 from widgets.painters.paint_manager import m_paint_visual
 from utils.space import get_single_ruler, map_to
-from widgets.text_box import TextBox, Label
+from widgets.text_box import TextBox
 from utils.file_utils.os_utils import get_absolute_path
 from model.audiofile import AudioFile
 
@@ -22,14 +22,12 @@ class PartWidget(QWidget):
         
         layout.setContentsMargins(0, 0, 0, 0)
         layout.setSpacing(0)
-        self.setStyleSheet("color: white; background-color: black;")
 
         
         layout.addWidget(
             VStack(
                 margin=(0, 0, 0, 0), 
-                children=[Label("Label")], 
-                black_on_white=False,
+                children=[QLabel(text="Label")],
                 fixed_width=100, stretch=False)
             .widget)
         

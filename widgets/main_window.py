@@ -40,10 +40,7 @@ class MainWindow(MyStyledWindow):
                 HStack(
                     children=
                     [
-                        VStack(
-                            fixed_width=120, 
-                            children=general.get_left_pane_buttons(), 
-                            stretch=True), 
+                        VStack(fixed_width=120, children=general.get_left_pane_buttons(), stretch=True), 
                         compound
                     ], 
                     stretch=False),

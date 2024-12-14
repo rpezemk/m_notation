@@ -7,16 +7,14 @@ class HStack(MyCompound):
     def __init__(self, 
                  margin: tuple|list = None, 
                  spacing: int = 0,
-                 children: list[MyCompound] = None, 
-                 black_on_white = False, 
+                 children: list[MyCompound] = None,
                  stretch = True, 
                  fixed_height = -1):
         super().__init__(QHBoxLayout, 
                          margin=margin, 
                          spacing=spacing, 
                          children=children, 
-                         stretch=stretch, 
-                         black_on_white=black_on_white)
+                         stretch=stretch)
         if fixed_height >= 0:
             self.widget.setFixedHeight(fixed_height)  
             
@@ -26,16 +24,14 @@ class VStack(MyCompound):
     def __init__(self, 
                  margin: tuple|list = None, 
                  spacing: int = 0,
-                 children: list[MyCompound] = None, 
-                 black_on_white = False, 
+                 children: list[MyCompound] = None,
                  stretch = True,
                  fixed_width=-1):
         super().__init__(QVBoxLayout, 
                          margin=margin, 
                          spacing=spacing, 
                          children=children, 
-                         stretch=stretch, 
-                         black_on_white=black_on_white)
+                         stretch=stretch)
         if fixed_width >= 0:
             self.widget.setFixedWidth(fixed_width)  
     
