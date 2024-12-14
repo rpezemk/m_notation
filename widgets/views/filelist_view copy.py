@@ -1,6 +1,6 @@
 import os
 from PyQt5.QtCore import QTimer, Qt
-from PyQt5.QtWidgets import QFrame, QWidget, QApplication, QTableView, QVBoxLayout, QWidget, QTableWidget, QHeaderView, QSizePolicy, QTableWidgetItem
+from PyQt5.QtWidgets import QFrame, QWidget, QApplication, QTableView, QVBoxLayout, QWidget, QTableWidget, QHeaderView, QTableWidgetItem, QSizePolicy
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 
 from model.piece import generate_sample_piece
@@ -20,45 +20,48 @@ def finish_path(fsItem: FsItem):
 class FileListView(QWidget):
     def __init__(self, margin = None, spacing = 0, children = None, stretch=True, fixed_width=-1):
         super().__init__()
-        current_dir = "."
-        resolved_path = os.path.abspath(current_dir)
-        
-        self.current_path = resolved_path
-        self.dir_model = DirModel(abs_path=self.current_path)
-        ok, self.dir_children = get_tree(self.dir_model)
-            
+        # Set up the table widget
         self.table_widget = QTableWidget(self)
-        
-        columns = ["rel_path", "ext", "play"]
-        data = [[finish_path(fs), fs.ext, fs.sel] for fs in self.dir_children]
 
-        n_rows = len(data)
-        n_cols = len(columns)
-        self.table_widget.setRowCount(n_rows)
-        self.table_widget.setColumnCount(n_cols)
-        self.table_widget.setHorizontalHeaderLabels(columns)
-        
-        for idx, row in enumerate(data):
-            for col in range(n_cols):
-                item = QTableWidgetItem(str(data[idx][col]))
-                self.table_widget.setItem(idx, col, item)
+        # Set the number of rows and columns
+        self.table_widget.setRowCount(3)
+        self.table_widget.setColumnCount(3)
 
+        # Set column headers
+        self.table_widget.setHorizontalHeaderLabels(["Name", "Age", "City"])
+
+        # Add data to the table
+        data = [
+            ["Alice", 30, "New York"],
+            ["Bob", 25, "Los Angeles"],
+            ["Charlie", 35, "Chicago"]
+        ]
+
+        for row in range(3):
+            for col in range(3):
+                item = QTableWidgetItem(str(data[row][col]))
+                self.table_widget.setItem(row, col, item)
+
+        # Set the table to expand and take available space
         self.table_widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         layout = QVBoxLayout(self)
-
+        # Set up the layout
         self.table_widget.selectionModel().selectionChanged.connect(self.on_selection_changed)
 
         layout.addWidget(self.table_widget)
     
         
     def on_selection_changed(self, selected, deselected):
+            """Method called when the selection changes."""
+            # Get the list of selected rows
             selected_rows = [index.row() for index in self.table_widget.selectedIndexes()]
+
+            # You can also print the selected row(s) or perform some other action
             print(f"Selected rows: {selected_rows}")
             
+            # Example: Get data from the selected row(s)
             for row in selected_rows:
-                # bullshit
-                print(row)
-                name = self.table_widget.item(row, 0).text()
-                age = self.table_widget.item(row, 1).text() 
-                city = self.table_widget.item(row, 2).text()
+                name = self.table_widget.item(row, 0).text()  # Get 'Name' column data
+                age = self.table_widget.item(row, 1).text()   # Get 'Age' column data
+                city = self.table_widget.item(row, 2).text()  # Get 'City' column data
                 print(f"Row {row} - Name: {name}, Age: {age}, City: {city}")
