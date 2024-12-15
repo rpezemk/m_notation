@@ -1,7 +1,7 @@
 # TODO LIST
 
 ## CSOUND
-* play wave from disk
+* stop to play already played file
 
 ## GUI GENERAL
 * playback etc buttons
