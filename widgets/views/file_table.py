@@ -1,6 +1,6 @@
 from utils.file_utils.fs_model import DirModel, ParentDirModel, get_tree
 from widgets.views.my_table_widget import MyTableView, finish_path
-
+from wirings.test_methods import quit_csound, save_file, start_CSOUND, play_ding, static_play_file, play_file
 
 import os
 from typing import Any, Callable
@@ -16,9 +16,9 @@ class FileTable(MyTableView):
         self.on_path_changed(self.dir_model.abs_path)
         columns = [
                 ("d", 15, True, None, None),
-                ("rel_path", 200, True, None, self.double_click_change_dir),
-                ("ext", 20, True, None, None),
-                ("play", 20, True, self.play_click, None)
+                ("rel_path", 400, True, None, self.double_click_change_dir),
+                ("ext", 60, True, None, None),
+                ("play", 60, True, self.play_click, None)
             ]
 
         super().__init__(columns,
@@ -27,12 +27,19 @@ class FileTable(MyTableView):
 
     def get_data(self):
         ok, self.dir_children = get_tree(self.dir_model)
-        data = [["D" if isinstance(fsi, DirModel) or isinstance(fsi, ParentDirModel) else "F", finish_path(fsi), fsi.ext, "PLAY"] for fsi in self.dir_children]
+        data = [["D" if isinstance(fsi, DirModel) or isinstance(fsi, ParentDirModel) else "F", finish_path(fsi), fsi.ext, (self.txt_for_play(fsi) )] for fsi in self.dir_children]
         return data
 
+    def txt_for_play(self, fsi):
+        return "PLAY" if fsi.ext in [".wav", ".wave"] else "< >"
+
     def play_click(self, row_data: list[Any], row_idx):
-        if not row_data:
+        if not row_data or len(row_data) == 0:
             return
+
+        fs_item = self.dir_children[row_idx]
+        if fs_item.ext in [".wav", ".wave"]:
+            play_file(fs_item.abs_path)
         print(f"TEST CLICK PLAY row_idx:{row_idx}")
 
     def double_click_change_dir(self, row_data: list[Any], row_idx):

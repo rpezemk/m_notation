@@ -102,7 +102,7 @@ gSpath init "" ; ; global def
     instr 39
 
         Spath strcpy gSpath
-        a_L, a_R diskin2 Spath, 1, p3;
+        a_L, a_R diskin2 Spath, 1
         outs a_L, a_R    
         
     endin

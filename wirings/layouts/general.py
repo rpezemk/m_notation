@@ -7,7 +7,7 @@ from widgets.lanes.AudioWidget import AudioWidget
 from widgets.lanes.ConductorWidget import ConductorWidget
 from widgets.lanes.StaffWidget import StaffWidget
 from widgets.base_window import MyStyledWindow
-from wirings.test_methods import quit_csound, save_file, start_CSOUND, play_ding, play_file
+from wirings.test_methods import quit_csound, save_file, start_CSOUND, play_ding, static_play_file
 from utils.logger import MLogger
 from widgets.compound.stack_panels import HStack, VStack
 from widgets.compound.stretch import Stretch
@@ -28,7 +28,7 @@ def get_left_pane_buttons():
     left_pane_buttons = [
         AsyncButton("CSOUND START", start_CSOUND), 
         AsyncButton("beep", play_ding), 
-        AsyncButton("play file", play_file),
+        AsyncButton("play file", static_play_file),
         AsyncButton("CSOUND STOP", quit_csound), 
         AsyncButton("GENERATE CSD", save_file),
         QLabel("devices"),
