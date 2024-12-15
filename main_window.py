@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QApplication
-from widgets.views.filelist_view import FileListView
+from widgets.views.file_list_view import FileListView
 from widgets.views.daw_view import DawView
 from widgets.views.score_view import ScoreView
 from widgets.base_window import MyStyledWindow
