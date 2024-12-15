@@ -1,5 +1,5 @@
 from PyQt5.QtWidgets import QApplication
-from widgets.views.file_list_view import FileListView
+from widgets.views.file_list_view import FileBrowserView
 from widgets.views.daw_view import DawView
 from widgets.views.score_view import ScoreView
 from widgets.base_window import MyStyledWindow
@@ -23,7 +23,7 @@ class MainWindow(MyStyledWindow):
         self.set_central(DawView())
         
     def load_file_view(self):
-        self.set_central(FileListView())
+        self.set_central(FileBrowserView())
         
     def close_app(self):
         QApplication.quit()
@@ -39,7 +39,7 @@ class MainWindow(MyStyledWindow):
                     [
                         SyncButton("load piece", self.load_piece), 
                         SyncButton("load DAW", self.load_daw),
-                        SyncButton("load file view", self.load_file_view), 
+                        SyncButton("FILE BROWSER", self.load_file_view), 
                         SyncButton("CLOSE APP", self.close_app)
                     ]), 
                 HStack(

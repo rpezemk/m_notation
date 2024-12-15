@@ -10,7 +10,7 @@ nchnls = 2
 0dbfs = 1
 ;  GLOBAL VARIABLES
 
-gihandle OSCinit 8043; global def
+gihandle OSCinit 8015; global def
 
 gSpath init "" ; ; global def
 

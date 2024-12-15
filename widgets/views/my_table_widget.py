@@ -35,11 +35,9 @@ class MyTableView(QWidget):
         self.get_data_func = get_data_func
         self.columns = columns
             
-        
-        
-        
         self.table_widget = QTableWidget(self)
-        self.table_widget.setHorizontalHeaderLabels([c[0] for c in columns])
+        defs = [c[0] for c in columns]
+        print(defs)
         self.table_widget.setSelectionBehavior(QTableWidget.SelectRows) 
         self.table_widget.selectionModel().selectionChanged.connect(on_selection_changed)
         self.table_widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
@@ -52,6 +50,7 @@ class MyTableView(QWidget):
         for idx, col_no in enumerate(columns):
             self.table_widget.setColumnWidth(idx, col_no[1])  
             
+        self.table_widget.setHorizontalHeaderLabels(defs)
         self.refresh_view()
     
         layout = QVBoxLayout(self)

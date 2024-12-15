@@ -58,21 +58,21 @@ msg_handlers = [
     ("/heartbeat", heartbeat_handler)
     ]
 
-def test_hb_checker():
-    msg_handlers = []
-    m_osc_server = MOscServer("127.0.0.1", 8012, msg_handlers)
+# def test_hb_checker():
+#     msg_handlers = []
+#     m_osc_server = MOscServer("127.0.0.1", 8012, msg_handlers)
 
-    t1 = threading.Thread(target=m_osc_server.start_server, args=[])
-    print('defined "start"')
-    t1.start()
-    print('started')
-    print('(sleep 10)')
-    time.sleep(10)
-    t2 = threading.Thread(target=m_osc_server.very_gently_close, args=[])
-    print('gently stop')
-    t2.start()
-    print('stopped?')
+#     t1 = threading.Thread(target=m_osc_server.start_server, args=[])
+#     print('defined "start"')
+#     t1.start()
+#     print('started')
+#     print('(sleep 10)')
+#     time.sleep(10)
+#     t2 = threading.Thread(target=m_osc_server.very_gently_close, args=[])
+#     print('gently stop')
+#     t2.start()
+#     print('stopped?')
 
-if __name__ == "__main__":
-    test_hb_checker()        
+# if __name__ == "__main__":
+#     test_hb_checker()        
         

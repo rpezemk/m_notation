@@ -57,24 +57,24 @@ class HeartbeatChecker(Informer):
         self.report_func(flag)
         self.flag = flag
         
-def test_hb_checker():
-    def change_state(hb: HeartbeatChecker):
-        flag = 1
-        cnt = 0
-        while cnt < 10:
-            hb.handle_flag(flag)
-            time.sleep(1)
-            flag = abs(1 - flag)
-            cnt += 1
+# def test_hb_checker():
+#     def change_state(hb: HeartbeatChecker):
+#         flag = 1
+#         cnt = 0
+#         while cnt < 10:
+#             hb.handle_flag(flag)
+#             time.sleep(1)
+#             flag = abs(1 - flag)
+#             cnt += 1
             
-    print("should be True for 10s and False for next 10s, then finish")
-    hb = HeartbeatChecker(0.5, None)
-    t1 = threading.Thread(target=lambda: change_state(hb) , args=[])
-    t1.start()
-    hb.start()
-    time.sleep(20)
-    hb.stop()      
+#     print("should be True for 10s and False for next 10s, then finish")
+#     hb = HeartbeatChecker(0.5, None)
+#     t1 = threading.Thread(target=lambda: change_state(hb) , args=[])
+#     t1.start()
+#     hb.start()
+#     time.sleep(20)
+#     hb.stop()      
         
-if __name__ == "__main__":
-    test_hb_checker()        
+# if __name__ == "__main__":
+#     test_hb_checker()        
         
