@@ -5,7 +5,9 @@ from utils.file_utils.fs_model import DirModel, ParentDirModel
 from widgets.basics.my_button import SyncButton
 from widgets.basics.text_box import LineBox
 from widgets.compound.stack_panels import HStack, VStack
-from widgets.views.file_table import FileTable
+from widgets.lanes.AudioWidget import AudioWidget
+from widgets.musical.PartWidget import PartWidget
+from widgets.views.file_table import AudioFileTable
 
 
 class FileBrowserView(HStack):
@@ -13,7 +15,7 @@ class FileBrowserView(HStack):
         self.line_box = LineBox("abc", validation_func=self.dir_validation_func, on_validate_ok=self.dir_validate_ok)
         self.old_path = self.line_box.text()
         
-        self.file_table = FileTable(self.on_path_change)
+        self.file_table = AudioFileTable(self.on_path_change, on_audio_file_click_func=self.on_audio_file_click_func)
         self.up_button = SyncButton("UP", sync_click_func=self.dir_up)
         sub_children = [HStack(fixed_height=30, children=[self.up_button, self.line_box], stretch=False), 
                     self.file_table]
@@ -23,10 +25,15 @@ class FileBrowserView(HStack):
         
         self.checkbox = QCheckBox("Enable Option")
         self.checkbox.stateChanged.connect(self.on_toggle)  # Connect signal
+        self.audio_widget = AudioWidget()
+
         
-        right_part = VStack(children=[self.checkbox], stretch=True)
+        right_part = VStack(children=[self.checkbox, self.audio_widget], stretch=True)
         super().__init__(margin, spacing, [left_part, right_part], stretch=False)
-        
+    
+    def on_audio_file_click_func(self, path: str):
+        self.audio_widget.set_content(path)
+        self.audio_widget.update()
         
     def on_path_change(self, path: str):
         self.line_box.setText(path)

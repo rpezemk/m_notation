@@ -9,7 +9,7 @@ from PyQt5.QtGui import QColor, QPainter, QPen
 from typing import Any, override
 
 
-audio_ranges = [(11, 12.3), (13, 16), (17, 19.7)]
+g_audio_ranges = [(11, 12.3), (13, 16), (17, 19.7)]
 
 class AudioWidget(LaneWidget):
     def __init__(self):
@@ -20,9 +20,19 @@ class AudioWidget(LaneWidget):
         self.abs_path_sample = get_absolute_path(self.sample_file_path)
         self.audiofile = AudioFile(self.abs_path_sample)
         self.simple = self.audiofile.get_simplified(10, 10)
-
+        self.audio_ranges = g_audio_ranges
+        
     @override
     def set_content(self, data: Any):
+        if isinstance(data, str):
+            path = data
+            self.view_time_start = 0
+            self.view_time_end = 10
+            self.sample_file_path = path
+            self.audio_ranges = [(0, 10)]
+            self.abs_path_sample = get_absolute_path(self.sample_file_path)
+            self.audiofile = AudioFile(self.abs_path_sample)
+            self.simple = self.audiofile.get_simplified(10, 10)
         ...
 
     @override
@@ -43,9 +53,9 @@ class AudioWidget(LaneWidget):
         self.draw_frame(painter)
         # super().paintEvent(event)
         self.draw_ranges(painter)
-        pen = QPen(QColor(255, 255, 255, 80))  # Set the pen color to black
+        pen = QPen(QColor(255, 255, 255, 255))  # Set the pen color to black
+        pen.setWidth(2)       # Set the stroke thickness to 5 pixels
         painter.setPen(pen)
-        pen.setWidth(1)       # Set the stroke thickness to 5 pixels
         self.draw_data(painter)
         painter.end()
 
@@ -62,7 +72,7 @@ class AudioWidget(LaneWidget):
         h = self.height()
         painter.setBrush(self.black)
 
-        for rng in audio_ranges:
+        for rng in self.audio_ranges:
             start = rng[0]
             end = rng[1]
             time_range = self.view_time_end - self.view_time_start
@@ -81,7 +91,7 @@ class AudioWidget(LaneWidget):
         h = self.height()
         painter.setBrush(self.black)
 
-        for rng in audio_ranges:
+        for rng in self.audio_ranges:
             start = rng[0]
             end = rng[1]
             time_range = self.view_time_end - self.view_time_start
@@ -94,7 +104,7 @@ class AudioWidget(LaneWidget):
 
     def draw_range_data(self, painter: QPainter, x0, y0, r_w, r_h):
         simplified = self.audiofile.get_simplified(r_h, 1)
-        max__ = max(simplified)
+        max__ = max(simplified) if simplified else [1]
         simplified = [(r*r_h)/max__ for r in simplified]
         lenght = len(simplified)
         cnt = 0

@@ -6,9 +6,10 @@ import os
 from typing import Any, Callable
 
 
-class FileTable(MyTableView):
-    def __init__(self, on_path_changed_func: Callable[[str], None] = None):
+class AudioFileTable(MyTableView):
+    def __init__(self, on_path_changed_func: Callable[[str], None] = None, on_audio_file_click_func: Callable[[str], None] = None):
         self.on_path_changed_func = on_path_changed_func
+        self.on_audio_file_click_func = on_audio_file_click_func
         current_dir = "."
         resolved_path = os.path.abspath(current_dir)
         self.current_path = resolved_path
@@ -54,6 +55,12 @@ class FileTable(MyTableView):
 
     def on_selection_changed(self, selected, deselected):
             selected_rows = [index.row() for index in self.table_widget.selectedIndexes()]
+            if not selected_rows:
+                return
+            if not self.on_audio_file_click_func:
+                return
+            first = self.dir_children[selected_rows[0]]
+            self.on_audio_file_click_func(first.abs_path)
             print(f"Selected rows: {selected_rows}")
 
     def on_path_changed(self, path: str):
