@@ -30,7 +30,7 @@ class MyStyledWindow(QMainWindow):
             }
             QPushButton, AsyncButton, SyncButton {
                 border: 1px solid #999999;
-                background-color: #121212;
+                background-color: black;
                 color: white;
                 padding: 1px 12px 1px 12px;
             }
@@ -69,7 +69,7 @@ class MyStyledWindow(QMainWindow):
             }
             
             QComboBox {
-                background-color: #121212;
+                background-color: black;
                 color: white;
             }
             QLineEdit {
@@ -80,12 +80,12 @@ class MyStyledWindow(QMainWindow):
                 background-color: black;}
                 
             QTextEdit {
-                background-color: #121212;
+                background-color: black;
                 color: white;
             }
             
             QTableWidget {
-                background-color: #121212;
+                background-color: black;
                 color: white;
                 gridline-color: #555555; 
                 font-family: 'Courier New';
@@ -96,7 +96,7 @@ class MyStyledWindow(QMainWindow):
                 font-family: 'Courier New', monospace;
                 font-size: 14px;
                 color: white;
-                background-color: #121212;
+                background-color: black;
             }
             
         """)
