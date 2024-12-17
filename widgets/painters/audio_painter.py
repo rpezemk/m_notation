@@ -1,5 +1,5 @@
 from PyQt5.QtCore import QRect
-from PyQt5.QtGui import QColor, QPainter
+from PyQt5.QtGui import QColor, QPainter, QFont
 from PyQt5.QtWidgets import QWidget
 
 from model.audiofile import AudioFile
@@ -11,6 +11,7 @@ class AudioPainter():
         self.very_light_gray = QColor(160, 160, 160)
         self.light_black = QColor(13, 13, 13)
         self.black = QColor(0, 0, 0)
+        self.white = QColor(255, 255, 255)
 
     def draw(self, qwidget: QWidget, view_time_start: float, view_time_end: float, start, end, audiofile: AudioFile):
         w = qwidget.width()
@@ -27,7 +28,14 @@ class AudioPainter():
         rect = QRect(x0, y0, r_w, r_h)
         painter.setPen(self.very_light_gray)
         painter.drawRect(rect)
+        painter.drawLine(x0, y0 + 20, x0 + r_w, y0 + 20)
         simplified = audiofile.get_simplified(10, 10)
+        font = QFont("Courier New", pointSize=14) 
+        font.setStyleHint(QFont.Monospace)  
+        painter.setFont(font)
+        painter.setBrush(self.very_light_gray)
+        painter.drawText(x0+10, 20, audiofile.rel_name)
+        painter.setBrush(self.black)
         max__ = max(simplified) if simplified else [1]
         normalized = [(r*r_h)/max__ for r in simplified]
         lenght = len(normalized)
@@ -36,7 +44,7 @@ class AudioPainter():
         for val in normalized:
             res_x0 = int(x0 + (r_w*cnt/lenght))
             val = int(val)
-            painter.drawPoint(res_x0, r_h - val - 5)
+            painter.drawPoint(res_x0, r_h - val + 5)
             cnt += 1
 
         painter.end()

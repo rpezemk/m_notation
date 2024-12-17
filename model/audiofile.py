@@ -8,6 +8,7 @@ from utils.file_utils.load_audio_file import load_audio_file
 class AudioFile():
     def __init__(self, full_path: Path|str):
         self.full_path = str(full_path)
+        self.rel_name = os.path.basename(full_path)
         self.ok, self.n_channels, self.rate, self.bit_depth, self.channels_data = load_audio_file(full_path)
         self.n_samples = len(self.channels_data[0]) if self.channels_data else 0
         self.simplified = []
