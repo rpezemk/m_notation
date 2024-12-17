@@ -50,7 +50,7 @@ class AudioWidget(LaneWidget):
         painter.setBrush(self.black)
         pen = QPen(self.very_light_gray)  # Set the pen color to black
         painter.setPen(pen)
-        self.draw_frame(painter)
+        self.draw_lane(painter)
         # super().paintEvent(event)
         self.draw_ranges(painter)
         pen = QPen(QColor(255, 255, 255, 255))  # Set the pen color to black
@@ -59,7 +59,7 @@ class AudioWidget(LaneWidget):
         self.draw_data(painter)
         painter.end()
 
-    def draw_frame(self, painter: QPainter):
+    def draw_lane(self, painter: QPainter):
         w = self.width()
         h = self.height()
         rect = QRect(0, 0, w-1, h-1)
