@@ -1,18 +1,17 @@
-from widgets.lanes.LaneWidget import LaneWidget
-
-
+from typing import override
+from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QHBoxLayout, QPushButton, QLabel
 from PyQt5.QtCore import QRect
 from PyQt5.QtGui import QColor, QPainter, QPen
 
-
-from typing import override
+from widgets.lanes.LaneWidget import LaneWidget
+from widgets.compound.stack_panels import HStack, VStack
 
 
 class ConductorWidget(LaneWidget):
     def __init__(self):
         super().__init__()
         self.setFixedHeight(40)
-
+        
     @override
     def paintEvent(self, event):
         self.draw_content()

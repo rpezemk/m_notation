@@ -5,6 +5,7 @@ from model.piece import generate_sample_piece
 from widgets.lanes.StaffWidget import StaffWidget
 from widgets.compound.stack_panels import VStack
 from widgets.musical.PartWidget import PartWidget
+from widgets.lanes.ConductorWidget import ConductorWidget
 
 class ScoreView(VStack):
     def __init__(self, margin = None, spacing = None, children = None, stretch=False, fixed_width=-1):
@@ -20,6 +21,10 @@ class ScoreView(VStack):
             self.layout.addWidget(part_widget)
 
         self.layout.addStretch()
+
+        conductor = PartWidget(widget_type=ConductorWidget)
+        self.layout.addWidget(conductor)
+
         self.layout.parentWidget().update()
         self.layout.update()
         self.delta = 1
