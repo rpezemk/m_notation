@@ -4,7 +4,7 @@ from PyQt5.QtCore import Qt
 
 from model.piece import Piece, generate_sample_piece
 from widgets.lanes.AudioWidget import AudioWidget
-from widgets.lanes.ConductorWidget import ConductorWidget
+from widgets.lanes.ConductorWidget import RulerWidget
 from widgets.lanes.StaffWidget import StaffWidget
 from widgets.base_window import MyStyledWindow
 from wirings.test_methods import quit_csound, save_file, start_CSOUND, play_ding, static_play_file

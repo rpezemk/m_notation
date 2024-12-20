@@ -1,5 +1,5 @@
 from widgets.compound.stack_panels import VStack
-from widgets.lanes.ConductorWidget import ConductorWidget
+from widgets.lanes.ConductorWidget import RulerWidget
 from widgets.musical.PartWidget import PartWidget
 from widgets.lanes.AudioWidget import AudioWidget
 
@@ -15,7 +15,7 @@ class DawView(VStack):
             self.layout.addWidget(part_widget)
         self.layout.addStretch()
         
-        conductor = PartWidget(widget_type=ConductorWidget)
-        self.layout.addWidget(conductor)
+        ruler_widget = PartWidget(widget_type=RulerWidget)
+        self.layout.addWidget(ruler_widget)
         self.layout.parentWidget().update()
         self.layout.update()

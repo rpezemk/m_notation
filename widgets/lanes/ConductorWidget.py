@@ -7,7 +7,7 @@ from widgets.lanes.LaneWidget import LaneWidget
 from widgets.compound.stack_panels import HStack, VStack
 
 
-class ConductorWidget(LaneWidget):
+class RulerWidget(LaneWidget):
     def __init__(self):
         super().__init__()
         self.setFixedHeight(40)
