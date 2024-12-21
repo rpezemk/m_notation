@@ -1,10 +1,10 @@
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, QLayout
 
 from widgets.compound.stretch import Stretch
 
 class MyCompound():
     def __init__(self, 
-                 t: type, 
+                 t: type[QLayout], 
                  margin: tuple|list = None, 
                  spacing: int=None, 
                  children: list['MyCompound'] = None,
