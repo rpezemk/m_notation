@@ -15,7 +15,7 @@ class ScoreView(VStack):
         self.back = QWidget(self.widget)
         
         ruler_widget = PartWidget(widget_type=RulerWidget)
-        ruler_widget.staff_widget.set_content(piece.conductor_part.tempo_marks)
+        ruler_widget.staff_widget.set_content(piece.parts[0].measures[:4])
         self.layout.addWidget(ruler_widget)
 
         for part in piece.parts:
@@ -36,7 +36,7 @@ class ScoreView(VStack):
         self.line_pos = self.line_x0
         self.timer = QTimer(self.widget)
         self.timer.timeout.connect(self.update_counter)  # Call update_counter every interval
-        self.timer.start(2)  # Interval set to 1000ms (1 second)
+        self.timer.start(100)  # Interval set to 1000ms (1 second)
         self.line = QFrame(self.back)
         self.widget.resizeEvent = self.resizeEvent
         
