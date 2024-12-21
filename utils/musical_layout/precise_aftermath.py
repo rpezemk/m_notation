@@ -1,4 +1,5 @@
 from math import gcd
+from functools import cmp_to_key
 
 class Ratio():
     def __init__(self, *, numerator: int = 1, denominator: int = 1, t: tuple[int, int] = None):
@@ -27,12 +28,12 @@ class Ratio():
     def __add__(self, other: 'Ratio'):
         new_num = (self.numerator * other.denominator + other.numerator * self.denominator)
         new_den = self.denominator * other.denominator
-        return Ratio(numerator=new_num, denominator=new_den)
+        return Ratio(numerator=new_num, denominator=new_den).simplify()
         
     def __sub__(self, other: 'Ratio'):
         new_num = (self.numerator * other.denominator - other.numerator * self.denominator)
         new_den = self.denominator * other.denominator
-        return Ratio(numerator=new_num, denominator=new_den)
+        return Ratio(numerator=new_num, denominator=new_den).simplify()
     
     def simplify(self):
         common = gcd(self.numerator, self.denominator)
@@ -43,6 +44,29 @@ class Ratio():
     def __str__(self):
         res = f"[{self.numerator}/{self.denominator}]"
         return res
+
+    def custom_comparator(x: 'Ratio', y: 'Ratio'):
+        if x < y:
+            return -1  # x comes before y
+        elif x > y:
+            return 1   # x comes after y
+        else:
+            return 0   # x and y are equal    
+
+    def sort(ratios: list['Ratio']):
+        sorted_ratios = sorted(ratios, key=custom_key)
+        return sorted_ratios
+    
+    def get_lowest(ratios: list['Ratio']) -> tuple[bool, list[int], 'Ratio']:
+        if not ratios:
+            return False, [], None
+        
+        lowest: Ratio = Ratio.sort(ratios)[0]
+        res_idxs = [i for i, v in enumerate(ratios) if v == lowest]
+        return True, res_idxs, lowest
+        
+    
+custom_key = cmp_to_key(Ratio.custom_comparator)
 
 def test_ratios():
         
@@ -69,5 +93,65 @@ def test_ratios():
             print("    ", check[0], res,  check[1])
             
 
+def to_moving_sum(lane: list[Ratio]) -> list[Ratio]:
+    curr = Ratio(t=(0, 1))
+    res = []
+    for r in lane:
+        curr = curr + r
+        res.append(curr)
+
+    return res
+
+
+    
+
+def ratio_lanes_to_ruler(lanes: list[list[Ratio]]) -> tuple[list[Ratio], list[Ratio]]:
+    curr_pos = Ratio(t=(0, 1))
+    moving_sum_lanes = [to_moving_sum(lane) for lane in lanes]
+    lane_cnt = 0
+    for lane in moving_sum_lanes:
+        for r in lane:
+            print("lane", lane_cnt, " = ", r)
+        lane_cnt += 1
+        
+    mov_sum_ruler = []
+    widths_ruler = []
+    while True:
+        curr_check = []
+        print(f"curr_pos is {curr_pos}")
+        mov = [[m for m in mov if m > curr_pos][:1] for mov in moving_sum_lanes]
+        lane_cnt = 0
+        for lane in mov:
+            for r in lane:
+                print("m. lane", lane_cnt, " = ", r)
+            lane_cnt += 1
+        if not mov:
+            break
+        for m in mov:
+            if m:
+                curr_check.append(m[0])
+        
+        ok, idxs, lowest = Ratio.get_lowest(curr_check)
+        if not ok:
+            break
+        widths_ruler.append(lowest - curr_pos)
+        curr_pos = lowest
+        mov_sum_ruler.append(curr_pos)  
+    return mov_sum_ruler, widths_ruler
+
+def test_ruler_get():
+    check_list1 = [Ratio(t=r) for r in [ (1, 2), (1, 4), (1, 4)]]
+    check_list2 = [Ratio(t=r) for r in [ (1, 4), (1, 12), (1, 12), (1, 12), (2, 4)]]
+    m_ruler, widths = ratio_lanes_to_ruler([check_list1, check_list2])
+    print("mov_ruler:")
+    for ratio in m_ruler:
+        print(ratio, end=" ")
+    print("")
+    print("widths:")
+    for ratio in widths:
+        print(ratio, end=" ")
+    print("")
+    
 if __name__ == "__main__":
-    test_ratios()
+    # test_ratios()
+    test_ruler_get()
