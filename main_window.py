@@ -49,12 +49,6 @@ class MainWindow(MyStyledWindow):
                         compound
                     ], 
                     stretch=False),
-                HStack(
-                    children=
-                    [
-                        SyncButton("PLAY", None), 
-                        SyncButton("STOP", None)
-                    ]),
                 ],
             stretch=False)
 

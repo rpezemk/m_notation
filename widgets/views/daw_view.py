@@ -1,4 +1,6 @@
-from widgets.compound.stack_panels import VStack
+from widgets.basics.my_button import StateButton, SyncButton
+from widgets.compound.stack_panels import HStack, VStack
+from widgets.compound.stretch import Stretch
 from widgets.lanes.ConductorWidget import RulerWidget
 from widgets.musical.PartWidget import PartWidget
 from widgets.lanes.AudioWidget import AudioWidget
@@ -17,5 +19,21 @@ class DawView(VStack):
         
         ruler_widget = PartWidget(widget_type=RulerWidget)
         self.layout.addWidget(ruler_widget)
+        
+        bottom_panel = HStack(
+                    children=
+                    [
+                        Stretch(),
+                        SyncButton("<<", None), 
+                        SyncButton("<", None), 
+                        StateButton("PLAY", None, color_hex_off="#334477", color_hex_on="#4477FF"),
+                        StateButton("REC", None, color_hex_off="#554422", color_hex_on="#FF5522"),
+                        SyncButton("STOP", None),
+                        SyncButton(">", None),
+                        SyncButton(">>", None),
+                    ],
+                    stretch=False)
+        self.layout.addWidget(bottom_panel.widget)
+        
         self.layout.parentWidget().update()
         self.layout.update()

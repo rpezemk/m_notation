@@ -2,8 +2,10 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QFrame, QWidget
 
 from model.piece import generate_sample_piece
+from widgets.basics.my_button import StateButton, SyncButton
+from widgets.compound.stretch import Stretch
 from widgets.lanes.StaffWidget import StaffWidget
-from widgets.compound.stack_panels import VStack
+from widgets.compound.stack_panels import HStack, VStack
 from widgets.musical.PartWidget import PartWidget
 from widgets.lanes.ConductorWidget import RulerWidget
 
@@ -29,6 +31,20 @@ class ScoreView(VStack):
         ruler_widget = PartWidget(widget_type=RulerWidget)
         self.layout.addWidget(ruler_widget)
 
+        bottom_panel = HStack(
+                    children=
+                    [
+                        Stretch(),
+                        SyncButton("<<", None), 
+                        SyncButton("<", None), 
+                        StateButton("PLAY", None, color_hex_off="#334477", color_hex_on="#4477FF"),
+                        SyncButton("STOP", None),
+                        SyncButton(">", None),
+                        SyncButton(">>", None),
+                    ],
+                    stretch=False)
+        self.layout.addWidget(bottom_panel.widget)
+        
         self.layout.parentWidget().update()
         self.layout.update()
         self.delta = 1
