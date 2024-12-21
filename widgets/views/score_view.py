@@ -13,6 +13,10 @@ class ScoreView(VStack):
         piece = generate_sample_piece(4, 8)
 
         self.back = QWidget(self.widget)
+        
+        ruler_widget = PartWidget(widget_type=RulerWidget)
+        ruler_widget.staff_widget.set_content(piece.conductor_part.tempo_marks)
+        self.layout.addWidget(ruler_widget)
 
         for part in piece.parts:
             part_widget = PartWidget(widget_type=StaffWidget)

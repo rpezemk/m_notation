@@ -1,8 +1,9 @@
-from typing import override
+from typing import Any, override
 from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QHBoxLayout, QPushButton, QLabel
 from PyQt5.QtCore import QRect
 from PyQt5.QtGui import QColor, QPainter, QPen
 
+from model.structure import TempoMark
 from widgets.lanes.LaneWidget import LaneWidget
 from widgets.compound.stack_panels import HStack, VStack
 
@@ -15,6 +16,10 @@ class RulerWidget(LaneWidget):
     @override
     def paintEvent(self, event):
         self.draw_content()
+
+    @override
+    def set_content(self, tempo_marks: list[TempoMark]):
+        ...
 
     def draw_content(self):
         painter = QPainter(self)
@@ -35,3 +40,4 @@ class RulerWidget(LaneWidget):
         h = self.height()
         rect = QRect(0, 0, w-1, h-1)
         painter.drawRect(rect)
+    

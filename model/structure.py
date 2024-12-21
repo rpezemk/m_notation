@@ -2,6 +2,7 @@ import random
 from typing import Any
 from PyQt5.QtGui import QColor
 from model.duration import Duration
+from utils.musical_layout.precise_aftermath import Ratio
 
     
     
@@ -52,7 +53,22 @@ class Part():
     def __init__(self, measures: list[Measure]=None, piece=None):
         self.piece = piece
         self.measures = [] if measures is None else measures
+
+class TempoMark():
+    def __init__(self, bpm: float, bpm_base: Duration, bar_no: int, bar_offset: Ratio):
+        self.bar_no = 0
+        self.bpm = bpm
+        self.bmp_base = bpm_base
+        self.bar_no = bar_no
+        self.bar_offset = bar_offset
+
+class ConductorPart():
+    def __init__(self, initial_tempo_mark: TempoMark):
+        self.base_tempo_mark = initial_tempo_mark
+        self.tempo_marks: list[TempoMark] = [initial_tempo_mark]
+        pass
     
 class Piece():
-    def __init__(self, parts: list[Part]=None):
+    def __init__(self, parts: list[Part]=None, conductor_part: ConductorPart = None):
         self.parts = [] if parts is None else parts
+        self.conductor_part = conductor_part if conductor_part is not None else ConductorPart()
