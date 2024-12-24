@@ -4,9 +4,11 @@ from widgets.compound.stack_panels import VStack
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QHBoxLayout, QLabel, QWidget
 
+from widgets.lanes.LaneWidget import LaneWidget
+
 
 class PartWidget(QWidget):
-    def __init__(self, parent=None, flags=None, widget_type: type = None):
+    def __init__(self, parent=None, flags=None, widget_type: type[LaneWidget] = None):
         super().__init__(parent, flags or Qt.WindowFlags())
         layout = QHBoxLayout(self)
 

@@ -7,7 +7,9 @@ from widgets.compound.stretch import Stretch
 from widgets.lanes.StaffWidget import StaffWidget
 from widgets.compound.stack_panels import HStack, VStack
 from widgets.musical.PartWidget import PartWidget
-from widgets.lanes.ConductorWidget import RulerWidget
+from widgets.lanes.RulerWidget import RulerWidget
+from utils.musical_layout.precise_aftermath import ratio_lanes_to_ruler, chunk_widths_by_duration
+
 
 class ScoreView(VStack):
     def __init__(self, margin = None, spacing = None, children = None, stretch=False, fixed_width=-1):
@@ -16,13 +18,29 @@ class ScoreView(VStack):
 
         self.back = QWidget(self.widget)
         
-        ruler_widget = PartWidget(widget_type=RulerWidget)
-        ruler_widget.staff_widget.set_content(piece.parts[0].measures[:4])
-        self.layout.addWidget(ruler_widget)
-
+        shown_area = []
         for part in piece.parts:
+            shown_area.append(part.measures[:4])
+        
+            
+        ruler_widget = PartWidget(widget_type=RulerWidget)
+        
+        lanes_data = []
+        for p in shown_area:
+            new_lane = []
+            for m in p:
+                for th in m.time_holders:
+                    new_lane.append(th.duration.to_ratio())
+            lanes_data.append(new_lane)
+                    
+        mov, ruler_measures = ratio_lanes_to_ruler(lanes_data)
+        ruler_widget.staff_widget.set_content(mov, ruler_measures)
+        self.layout.addWidget(ruler_widget)
+            
+            
+        for part in shown_area:
             part_widget = PartWidget(widget_type=StaffWidget)
-            part_widget.staff_widget.set_content(part.measures[:4])
+            part_widget.staff_widget.set_content(part)
             part_widget.staff_widget.update()
             self.layout.addWidget(part_widget)
 

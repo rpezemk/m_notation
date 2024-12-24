@@ -1,5 +1,7 @@
 from enum import Enum
 
+from utils.musical_layout.precise_aftermath import Ratio
+
 class Duration(Enum):
     LONGA = "Longa"                # 4 times a whole note
     BREVE = "Breve"                # 2 times a whole note
@@ -27,6 +29,21 @@ class Duration(Enum):
         }
         return durations[self]
 
+    def to_ratio(self):
+        durations = {
+            Duration.LONGA: Ratio(t=(4, 1)),
+            Duration.BREVE: Ratio(t=(2, 1)),
+            Duration.WHOLE: Ratio(t=(1, 1)),
+            Duration.HALF: Ratio(t=(1, 2)),
+            Duration.QUARTER: Ratio(t=(1, 4)),
+            Duration.EIGHTH: Ratio(t=(1, 8)),
+            Duration.SIXTEENTH: Ratio(t=(1, 16)),
+            Duration.THIRTY_SECOND: Ratio(t=(1, 32)),
+            Duration.SIXTY_FOURTH: Ratio(t=(1, 64))
+        }
+        return durations[self]
+        
+        
     def get_all_durations():
         all_durations = [
             Duration.LONGA,

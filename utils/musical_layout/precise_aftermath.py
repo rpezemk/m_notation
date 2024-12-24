@@ -17,6 +17,15 @@ class Ratio():
         res = self.numerator * other.denominator > other.numerator * self.denominator
         return res
     
+    def __le__(self, other: 'Ratio'):
+        res = self.numerator * other.denominator <= other.numerator * self.denominator
+        return res
+    
+    def __ge__(self, other: 'Ratio'):
+        res = self.numerator * other.denominator >= other.numerator * self.denominator
+        return res
+    
+    
     def __eq__(self, other: 'Ratio'):
         res = self.numerator * other.denominator == other.numerator * self.denominator
         return res
@@ -107,24 +116,12 @@ def to_moving_sum(lane: list[Ratio]) -> list[Ratio]:
 
 def ratio_lanes_to_ruler(lanes: list[list[Ratio]]) -> tuple[list[Ratio], list[Ratio]]:
     curr_pos = Ratio(t=(0, 1))
-    moving_sum_lanes = [to_moving_sum(lane) for lane in lanes]
-    lane_cnt = 0
-    for lane in moving_sum_lanes:
-        for r in lane:
-            print("lane", lane_cnt, " = ", r)
-        lane_cnt += 1
-        
+    moving_sum_lanes = [to_moving_sum(lane) for lane in lanes]        
     mov_sum_ruler = []
     widths_ruler = []
     while True:
         curr_check = []
-        print(f"curr_pos is {curr_pos}")
         mov = [[m for m in mov if m > curr_pos][:1] for mov in moving_sum_lanes]
-        lane_cnt = 0
-        for lane in mov:
-            for r in lane:
-                print("m. lane", lane_cnt, " = ", r)
-            lane_cnt += 1
         if not mov:
             break
         for m in mov:
@@ -138,6 +135,28 @@ def ratio_lanes_to_ruler(lanes: list[list[Ratio]]) -> tuple[list[Ratio], list[Ra
         curr_pos = lowest
         mov_sum_ruler.append(curr_pos)  
     return mov_sum_ruler, widths_ruler
+
+def chunk_widths_by_duration(ratios: list[Ratio], chunk_by: Ratio):
+    curr_ratio = Ratio(t=(0, 1))
+    res_measures = []
+    sub_measure = []
+    for r in ratios:
+        curr_ratio += r
+        if curr_ratio == chunk_by:
+            sub_measure.append(r)
+            res_measures.append(sub_measure)
+            sub_measure = []
+            curr_ratio = Ratio(t=(0, 1))
+        elif curr_ratio >= chunk_by:
+            sub_measure.append(chunk_by - (curr_ratio - r))
+            res_measures.append(sub_measure)
+            sub_measure = [curr_ratio - chunk_by]
+            curr_ratio = Ratio(t=(0, 1))
+        else: 
+            sub_measure.append(r)
+            
+    return res_measures
+
 
 def test_ruler_get():
     check_list1 = [Ratio(t=r) for r in [ (1, 2), (1, 4), (1, 4)]]

@@ -1,7 +1,7 @@
 from widgets.basics.my_button import StateButton, SyncButton
 from widgets.compound.stack_panels import HStack, VStack
 from widgets.compound.stretch import Stretch
-from widgets.lanes.ConductorWidget import RulerWidget
+from widgets.lanes.RulerWidget import RulerWidget
 from widgets.musical.PartWidget import PartWidget
 from widgets.lanes.AudioWidget import AudioWidget
 
