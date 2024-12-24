@@ -1,6 +1,6 @@
 from model.duration import Duration
 from model.structure import ConductorPart, Measure, Note, Part, Piece, TempoMark
-from utils.musical_layout.Ratio import Ratio
+from model.Ratio import Ratio
 
 def generate_sample_piece(n_parts: int, n_measures: int):
     piece = Piece(conductor_part=ConductorPart(TempoMark(90, Duration.QUARTER, 0, Ratio(t=(0, 4)))))

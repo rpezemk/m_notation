@@ -2,7 +2,7 @@ from typing import override
 from PyQt5.QtCore import QRect
 from PyQt5.QtGui import QColor, QPainter, QPen
 
-from utils.musical_layout.Ratio import Ratio
+from model.Ratio import Ratio
 from widgets.lanes.BarrableWidget import BarrableWidget
 from utils.musical_layout.precise_aftermath import ratio_lanes_to_ruler, chunk_widths_by_duration
 

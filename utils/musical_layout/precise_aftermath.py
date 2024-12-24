@@ -1,6 +1,6 @@
 
 
-from utils.musical_layout.Ratio import Ratio
+from model.Ratio import Ratio
 
 
 def test_ratios():
