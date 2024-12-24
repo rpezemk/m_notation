@@ -2,7 +2,7 @@ import random
 from typing import Any
 from PyQt5.QtGui import QColor
 from model.duration import Duration
-from utils.musical_layout.precise_aftermath import Ratio
+from utils.musical_layout.Ratio import Ratio
 
     
     
