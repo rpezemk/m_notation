@@ -18,16 +18,12 @@ class ScoreView(VStack):
         self.back = QWidget(self.widget)
         
         
-        chunk = piece.to_chunk(0, 4)
-            
         ruler_widget = PartWidget(widget_type=RulerWidget)
-        
-        # lanes_data = piece.to_ratio_lanes(0, 4)
-        
+
+        chunk = piece.to_chunk(0, 4)
         ruler_widget.staff_widget.set_content(chunk)
         self.layout.addWidget(ruler_widget)
-            
-            
+                        
         for h_chunk in chunk.h_chunks:
             part_widget = PartWidget(widget_type=StaffWidget)
             part_widget.staff_widget.set_content(h_chunk.measures)
@@ -59,8 +55,8 @@ class ScoreView(VStack):
         self.line_x0 = 100
         self.line_pos = self.line_x0
         self.timer = QTimer(self.widget)
-        self.timer.timeout.connect(self.update_counter)  # Call update_counter every interval
-        self.timer.start(100)  # Interval set to 1000ms (1 second)
+        self.timer.timeout.connect(self.update_counter) 
+        self.timer.start(100) 
         self.line = QFrame(self.back)
         self.widget.resizeEvent = self.resizeEvent
         

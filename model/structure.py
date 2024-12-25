@@ -102,7 +102,10 @@ class Chunk:
         self.h_chunks = h_chunks
         
     def to_ruler_bars(self):         
-        lanes_data2 =  [RulerBar([RulerEvent(r) for r in ratio_lanes_to_ruler([[th.duration.to_ratio() for th in m.time_holders] for m in v_ch.one_measure_parts])]) for v_ch in self.v_chunks]
+        lanes_data2 =  [
+            RulerBar([
+                RulerEvent(r) for r in ratio_lanes_to_ruler([[th.duration.to_ratio() for th in m.time_holders] for m in v_ch.one_measure_parts])
+                ]) for v_ch in self.v_chunks]
         return lanes_data2
         
         
