@@ -45,8 +45,8 @@ class RulerWidget(BarrableWidget):
             self.draw_bar_frame(painter, seg_start, seg_end)
             curr_x = 0
             for r_e in ruler_bar.ruler_events:
-                curr_x += r_e.ratio.to_float() * (seg_end - seg_start)
-                self.draw_bar_frame(painter, int(curr_x) + seg_start, int(curr_x) + seg_start + 3)
+                curr_x = r_e.offset_ratio.to_float() * (seg_end - seg_start) + seg_start
+                self.draw_bar_frame(painter, int(curr_x), int(curr_x) + 1)
                 
         painter.end()
 

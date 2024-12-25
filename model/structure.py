@@ -4,15 +4,14 @@ from PyQt5.QtGui import QColor
 from model.RulerBar import RulerBar, RulerEvent
 from model.duration import Duration
 from model.Ratio import Ratio
-from utils.musical_layout.precise_aftermath import ratio_lanes_to_ruler
 
-    
     
 class TimeHolder():
     def __init__(self, duration: Duration = None, measure: 'Measure' = None):
         self.duration = duration if duration is not None else Duration.QUARTER
         self.measure = measure
-    
+        self.offset_ratio = Ratio(t=(0, 1))
+        
 class Rest(TimeHolder):
     def __init__(self, duration: Duration = None, measure: 'Measure' = None):
         self.duration = duration if duration is not None else Duration.QUARTER
@@ -78,7 +77,7 @@ class VerticalChunk():
     """model for vertical one-measure length, n-parts height section.
     """
     def __init__(self, one_measure_parts: list[Measure]):
-        self.one_measure_parts = one_measure_parts
+        self.vertical_measures = one_measure_parts
 
 
 
@@ -93,20 +92,62 @@ class Chunk:
     def __init__(self, v_chunks: list[VerticalChunk]):
         self.v_chunks = v_chunks
         self.duration_ratio = Ratio(t=(4,4))
-        h_chunks = [HorizontalChunk() for _ in v_chunks[0].one_measure_parts]
+        h_chunks = [HorizontalChunk() for _ in v_chunks[0].vertical_measures]
         
         for m_idx, v_ch in enumerate(v_chunks):
-            for part_no, m in enumerate(v_ch.one_measure_parts):
+            for part_no, m in enumerate(v_ch.vertical_measures):
                 h_chunks[part_no].measures.append(m)
                 
         self.h_chunks = h_chunks
         
-    def to_ruler_bars(self):         
-        lanes_data2 =  [
-            RulerBar([
-                RulerEvent(r) for r in ratio_lanes_to_ruler([[th.duration.to_ratio() for th in m.time_holders] for m in v_ch.one_measure_parts])
-                ]) for v_ch in self.v_chunks]
+    def to_ruler_bars(self) -> list[RulerBar]:         
+        lanes_data2 = [Chunk.ratio_lanes_to_ruler(v_ch) for v_ch in self.v_chunks]
         return lanes_data2
+    
+    def ratio_lanes_to_ruler(v_ch: VerticalChunk) -> RulerBar:
+        lanes = [[th.duration.to_ratio() for th in m.time_holders] for m in v_ch.vertical_measures]
+        curr_pos = Ratio(t=(0, 1))
+        moving_sum_lanes: list[list[Ratio]] = [Chunk.to_moving_sum(lane) for lane in lanes]
+                        
+        ruler_events: list[RulerEvent] = []
+        while True:
+            curr_check: list[Ratio] = []
+            mov = [[m for m in mov if m > curr_pos][:1] for mov in moving_sum_lanes]
+            if not mov:
+                break
+            for m in mov:
+                if m:
+                    curr_check.append(m[0])
+            
+            ok, idxs, lowest = Ratio.get_lowest(curr_check)
+            if not ok:
+                break
+            ratio: Ratio = lowest - curr_pos
+            th = RulerEvent(ratio)
+            ruler_events.append(th)
+            curr_pos = lowest
+            
+            
+        curr_pos = Ratio(t=(0, 1))
+        for m in v_ch.vertical_measures:
+            for e_idx, th in list(enumerate(m.time_holders))[:-1]:
+                curr_pos += th.duration.to_ratio()
+                m.time_holders[e_idx + 1].offset_ratio = curr_pos
+
+        curr_pos = Ratio(t=(0, 1))
+        for e_idx, th in list(enumerate(ruler_events))[:-1]:
+            curr_pos += th.len_ratio
+            ruler_events[e_idx + 1].offset_ratio = curr_pos
+
+        return RulerBar(ruler_events)
+
+    def to_moving_sum(lane: list[Ratio]) -> list[Ratio]:
+        curr = Ratio(t=(0, 1))
+        res = []
+        for r in lane:
+            curr = curr + r
+            res.append(curr)
+        return res
         
         
 class Piece():
