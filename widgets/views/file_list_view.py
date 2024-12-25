@@ -6,7 +6,7 @@ from widgets.basics.my_button import SyncButton
 from widgets.basics.text_box import LineBox
 from widgets.compound.stack_panels import HStack, VStack
 from widgets.lanes.AudioWidget import AudioWidget
-from widgets.musical.PartWidget import PartWidget
+from widgets.lanes.PartWidget import PartWidget
 from widgets.views.file_table import AudioFileTable
 
 

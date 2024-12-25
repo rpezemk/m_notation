@@ -24,10 +24,4 @@ class IndicatorButton(QPushButton, Informable):
     def set_state(self, state: bool):
         print(f"IndicatorButton.set_state: {state}")
         self.state = state
-
-        # ## KEEP MEEEE
-        # if state:
-        #     self.setStyleSheet("background: black;")
-        # else:
-        #     self.setStyleSheet("background: red;")
         self.update()

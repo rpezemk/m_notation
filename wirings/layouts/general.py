@@ -12,7 +12,7 @@ from utils.logger import MLogger
 from widgets.compound.stack_panels import HStack, VStack
 from widgets.compound.stretch import Stretch
 from widgets.basics.my_button import AsyncButton, SyncButton
-from widgets.musical.PartWidget import PartWidget
+from widgets.lanes.PartWidget import PartWidget
 from widgets.basics.text_box import TextBox
 import utils.widget_utils as w_utils
 from widgets.basics.comboBox import ComboBox
