@@ -76,5 +76,8 @@ class Ratio():
         res_idxs = [i for i, v in enumerate(ratios) if v == lowest]
         return True, res_idxs, lowest
     
+    def to_float(self):
+        res = self.numerator / self.denominator
+        return res
     
 custom_key = cmp_to_key(Ratio.custom_comparator)

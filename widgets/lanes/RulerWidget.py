@@ -3,26 +3,24 @@ from PyQt5.QtCore import QRect
 from PyQt5.QtGui import QColor, QPainter, QPen
 
 from model.Ratio import Ratio
+from model.structure import Chunk
 from widgets.lanes.BarrableWidget import BarrableWidget
-from utils.musical_layout.precise_aftermath import ratio_lanes_to_ruler, chunk_widths_by_duration
-
 
 class RulerWidget(BarrableWidget):
     def __init__(self):
         super().__init__()
         self.setFixedHeight(40)
-
+        self.ruler_bars = []
+        self.chunk = None
+        
     @override
     def paintEvent(self, event):
         self.draw_content()
 
     @override
-    def set_content(self, mov: list[Ratio], widths: list[Ratio]):
-        self.moving_sum = mov
-        
-        self.measures: list[list[Ratio]] = chunk_widths_by_duration(widths, Ratio(t=(4, 4)))
-        
-        ...
+    def set_content(self, chunk: Chunk):
+        self.chunk = chunk
+        self.ruler_bars = chunk.to_ruler_bars()
 
     def draw_content(self):
         painter = QPainter(self)
@@ -32,7 +30,6 @@ class RulerWidget(BarrableWidget):
         pen = QPen(self.very_light_gray)
         painter.setPen(pen)
         self.draw_frame(painter)
-        # super().paintEvent(event)
         pen = QPen(QColor(255, 255, 255, 80))
         painter.setPen(pen)
         pen.setWidth(1)
@@ -40,17 +37,15 @@ class RulerWidget(BarrableWidget):
         bar_segments = self.get_h_segments()
         self.visual_notes = []
         
-        for m_no, bar in enumerate(self.measures):
+        for m_no, ruler_bar in enumerate(self.ruler_bars):
             seg_start = bar_segments[m_no][0]
             seg_end = bar_segments[m_no][1]
             if seg_end - seg_start < 10:
                 continue
             self.draw_bar_frame(painter, seg_start, seg_end)
             curr_x = 0
-            for r in bar:
-                n = r.numerator
-                d = r.denominator 
-                curr_x += n/d * (seg_end - seg_start)
+            for r_e in ruler_bar.ruler_events:
+                curr_x += r_e.ratio.to_float() * (seg_end - seg_start)
                 self.draw_bar_frame(painter, int(curr_x) + seg_start, int(curr_x) + seg_start + 3)
                 
         painter.end()
