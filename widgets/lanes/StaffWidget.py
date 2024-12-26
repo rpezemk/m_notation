@@ -96,12 +96,17 @@ class StaffWidget(BarrableWidget):
                 return
             
             maybe[0].inner.is_selected = True
-            
-            deselected = [v_n for v_n in self.visual_notes if v_n is not maybe[0]]
-            for d in deselected:
-                d.inner.is_selected = False
-                
             self.update()
+            self.deselect_notes_but(maybe[0])    
+            
+    def deselect_notes_but(self, v_n: VisualNote):
+        deselected = [v_n for v_n in self.visual_notes if v_n is not v_n]
+        if not deselected:
+            return
+        
+        for d in deselected:
+            d.inner.is_selected = False
+        self.update()
             
     def remove_note(self, v_n: VisualNote):
         m = v_n.inner.measure
