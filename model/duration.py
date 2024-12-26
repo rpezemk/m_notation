@@ -1,6 +1,6 @@
 from enum import Enum
 
-from model.Ratio import Ratio
+from model.ratio import Ratio
 
 class Duration(Enum):
     LONGA = "Longa"                # 4 times a whole note

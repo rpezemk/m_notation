@@ -1,5 +1,5 @@
 from fonts.glyphs import Glyphs
-from model.piece import Measure
+from model.sample_piece_gen import Measure
 from model.structure import Note, Rest
 from utils.musical_layout.space import get_single_ruler, map_to
 from widgets.lanes.BarrableWidget import BarrableWidget

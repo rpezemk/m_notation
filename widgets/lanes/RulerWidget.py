@@ -2,8 +2,8 @@ from typing import override
 from PyQt5.QtCore import QRect
 from PyQt5.QtGui import QColor, QPainter, QPen
 
-from model.Ratio import Ratio
-from model.structure import Chunk
+from model.ratio import Ratio
+from model.chunk import Chunk
 from widgets.lanes.BarrableWidget import BarrableWidget
 
 class RulerWidget(BarrableWidget):
@@ -44,7 +44,7 @@ class RulerWidget(BarrableWidget):
                 continue
             self.draw_bar_frame(painter, seg_start, seg_end)
             curr_x = 0
-            for r_e in ruler_bar.ruler_events:
+            for r_e in ruler_bar:
                 curr_x = r_e.offset_ratio.to_float() * (seg_end - seg_start) + seg_start
                 self.draw_bar_frame(painter, int(curr_x), int(curr_x) + 1)
                 

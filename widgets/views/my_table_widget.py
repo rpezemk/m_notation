@@ -3,7 +3,7 @@ from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtWidgets import QFrame, QWidget, QApplication, QTableView, QVBoxLayout, QWidget, QTableWidget, QHeaderView, QSizePolicy, QTableWidgetItem
 from PyQt5.QtGui import QStandardItemModel, QStandardItem
 
-from model.piece import generate_sample_piece
+from model.sample_piece_gen import generate_sample_piece
 from utils.file_utils.fs_model import DirModel, FsItem
 from widgets.basics.button_delegate import ButtonDelegate
 from widgets.compound.stack_panels import HStack, VStack

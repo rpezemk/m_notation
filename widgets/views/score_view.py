@@ -1,7 +1,8 @@
 from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QFrame, QWidget
 
-from model.piece import generate_sample_piece
+from model.sample_piece_gen import generate_sample_piece
+from utils.chunk_player import ChunkPlayer
 from widgets.basics.my_button import StateButton, SyncButton
 from widgets.compound.stretch import Stretch
 from widgets.lanes.StaffWidget import StaffWidget
@@ -13,18 +14,18 @@ from widgets.lanes.RulerWidget import RulerWidget
 class ScoreView(VStack):
     def __init__(self, margin = None, spacing = None, children = None, stretch=False, fixed_width=-1):
         super().__init__(margin, spacing, children, stretch, fixed_width)
-        piece = generate_sample_piece(4, 8)
-
         self.back = QWidget(self.widget)
         
+        self.piece = generate_sample_piece(4, 8)
+        self.chunk = self.piece.to_chunk(0, 4)
+        self.chunk_player = ChunkPlayer(self.chunk)
         
         ruler_widget = PartWidget(widget_type=RulerWidget)
 
-        chunk = piece.to_chunk(0, 4)
-        ruler_widget.staff_widget.set_content(chunk)
+        ruler_widget.staff_widget.set_content(self.chunk)
         self.layout.addWidget(ruler_widget)
                         
-        for h_chunk in chunk.h_chunks:
+        for h_chunk in self.chunk.h_chunks:
             part_widget = PartWidget(widget_type=StaffWidget)
             part_widget.staff_widget.set_content(h_chunk.measures)
             part_widget.staff_widget.update()
@@ -41,7 +42,7 @@ class ScoreView(VStack):
                         Stretch(),
                         SyncButton("<<", None), 
                         SyncButton("<", None), 
-                        StateButton("PLAY", None, color_hex_off="#334477", color_hex_on="#4477FF"),
+                        StateButton("PLAY", self.chunk_player.start, color_hex_off="#334477", color_hex_on="#4477FF"),
                         SyncButton("STOP", None),
                         SyncButton(">", None),
                         SyncButton(">>", None),

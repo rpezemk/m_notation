@@ -11,6 +11,9 @@ class Ratio():
         self.numerator = numerator
         self.denominator = denominator
 
+    def __hash__(self):
+        return hash(self.simplify().to_float())
+    
     def __lt__(self, other: 'Ratio'):
         res = self.numerator * other.denominator < other.numerator * self.denominator
         return res
