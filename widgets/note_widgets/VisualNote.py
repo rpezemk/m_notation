@@ -1,11 +1,12 @@
-from model.structure import Note
+from model.structure import Note, TimeHolder
 
 
 from typing import Tuple
 
 
 class VisualNote():
-    def __init__(self, note: Note, point: Tuple[float, float]):
-        self.inner_note = note
+    def __init__(self, note: TimeHolder, point: Tuple[float, float]):
+        self.inner = note
         self.point = point
+        self.is_selected = False
         pass

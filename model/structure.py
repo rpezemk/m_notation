@@ -10,7 +10,8 @@ class TimeHolder():
         self.duration = duration if duration is not None else Duration.QUARTER
         self.measure = measure
         self.offset_ratio = Ratio(t=(0, 1))
-    
+        self.is_selected = False
+        
     def __str__(self):
         return f"d: {self.duration.to_ratio()}"
         
