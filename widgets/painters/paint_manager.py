@@ -22,9 +22,6 @@ def m_paint_visual(q_painter: QPainter, vn: VisualNote):
     
     p_d = maybe[0]
     
-    if p_d.d == Duration.EIGHTH:
-        abc = 234
-    # vis_note.point[0] - self.note_size, vis_note.point[1] - self.note_size, self.note_size * 2, self.note_size * 2
     transform = Transform2D(vn.point[0], vn.point[1])
     head_painter.paint(t=transform, q_painter=q_painter, s=p_d.head_str)
     if p_d.stemed:
