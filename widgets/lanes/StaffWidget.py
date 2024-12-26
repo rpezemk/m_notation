@@ -100,7 +100,7 @@ class StaffWidget(BarrableWidget):
             self.deselect_notes_but(maybe[0])    
             
     def deselect_notes_but(self, v_n: VisualNote):
-        deselected = [v_n for v_n in self.visual_notes if v_n is not v_n]
+        deselected = [d for d in self.visual_notes if d is not v_n]
         if not deselected:
             return
         
