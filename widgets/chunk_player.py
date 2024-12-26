@@ -12,8 +12,6 @@ class RulerPlayer(QThread):
     def __init__(self, chunk: Chunk):
         super().__init__()
         self.ruler_bars = chunk.to_ruler_bars()
-        
-
 
     def run(self):
         for bar_no,ruler_bar in enumerate(self.ruler_bars):
@@ -23,18 +21,8 @@ class RulerPlayer(QThread):
                 for th in evt.inner_events:
                     ...
                     
-                time.sleep(evt.len_ratio.to_float())
-        
-    
-    
-    def play_group(self, time_group: RulerEvent):
-        ...
-        
-    def play(self):
-        self.worker.start()
-    
-    
-        
+                time.sleep(evt.len_ratio.to_float()*4)
+                    
     def set_chunk(self, chunk: Chunk):
         self.ruler_bars = chunk.to_ruler_bars()
 

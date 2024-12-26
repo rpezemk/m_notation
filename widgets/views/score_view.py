@@ -18,13 +18,13 @@ class ScoreView(VStack):
         
         self.piece = generate_sample_piece(4, 8)
         self.chunk = self.piece.to_chunk(0, 4)
-        self.player = RulerPlayer(self.chunk)
-        self.player.signal.connect(lambda m_no, e_no: print(f"{m_no}, {e_no}"))
         
         ruler_widget = PartWidget(widget_type=RulerWidget)
-
         ruler_widget.staff_widget.set_content(self.chunk)
         self.layout.addWidget(ruler_widget)
+        
+        self.player = RulerPlayer(self.chunk)
+        self.player.signal.connect(lambda m_no, e_no: ruler_widget.staff_widget.mark_at(m_no, e_no))
                         
         for h_chunk in self.chunk.h_chunks:
             part_widget = PartWidget(widget_type=StaffWidget)
@@ -34,8 +34,6 @@ class ScoreView(VStack):
 
         self.layout.addStretch()
 
-        ruler_widget = PartWidget(widget_type=RulerWidget)
-        self.layout.addWidget(ruler_widget)
 
         bottom_panel = HStack(
                     children=

@@ -12,15 +12,24 @@ class RulerWidget(BarrableWidget):
         self.setFixedHeight(40)
         self.ruler_bars = []
         self.chunk = None
+        self.m_no = 0
+        self.e_no = 0
         
     @override
     def paintEvent(self, event):
         self.draw_content()
-
+        self.update()
+        
     @override
     def set_content(self, chunk: Chunk):
         self.chunk = chunk
         self.ruler_bars = chunk.to_ruler_bars()
+        
+        ...
+
+    def mark_at(self, m_no: int, e_no: int):
+        self.m_no = m_no
+        self.e_no = e_no
 
     def draw_content(self):
         painter = QPainter(self)
@@ -32,7 +41,6 @@ class RulerWidget(BarrableWidget):
         self.draw_frame(painter)
         pen = QPen(QColor(255, 255, 255, 80))
         painter.setPen(pen)
-        pen.setWidth(1)
         self.y_offsets = self.get_x_offsets()
         bar_segments = self.get_h_segments()
         self.visual_notes = []
@@ -47,9 +55,13 @@ class RulerWidget(BarrableWidget):
             for r_e in ruler_bar:
                 curr_x = r_e.offset_ratio.to_float() * (seg_end - seg_start) + seg_start
                 self.draw_bar_frame(painter, int(curr_x), int(curr_x) + 1)
-                
+        
+        pen.setWidth(3)
+        painter.setPen(pen)
+        self.draw_marked(painter)  
         painter.end()
 
+        
     def draw_frame(self, painter: QPainter):
         w = self.width()
         h = self.height()
@@ -61,3 +73,11 @@ class RulerWidget(BarrableWidget):
         h = self.height() - 5
         rect = QRect(x0, 2, x1 - x0, h-3)
         painter.drawRect(rect)
+        
+    def draw_marked(self, painter: QPainter):
+        e = self.ruler_bars[self.m_no][self.e_no]
+        seg = self.get_h_segments()[self.m_no]
+        seg_start = seg[0]
+        seg_end = seg[1]
+        curr_x = e.offset_ratio.to_float() * (seg_end - seg_start) + seg_start
+        self.draw_bar_frame(painter, int(curr_x)-5, int(curr_x) + 5)
