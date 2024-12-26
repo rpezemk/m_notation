@@ -25,11 +25,13 @@ class ScoreView(VStack):
         
         self.player = RulerPlayer(self.chunk)
         self.player.signal.connect(lambda m_no, e_no: ruler_widget.staff_widget.mark_at(m_no, e_no))
-                        
+           
+        self.part_widgets = []                
         for h_chunk in self.chunk.h_chunks:
             part_widget = PartWidget(widget_type=StaffWidget)
             part_widget.staff_widget.set_content(h_chunk.measures)
             part_widget.staff_widget.update()
+            self.part_widgets.append(part_widget)
             self.layout.addWidget(part_widget)
 
         self.layout.addStretch()
@@ -59,7 +61,11 @@ class ScoreView(VStack):
         self.timer.start(100) 
         self.line = QFrame(self.back)
         self.widget.resizeEvent = self.resizeEvent
-        
+    
+    def select_all(self):
+        for p in self.part_widgets:
+            p.staff_widget.select_all()
+    
     def update_counter(self):
         w = self.widget.width()
         if w - self.line_x0 <= 0:

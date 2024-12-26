@@ -98,6 +98,15 @@ class StaffWidget(BarrableWidget):
             maybe[0].inner.is_selected = True
             self.update()
             self.deselect_notes_but(maybe[0])    
+    
+    def select_all(self):
+        selected = [d for d in self.visual_notes]
+        if not selected:
+            return
+        
+        for s in selected:
+            s.inner.is_selected = True
+        self.update()
             
     def deselect_notes_but(self, v_n: VisualNote):
         deselected = [d for d in self.visual_notes if d is not v_n]
@@ -123,3 +132,5 @@ class StaffWidget(BarrableWidget):
         for i in range(0, 5):
             offsets.append(self.staff_offset + i*self.line_spacing)
         return offsets
+    
+    
