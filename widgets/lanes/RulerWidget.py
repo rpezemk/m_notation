@@ -7,8 +7,8 @@ from model.chunk import Chunk
 from widgets.lanes.BarrableWidget import BarrableWidget
 
 class RulerWidget(BarrableWidget):
-    def __init__(self):
-        super().__init__()
+    def __init__(self, parent=None):
+        super().__init__(parent=parent)
         self.setFixedHeight(40)
         self.ruler_bars = []
         self.chunk = None
@@ -50,7 +50,6 @@ class RulerWidget(BarrableWidget):
             seg_end = bar_segments[m_no][1]
             if seg_end - seg_start < 10:
                 continue
-            # self.draw_bar_frame(painter, seg_start, seg_end)
             curr_x = 0
             for r_e in ruler_bar:
                 curr_x = r_e.offset_ratio.to_float() * (seg_end - seg_start) + seg_start
@@ -58,6 +57,8 @@ class RulerWidget(BarrableWidget):
         
         pen.setWidth(3)
         painter.setPen(pen)
+        painter.setPen(self.light_gray)
+        painter.setBrush(self.light_gray)
         self.draw_marked(painter)  
         painter.end()
 

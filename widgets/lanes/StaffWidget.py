@@ -14,9 +14,9 @@ from widgets.painters.paint_manager import m_paint_visual
 
 
 class StaffWidget(BarrableWidget):
-    def __init__(self):
-        super().__init__()
-        
+    def __init__(self, parent=None):
+        super().__init__(parent=parent)
+        self.staff_widget = parent
         self.setCursor(Qt.CrossCursor)
 
         self.staff_offset = 30
@@ -97,7 +97,7 @@ class StaffWidget(BarrableWidget):
             
             maybe[0].inner.is_selected = True
             self.update()
-            self.deselect_notes_but(maybe[0])    
+            self.staff_widget.deselect_notes_but([maybe[0]])
     
     def select_all(self):
         selected = [d for d in self.visual_notes]
@@ -108,8 +108,8 @@ class StaffWidget(BarrableWidget):
             s.inner.is_selected = True
         self.update()
             
-    def deselect_notes_but(self, v_n: VisualNote):
-        deselected = [d for d in self.visual_notes if d is not v_n]
+    def deselect_notes_but(self, v_notes: list[VisualNote]):
+        deselected = [d for d in self.visual_notes if d not in v_notes]
         if not deselected:
             return
         

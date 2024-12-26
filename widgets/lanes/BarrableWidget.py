@@ -2,7 +2,7 @@ from widgets.lanes.LaneWidget import LaneWidget
 
 
 class BarrableWidget(LaneWidget):
-    def __init__(self):
+    def __init__(self, parent=None):
         super().__init__()
         self.measures = []
         self.clef_margin = 30

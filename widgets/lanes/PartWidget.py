@@ -9,7 +9,7 @@ from widgets.lanes.LaneWidget import LaneWidget
 
 class PartWidget(QWidget):
     def __init__(self, parent=None, flags=None, widget_type: type[LaneWidget] = None):
-        super().__init__(parent, flags or Qt.WindowFlags())
+        super().__init__()
         layout = QHBoxLayout(self)
 
         layout.setContentsMargins(0, 0, 0, 0)
@@ -23,5 +23,5 @@ class PartWidget(QWidget):
                 fixed_width=100, stretch=False)
             .widget)
 
-        self.staff_widget = widget_type()
+        self.staff_widget = widget_type(parent)
         layout.addWidget(self.staff_widget)

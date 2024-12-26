@@ -11,7 +11,7 @@ from typing import Any, override
 g_audio_ranges = [(11, 12.3), (13, 16), (17, 19.7)]
 
 class AudioWidget(LaneWidget):
-    def __init__(self):
+    def __init__(self, parent = None):
         super().__init__()
         self.view_time_start = 10 # sec
         self.view_time_end = 20 # sec

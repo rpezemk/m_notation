@@ -9,6 +9,7 @@ from widgets.lanes.StaffWidget import StaffWidget
 from widgets.compound.stack_panels import HStack, VStack
 from widgets.lanes.PartWidget import PartWidget
 from widgets.lanes.RulerWidget import RulerWidget
+from widgets.note_widgets.VisualNote import VisualNote
 
 
 class ScoreView(VStack):
@@ -19,7 +20,7 @@ class ScoreView(VStack):
         self.piece = generate_sample_piece(4, 8)
         self.chunk = self.piece.to_chunk(0, 4)
         
-        ruler_widget = PartWidget(widget_type=RulerWidget)
+        ruler_widget = PartWidget(widget_type=RulerWidget, parent=self)
         ruler_widget.staff_widget.set_content(self.chunk)
         self.layout.addWidget(ruler_widget)
         
@@ -28,7 +29,7 @@ class ScoreView(VStack):
            
         self.part_widgets = []                
         for h_chunk in self.chunk.h_chunks:
-            part_widget = PartWidget(widget_type=StaffWidget)
+            part_widget = PartWidget(parent=self, widget_type=StaffWidget)
             part_widget.staff_widget.set_content(h_chunk.measures)
             part_widget.staff_widget.update()
             self.part_widgets.append(part_widget)
@@ -65,7 +66,11 @@ class ScoreView(VStack):
     def select_all(self):
         for p in self.part_widgets:
             p.staff_widget.select_all()
-    
+            
+    def deselect_notes_but(self, v_notes: list[VisualNote]):
+        for p in self.part_widgets:
+            p.staff_widget.deselect_notes_but(v_notes)
+            
     def update_counter(self):
         w = self.widget.width()
         if w - self.line_x0 <= 0:

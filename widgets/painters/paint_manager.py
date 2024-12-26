@@ -28,9 +28,9 @@ def m_paint_visual(q_painter: QPainter, vn: VisualNote):
     
     transform = Transform2D(vn.point[0], vn.point[1])
     if inner.is_selected:
-        print("is selected")
         q_painter.setPen(red)
         q_painter.setBrush(red)
+        
     head_painter.paint(t=transform, q_painter=q_painter, s=p_d.head_str)
     if p_d.stemed:
         beam_painter.paint(t=transform, q_painter=q_painter, s=p_d.stem_str)

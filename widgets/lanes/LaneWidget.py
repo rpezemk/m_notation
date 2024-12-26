@@ -10,7 +10,7 @@ from typing import Any, override
 
 class LaneWidget(QWidget):
     def __init__(self):
-        super().__init__()
+        super().__init__(parent=None)
         res, self.bravura_font = fonts.loader.try_get_music_font()
         self.dark_gray = QColor(100, 100, 100)
         self.light_gray = QColor(140, 140, 140)
