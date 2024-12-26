@@ -1,3 +1,7 @@
+from PyQt5.QtCore import QRect, Qt
+from PyQt5.QtGui import QPainter
+from PyQt5.QtCore import Qt
+
 from fonts.glyphs import Glyphs
 from model.sample_piece_gen import Measure
 from model.structure import Note, Rest
@@ -7,14 +11,13 @@ from widgets.note_widgets.VisualNote import VisualNote
 from widgets.painters.paint_manager import m_paint_visual
 
 
-from PyQt5.QtCore import QRect, Qt
-from PyQt5.QtGui import QPainter
 
 
 class StaffWidget(BarrableWidget):
     def __init__(self):
         super().__init__()
         
+        self.setCursor(Qt.CrossCursor)
 
         self.staff_offset = 30
 
