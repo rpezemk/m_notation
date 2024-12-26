@@ -89,11 +89,12 @@ class StaffWidget(BarrableWidget):
     def mousePressEvent(self, event):
         if event.button() == Qt.LeftButton:
             click_pos = event.pos()
-            for v_n in self.visual_notes:
-                x, y = (v_n.point[0], v_n.point[1])
-                if (x - click_pos.x())**2 + (y - click_pos.y())**2 <= (self.note_size // 2)**2:
-                    self.remove_note(v_n)
-                    break
+            x0 = click_pos.x()
+            y0 = click_pos.y()
+            maybe = [v_n for v_n in self.visual_notes if abs(v_n.point[0] - x0) < 7 and abs(v_n.point[1] - y0) < 7]
+            if not maybe:
+                return
+            self.remove_note(maybe[0])
 
     def remove_note(self, v_n):
         m = v_n.inner_note.measure
