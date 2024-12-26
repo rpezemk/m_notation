@@ -3,20 +3,14 @@ from model.structure import Measure
 
 
 class RulerEvent():
-    def __init__(self, ratio: Ratio):
-        self.len_ratio = ratio
-        self.offset_ratio = Ratio(t=(0, 1))
+    def __init__(self, len_ratio: Ratio, offset_ratio: Ratio):
+        self.len_ratio = len_ratio
+        self.offset_ratio = offset_ratio
+        self.inner_events = []
         
 class CsEvent():
     def __init__(self, i_no: int, start_offset: float, duration: float):
         pass
-
-
-class EventTimeGroup():
-    def __init__(self):
-        self.events: list[CsEvent] = []
-        self.offset_ratio = Ratio(t=(0, 1))
-        self.len_ratio = Ratio(t=(0, 1))
         
         
 class HorizontalChunk():
@@ -34,41 +28,28 @@ class VerticalChunk():
 
     def ratio_lanes_to_ruler(self) -> list[RulerEvent]:
         lanes = [[th.duration.to_ratio() for th in m.time_holders] for m in self.vertical_measures]
-        curr_pos = Ratio(t=(0, 1))
+        for v_m in self.vertical_measures:
+            curr_pos = Ratio(t=(0, 1))
+            for th in v_m.time_holders:
+                th.offset_ratio = curr_pos
+                curr_pos += th.duration.to_ratio()
+        curr_offset = Ratio(t=(0, 1))
         moving_sum_lanes: list[tuple[list[Ratio], list[Ratio]]] = [(lane, VerticalChunk.to_moving_sum(lane)) for lane in lanes]
         res2 = [(k[0], k[1]) for idx, k in enumerate(moving_sum_lanes)]
         
-        mov_ordered_list = sorted(set([r for bar_ratios in moving_sum_lanes for r in bar_ratios[1]]), key=lambda r: r.to_float())
+        mov_ordered_list =[Ratio(t=(0, 1)), *sorted(set([r for bar_ratios in moving_sum_lanes for r in bar_ratios[1]]), key=lambda r: r.to_float())]
         ruler_events: list[RulerEvent] = []
-        while True:
-            curr_check: list[Ratio] = []
-            mov = [[m for m in mov[1] if m > curr_pos][:1] for mov in moving_sum_lanes]
-            if not mov:
-                break
-            for m in mov:
-                if m:
-                    curr_check.append(m[0])
+         
 
-            ok, idxs, lowest = Ratio.get_lowest(curr_check)
-            if not ok:
-                break
-            ratio: Ratio = lowest - curr_pos
-            evt = RulerEvent(ratio)
+        for idx, offset_ratio in enumerate(mov_ordered_list[:-1]):
+            len_ratio = mov_ordered_list[idx] - offset_ratio
+            evt = RulerEvent(len_ratio, offset_ratio)
             ruler_events.append(evt)
-            curr_pos = lowest
-
-
-        curr_pos = Ratio(t=(0, 1))
-        for m in self.vertical_measures:
-            for e_idx, evt in list(enumerate(m.time_holders))[:-1]:
-                curr_pos += evt.duration.to_ratio()
-                m.time_holders[e_idx + 1].offset_ratio = curr_pos
-
-        curr_pos = Ratio(t=(0, 1))
-        for e_idx, evt in list(enumerate(ruler_events))[:-1]:
-            curr_pos += evt.len_ratio
-            ruler_events[e_idx + 1].offset_ratio = curr_pos
-
+        
+        for evt in ruler_events:
+            this_time_evts = [th for m in self.vertical_measures for th in m.time_holders if th.offset_ratio == evt.offset_ratio]
+            evt.inner_events = this_time_evts
+        
         return ruler_events
 
     def to_moving_sum(lane: list[Ratio]) -> list[Ratio]:

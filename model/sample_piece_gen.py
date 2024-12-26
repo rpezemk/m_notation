@@ -15,6 +15,7 @@ def generate_sample_piece(n_parts: int, n_measures: int):
                 for note in notes:
                     note.measure = measure
             else:
+                # notes = [Note(0, 0), Note(0, 7), Note(0, 0), Note(0, 7)]
                 notes = [
                     Note(0, 0, duration=Duration.QUARTER), 
                     Note(0, 7, duration=Duration.EIGHTH), 
@@ -27,7 +28,9 @@ def generate_sample_piece(n_parts: int, n_measures: int):
                     Note(0, 7, duration=Duration.THIRTY_SECOND), 
                     Note(0, 7, duration=Duration.THIRTY_SECOND), 
                     Note(0, 7, duration=Duration.THIRTY_SECOND), 
-                    Note(0, 0, duration=Duration.EIGHTH), 
+                    Note(0, 7, duration=Duration.THIRTY_SECOND), 
+                    Note(0, 0, duration=Duration.SIXTEENTH), 
+                    Note(0, 7, duration=Duration.THIRTY_SECOND), 
                     ]
                 measure = Measure(parent=part, notes=notes)
                 for note in notes:
