@@ -17,8 +17,8 @@ class DawView(VStack):
             self.layout.addWidget(part_widget)
         self.layout.addStretch()
         
-        ruler_widget = PartWidget(widget_type=RulerWidget)
-        self.layout.addWidget(ruler_widget)
+        # ruler_widget = PartWidget(widget_type=RulerWidget)
+        # self.layout.addWidget(ruler_widget)
         
         bottom_panel = HStack(
                     children=
