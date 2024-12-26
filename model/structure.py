@@ -10,6 +10,9 @@ class TimeHolder():
         self.duration = duration if duration is not None else Duration.QUARTER
         self.measure = measure
         self.offset_ratio = Ratio(t=(0, 1))
+    
+    def __str__(self):
+        return f"d: {self.duration.to_ratio()}"
         
 class Rest(TimeHolder):
     def __init__(self, duration: Duration = None, measure: 'Measure' = None):
@@ -17,12 +20,19 @@ class Rest(TimeHolder):
         self.duration = duration if duration is not None else Duration.QUARTER
         self.measure = measure
 
+    def __str__(self):
+        return f"d: {self.duration.to_ratio()}"
+    
+    
 class Triplet(TimeHolder):
     def __init__(self, duration: Duration = None, measure: 'Measure' = None, notes: list[TimeHolder]=None, parent=None):
         super().__init__(duration, measure)
         self.duration = duration if duration is not None else Duration.QUARTER
         self.notes = notes if notes is not None else []
         self.measure = measure
+    
+    def __str__(self):
+        return f"d: {self.duration.to_ratio()}"
     
 class Note(TimeHolder):
     def __init__(self, time, pitch, duration = None, measure: 'Measure' = None):
@@ -47,6 +57,9 @@ class Note(TimeHolder):
         else:
             abdfsdf = 234
           
+    def __str__(self):
+        return f"d: {self.duration.to_ratio()}"
+    
                 
 class Measure():
     def __init__(self, notes: list[TimeHolder]=None, parent=None):

@@ -1,13 +1,16 @@
 from model.ratio import Ratio
-from model.structure import Measure
+from model.structure import Measure, TimeHolder
 
 
 class RulerEvent():
     def __init__(self, len_ratio: Ratio, offset_ratio: Ratio):
         self.len_ratio = len_ratio
         self.offset_ratio = offset_ratio
-        self.inner_events = []
-        
+        self.inner_events:list[TimeHolder] = []
+    
+    def __str__(self):
+        return f"at: {self.offset_ratio}, d:{self.len_ratio}, i_es:{len(self.inner_events)}"
+    
 class CsEvent():
     def __init__(self, i_no: int, start_offset: float, duration: float):
         pass
@@ -42,7 +45,7 @@ class VerticalChunk():
          
 
         for idx, offset_ratio in enumerate(mov_ordered_list[:-1]):
-            len_ratio = mov_ordered_list[idx] - offset_ratio
+            len_ratio = mov_ordered_list[idx+1] - offset_ratio
             evt = RulerEvent(len_ratio, offset_ratio)
             ruler_events.append(evt)
         

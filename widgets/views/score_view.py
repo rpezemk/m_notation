@@ -2,7 +2,7 @@ from PyQt5.QtCore import QTimer
 from PyQt5.QtWidgets import QFrame, QWidget
 
 from model.sample_piece_gen import generate_sample_piece
-from utils.chunk_player import RulerPlayer
+from widgets.chunk_player import RulerPlayer
 from widgets.basics.my_button import StateButton, SyncButton
 from widgets.compound.stretch import Stretch
 from widgets.lanes.StaffWidget import StaffWidget
@@ -18,7 +18,8 @@ class ScoreView(VStack):
         
         self.piece = generate_sample_piece(4, 8)
         self.chunk = self.piece.to_chunk(0, 4)
-        self.chunk_player = RulerPlayer(self.chunk)
+        self.player = RulerPlayer(self.chunk)
+        self.player.signal.connect(lambda m_no, e_no: print(f"{m_no}, {e_no}"))
         
         ruler_widget = PartWidget(widget_type=RulerWidget)
 
@@ -42,7 +43,7 @@ class ScoreView(VStack):
                         Stretch(),
                         SyncButton("<<", None), 
                         SyncButton("<", None), 
-                        StateButton("PLAY", self.chunk_player.start, color_hex_off="#334477", color_hex_on="#4477FF"),
+                        StateButton("PLAY", self.player.start, color_hex_off="#334477", color_hex_on="#4477FF"),
                         SyncButton("STOP", None),
                         SyncButton(">", None),
                         SyncButton(">>", None),
