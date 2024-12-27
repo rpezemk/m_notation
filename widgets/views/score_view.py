@@ -30,7 +30,7 @@ class ScoreView(VStack):
         self.part_widgets: list[PartWidget] = []                
         for h_chunk in self.chunk.h_chunks:
             part_widget = PartWidget(parent=self, widget_type=StaffWidget)
-            part_widget.staff_widget.set_content(h_chunk.measures)
+            part_widget.staff_widget.set_content(h_chunk)
             part_widget.staff_widget.update()
             self.part_widgets.append(part_widget)
             self.layout.addWidget(part_widget)

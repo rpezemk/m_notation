@@ -3,6 +3,7 @@ from PyQt5.QtGui import QPainter
 from PyQt5.QtCore import Qt
 
 from fonts.glyphs import Glyphs
+from model.chunk import HorizontalChunk
 from model.sample_piece_gen import Measure
 from model.structure import Note, Rest
 from utils.musical_layout.space import get_single_ruler, map_to
@@ -27,8 +28,8 @@ class StaffWidget(BarrableWidget):
         self.note_size = 120
         self.line_spacing = 10
 
-    def set_content(self, measures: list[Measure]):
-        self.measures = measures
+    def set_content(self, h_chunk: HorizontalChunk):
+        self.measures = h_chunk.measures
 
     def paintEvent(self, event):
         if self.width() < 30 or self.height() < 30:
