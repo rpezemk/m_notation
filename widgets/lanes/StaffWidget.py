@@ -66,16 +66,15 @@ class StaffWidget(BarrableWidget):
 
             if seg_end - seg_start < 10:
                 return
-            ruler = get_single_ruler(list([th.real_duration.to_float() for th in bar.time_holders]))
-            ruler = map_to(ruler, seg_start, seg_end)
-            for idx, note in enumerate(bar.time_holders):
-                x_0 = int(ruler[idx])
+            
+            for note in bar.time_holders:
+                curr_x = int(note.offset_ratio.to_float() * (seg_end - seg_start) + seg_start)
                 if isinstance(note, Note):
-                    res_y = int( (-note.get_pitch() * self.line_spacing) / 2) + self.line_spacing * 8
+                    res_y = int( (-note.pitch * self.line_spacing) / 2) + self.line_spacing * 8
                 elif isinstance(note, Rest):
                     res_y = int( (0) / 2) + self.line_spacing * 8
 
-                vis_note = VisualNote(note, (x_0, res_y))
+                vis_note = VisualNote(note, (curr_x, res_y))
                 self.visual_notes.append(vis_note)
 
     def draw_staff_lines(self, painter: QPainter):

@@ -47,8 +47,8 @@ class VerticalChunk():
             ruler_events.append(evt)
         
         for evt in ruler_events:
-            this_time_evts = [th for m in self.vertical_measures for th in m.time_holders if th.offset_ratio == evt.offset_ratio]
-            evt.inner_events = this_time_evts
+            time_holders = [th for m in self.vertical_measures for th in m.time_holders if th.offset_ratio == evt.offset_ratio]
+            evt.inner_events = time_holders
         
         return ruler_events
 
