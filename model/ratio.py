@@ -88,4 +88,18 @@ class Ratio():
         res = self.numerator / self.denominator
         return res
     
+    def zero():
+        """
+        Returns:
+            Ratio(t=(0, 1))
+        """
+        return Ratio(t=(0, 1))
+    
+    def one():
+        """
+        Returns:
+            Ratio(t=(1, 1))
+        """
+        return Ratio(t=(1, 1))
+    
 custom_key = cmp_to_key(Ratio.custom_comparator)

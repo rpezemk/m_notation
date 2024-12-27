@@ -8,10 +8,10 @@ from model.ratio import Ratio
 class TimeHolder():
     def __init__(self, duration: DurationBase = None, measure: 'Measure' = None, dotting: Ratio = None):
         self.base_duration = duration if duration is not None else DurationBase.QUARTER
-        self.dotting = dotting if dotting is not None else Ratio(t=(0, 1))
+        self.dotting = dotting if dotting is not None else Ratio.zero()
         self.real_duration = self.base_duration + self.base_duration * self.dotting
         self.measure = measure
-        self.offset_ratio = Ratio(t=(0, 1))
+        self.offset_ratio = Ratio.zero()
         self.is_selected = False
         
     def __str__(self):

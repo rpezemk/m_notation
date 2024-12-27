@@ -32,12 +32,12 @@ class VerticalChunk():
     def ratio_lanes_to_ruler(self) -> list[RulerEvent]:
         lanes = [[th.real_duration for th in m.time_holders] for m in self.vertical_measures]
         for v_m in self.vertical_measures:
-            curr_pos = Ratio(t=(0, 1))
+            curr_pos = Ratio.zero()
             for th in v_m.time_holders:
                 th.offset_ratio = curr_pos
                 curr_pos += th.real_duration
         moving_sum_lanes: list[tuple[list[Ratio], list[Ratio]]] = [(lane, VerticalChunk.to_moving_sum(lane)) for lane in lanes]
-        mov_ordered_list =[Ratio(t=(0, 1)), *sorted(set([r for bar_ratios in moving_sum_lanes for r in bar_ratios[1]]), key=lambda r: r.to_float())]
+        mov_ordered_list =[Ratio.zero(), *sorted(set([r for bar_ratios in moving_sum_lanes for r in bar_ratios[1]]), key=lambda r: r.to_float())]
         ruler_events: list[RulerEvent] = []
          
 
@@ -53,7 +53,7 @@ class VerticalChunk():
         return ruler_events
 
     def to_moving_sum(lane: list[Ratio]) -> list[Ratio]:
-        curr = Ratio(t=(0, 1))
+        curr = Ratio.zero()
         res = []
         for r in lane:
             curr = curr + r
@@ -66,7 +66,7 @@ class Chunk:
         self.duration_ratio = Ratio(t=(4,4))
         self.h_chunks = [HorizontalChunk() for _ in v_chunks[0].vertical_measures]
 
-        for m_idx, v_ch in enumerate(v_chunks):
+        for v_ch in v_chunks:
             for part_no, m in enumerate(v_ch.vertical_measures):
                 self.h_chunks[part_no].measures.append(m)
 
