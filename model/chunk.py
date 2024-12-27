@@ -36,10 +36,7 @@ class VerticalChunk():
             for th in v_m.time_holders:
                 th.offset_ratio = curr_pos
                 curr_pos += th.real_duration
-        curr_offset = Ratio(t=(0, 1))
         moving_sum_lanes: list[tuple[list[Ratio], list[Ratio]]] = [(lane, VerticalChunk.to_moving_sum(lane)) for lane in lanes]
-        res2 = [(k[0], k[1]) for idx, k in enumerate(moving_sum_lanes)]
-        
         mov_ordered_list =[Ratio(t=(0, 1)), *sorted(set([r for bar_ratios in moving_sum_lanes for r in bar_ratios[1]]), key=lambda r: r.to_float())]
         ruler_events: list[RulerEvent] = []
          
