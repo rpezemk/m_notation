@@ -27,7 +27,7 @@ class ScoreView(VStack):
         self.player = RulerPlayer(self.chunk)
         self.player.signal.connect(lambda m_no, e_no: ruler_widget.staff_widget.mark_at(m_no, e_no))
            
-        self.part_widgets = []                
+        self.part_widgets: list[PartWidget] = []                
         for h_chunk in self.chunk.h_chunks:
             part_widget = PartWidget(parent=self, widget_type=StaffWidget)
             part_widget.staff_widget.set_content(h_chunk.measures)
@@ -55,12 +55,6 @@ class ScoreView(VStack):
         self.layout.parentWidget().update()
         self.layout.update()
         self.delta = 1
-        self.line_x0 = 100
-        self.line_pos = self.line_x0
-        self.timer = QTimer(self.widget)
-        self.timer.timeout.connect(self.update_counter) 
-        self.timer.start(100) 
-        self.line = QFrame(self.back)
         self.widget.resizeEvent = self.resizeEvent
     
     def select_all(self):
@@ -70,19 +64,7 @@ class ScoreView(VStack):
     def deselect_notes_but(self, v_notes: list[VisualNote]):
         for p in self.part_widgets:
             p.staff_widget.deselect_notes_but(v_notes)
-            
-    def update_counter(self):
-        w = self.widget.width()
-        if w - self.line_x0 <= 0:
-            return
-        self.line_pos = (self.line_pos + self.delta) % (w - self.line_x0)
-        self.draw_line(self.line_pos + self.line_x0)
-        
-    def draw_line(self, x0):
-        h = self.widget.height()
-        self.line.setFrameShape(QFrame.HLine)  # Horizontal line
-        self.line.setGeometry(x0, 0, 1, h)  # Set position and size
-        
+                          
     def resizeEvent(self, event):
         h = self.widget.height()
         w = self.widget.width()
