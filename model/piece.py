@@ -25,6 +25,6 @@ class Piece():
             new_lane: list[Ratio] = []
             for m in p:
                 for th in m.time_holders:
-                    new_lane.append(th.duration.to_ratio())
+                    new_lane.append(th.base_duration)
             lanes_data.append(new_lane)
         return lanes_data

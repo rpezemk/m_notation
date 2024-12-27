@@ -1,64 +1,51 @@
 from enum import Enum
 
 from model.ratio import Ratio
-
-class Duration(Enum):
-    LONGA = "Longa"                # 4 times a whole note
-    BREVE = "Breve"                # 2 times a whole note
-    WHOLE = "Whole"                # 1 whole note
-    HALF = "Half"                  # 1/2 of a whole note
-    QUARTER = "Quarter"            # 1/4 of a whole note
-    EIGHTH = "Eighth"              # 1/8 of a whole note
-    SIXTEENTH = "Sixteenth"        # 1/16 of a whole note
-    THIRTY_SECOND = "ThirtySecond" # 1/32 of a whole note
-    SIXTY_FOURTH = "SixtyFourth"   # 1/64 of a whole note
+class Dotting(Enum):
+    NO_DOT = Ratio(t=(1,1))
+    ONE_DOT = Ratio(t=(3,2))
+    TWO_DOTS = Ratio(t=(7,4))
+    THREE_DOTS = Ratio(t=(15,8))
+    FOUR_DOTS = Ratio(t=(31,16))
+    
+class DurationBase():
+    LONGA = Ratio(t=(4,1))               # 4 times a whole note
+    BREVE = Ratio(t=(2,1))               # 2 times a whole note
+    WHOLE = Ratio(t=(1,1))               # 1 whole note
+    HALF = Ratio(t=(1,2))                # 1/2 of a whole note
+    QUARTER = Ratio(t=(1,4))             # 1/4 of a whole note
+    EIGHTH = Ratio(t=(1,8))              # 1/8 of a whole note
+    SIXTEENTH = Ratio(t=(1,16))          # 1/16 of a whole note
+    THIRTY_SECOND = Ratio(t=(1,32))      # 1/32 of a whole note
+    SIXTY_FOURTH = Ratio(t=(1,64))       # 1/64 of a whole note
 
     @property
     def to_beats(self) -> float:
         """Returns the note duration in terms of whole note beats"""
         durations = {
-            Duration.LONGA: 4,
-            Duration.BREVE: 2,
-            Duration.WHOLE: 1,
-            Duration.HALF: 0.5,
-            Duration.QUARTER: 0.25,
-            Duration.EIGHTH: 0.125,
-            Duration.SIXTEENTH: 0.0625,
-            Duration.THIRTY_SECOND: 0.03125,
-            Duration.SIXTY_FOURTH: 0.015625
+            DurationBase.LONGA: Ratio(t=(4,1)),
+            DurationBase.BREVE: Ratio(t=(2,1)),
+            DurationBase.WHOLE: Ratio(t=(1,1)),
+            DurationBase.HALF: Ratio(t=(1,2)),
+            DurationBase.QUARTER: Ratio(t=(1,4)),
+            DurationBase.EIGHTH: Ratio(t=(1,8)),
+            DurationBase.SIXTEENTH: Ratio(t=(1,16)),
+            DurationBase.THIRTY_SECOND: Ratio(t=(1,32)),
+            DurationBase.SIXTY_FOURTH: Ratio(t=(1,64)),
         }
         return durations[self]
-
-    def to_ratio(self):
-        durations = {
-            Duration.LONGA: Ratio(t=(4, 1)),
-            Duration.BREVE: Ratio(t=(2, 1)),
-            Duration.WHOLE: Ratio(t=(1, 1)),
-            Duration.HALF: Ratio(t=(1, 2)),
-            Duration.QUARTER: Ratio(t=(1, 4)),
-            Duration.EIGHTH: Ratio(t=(1, 8)),
-            Duration.SIXTEENTH: Ratio(t=(1, 16)),
-            Duration.THIRTY_SECOND: Ratio(t=(1, 32)),
-            Duration.SIXTY_FOURTH: Ratio(t=(1, 64))
-        }
-        return durations[self]
-        
         
     def get_all_durations():
         all_durations = [
-            Duration.LONGA,
-            Duration.BREVE,
-            Duration.WHOLE,
-            Duration.HALF,
-            Duration.QUARTER,
-            Duration.EIGHTH,
-            Duration.SIXTEENTH,
-            Duration.THIRTY_SECOND,
-            Duration.SIXTY_FOURTH,
+            DurationBase.LONGA,
+            DurationBase.BREVE,
+            DurationBase.WHOLE,
+            DurationBase.HALF,
+            DurationBase.QUARTER,
+            DurationBase.EIGHTH,
+            DurationBase.SIXTEENTH,
+            DurationBase.THIRTY_SECOND,
+            DurationBase.SIXTY_FOURTH,
         ]
         return all_durations
     
-    
-# Example usage:
-note = Duration.QUARTER
-print(f"Duration of {note.value} in beats: {note.to_beats}")

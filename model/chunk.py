@@ -30,12 +30,12 @@ class VerticalChunk():
         self.vertical_measures = one_measure_parts
 
     def ratio_lanes_to_ruler(self) -> list[RulerEvent]:
-        lanes = [[th.duration.to_ratio() for th in m.time_holders] for m in self.vertical_measures]
+        lanes = [[th.real_duration for th in m.time_holders] for m in self.vertical_measures]
         for v_m in self.vertical_measures:
             curr_pos = Ratio(t=(0, 1))
             for th in v_m.time_holders:
                 th.offset_ratio = curr_pos
-                curr_pos += th.duration.to_ratio()
+                curr_pos += th.real_duration
         curr_offset = Ratio(t=(0, 1))
         moving_sum_lanes: list[tuple[list[Ratio], list[Ratio]]] = [(lane, VerticalChunk.to_moving_sum(lane)) for lane in lanes]
         res2 = [(k[0], k[1]) for idx, k in enumerate(moving_sum_lanes)]

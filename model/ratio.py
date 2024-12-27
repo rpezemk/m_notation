@@ -44,6 +44,11 @@ class Ratio():
         new_den = self.denominator * other.denominator
         return Ratio(numerator=new_num, denominator=new_den).simplify()
 
+    def __mul__(self, other: 'Ratio'):
+        new_num = self.numerator * other.numerator
+        new_den = self.denominator * other.denominator
+        return Ratio(numerator=new_num, denominator=new_den).simplify()
+    
     def __sub__(self, other: 'Ratio'):
         new_num = (self.numerator * other.denominator - other.numerator * self.denominator)
         new_den = self.denominator * other.denominator

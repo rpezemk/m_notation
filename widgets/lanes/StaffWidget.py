@@ -65,7 +65,7 @@ class StaffWidget(BarrableWidget):
 
             if seg_end - seg_start < 10:
                 return
-            ruler = get_single_ruler(list([th.duration.to_beats for th in bar.time_holders]))
+            ruler = get_single_ruler(list([th.real_duration.to_float() for th in bar.time_holders]))
             ruler = map_to(ruler, seg_start, seg_end)
             for idx, note in enumerate(bar.time_holders):
                 x_0 = int(ruler[idx])
@@ -119,7 +119,7 @@ class StaffWidget(BarrableWidget):
             
     def remove_note(self, v_n: VisualNote):
         m = v_n.inner.measure
-        rest = Rest(duration=v_n.inner.duration, measure=m)
+        rest = Rest(duration=v_n.inner.real_duration, measure=m, dotting=v_n.inner.dotting)
         inner_note_idx = m.time_holders.index(v_n.inner)
         m.time_holders[inner_note_idx] = rest
         idx = self.visual_notes.index(v_n)

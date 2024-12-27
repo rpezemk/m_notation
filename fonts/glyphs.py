@@ -156,3 +156,6 @@ class Glyphs:
     SixteenthNote = "\uE1D9"
     ThirtySecondNote = "\uE1DB"
     SixtyFourthNote = "\uE1DD"
+
+    AugDot = "\uE1E7"
+    DoubleAugDot = "\uE1E8"

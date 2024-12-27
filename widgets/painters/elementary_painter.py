@@ -10,7 +10,7 @@ class ElementaryPainter():
     def paint(self, t: Transform2D, q_painter: QPainter, s: str):
         t2 = self.self_transform(t)
         text_rect = QRect(t2.x - self.size, t2.y - self.size, self.size * 2, self.size * 2)
-        q_painter.drawText(text_rect, Qt.AlignCenter, s) 
+        q_painter.drawText(text_rect, Qt.AlignLeft | Qt.AlignVCenter, s) 
         
     def self_transform(self, t: Transform2D):
         res = self.offset + t
@@ -28,7 +28,7 @@ class HeadPainter(ElementaryPainter):
 class StemPainter(ElementaryPainter):
     def __init__(self):
         super().__init__()
-        self.offset = Transform2D(5)
+        self.offset = Transform2D(12)
         
     def paint(self, t, q_painter, s: str):
         super().paint(t, q_painter, s)
@@ -37,7 +37,7 @@ class StemPainter(ElementaryPainter):
 class FlagPainter(ElementaryPainter):
     def __init__(self):
         super().__init__()
-        self.offset = Transform2D(9, -38)
+        self.offset = Transform2D(11, -38)
         
     def paint(self, t, q_painter, s: str):
         super().paint(t, q_painter, s)

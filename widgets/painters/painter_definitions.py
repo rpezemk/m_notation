@@ -1,6 +1,7 @@
+from model.ratio import Ratio
 from widgets.note_widgets.VisualNote import VisualNote
 from model.structure import TimeHolder, Note, Rest
-from model.duration import Duration
+from model.duration import DurationBase
 from fonts.glyphs import Glyphs
 
 def get_default_if_none(maybe_filled, default_value):
@@ -8,7 +9,7 @@ def get_default_if_none(maybe_filled, default_value):
     return filled
 
 class PainterData():
-    def __init__(self, t: type, d: Duration):
+    def __init__(self, t: type, d: DurationBase):
         self.t = t
         self.d = d
         self.stemed = False
@@ -18,7 +19,7 @@ class PainterData():
         self.stem_str = None
     
     @staticmethod    
-    def emit(t: type, d: Duration):
+    def emit(t: type, d: DurationBase):
         return PainterData(t, d)    
     
     
@@ -39,9 +40,9 @@ class PainterData():
     
     
 def get_painter_definitions() -> list[PainterData]:
-    all_durations = Duration.get_all_durations()
-    simple_durations = [Duration.LONGA, Duration.BREVE, Duration.WHOLE]
-    only_stemed_durations = [Duration.HALF, Duration.QUARTER]
+    all_durations = DurationBase.get_all_durations()
+    simple_durations = [DurationBase.LONGA, DurationBase.BREVE, DurationBase.WHOLE]
+    only_stemed_durations = [DurationBase.HALF, DurationBase.QUARTER]
     flagged = all_durations[5:]
     
     heads = [Glyphs.LongaNote, Glyphs.BreveNote, Glyphs.WholeNote, Glyphs.Notehead_Half, Glyphs.Notehead_Black]
@@ -80,4 +81,9 @@ def get_painter_definitions() -> list[PainterData]:
     painters = [*note_painters, *rest_painters]
     return painters
     
-get_painter_definitions()
+def get_dotting_painters() -> list[PainterData]:
+    dotting_painters = [
+        (Ratio(t=(1, 2)), Glyphs.AugDot),
+        (Ratio(t=(3, 4)), Glyphs.AugDot + " " + Glyphs.AugDot),
+        ]
+    return dotting_painters
