@@ -1,4 +1,4 @@
-from PyQt5.QtCore import QTimer
+from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtWidgets import QFrame, QWidget
 
 from model.sample_piece_gen import generate_sample_piece
@@ -16,7 +16,7 @@ class ScoreView(VStack):
     def __init__(self, margin = None, spacing = None, children = None, stretch=False, fixed_width=-1):
         super().__init__(margin, spacing, children, stretch, fixed_width)
         self.back = QWidget(self.widget)
-        
+        self.widget.setFocusPolicy(Qt.NoFocus)
         self.piece = generate_sample_piece(4, 8)
         self.chunk = self.piece.to_chunk(0, 4)
         

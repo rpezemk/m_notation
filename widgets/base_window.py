@@ -19,6 +19,7 @@ class MyStyledWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("m_notator")
+        self.setFocusPolicy(Qt.StrongFocus)
         self.setStyleSheet("""
             QWidget {
                 background-color: black;

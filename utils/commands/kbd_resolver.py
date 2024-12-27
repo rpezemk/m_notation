@@ -68,32 +68,32 @@ class Automaton():
         
         return len(res_list) > 0, res_list
     
-    def try_resolve(self, keys: list[int]):
+    def try_resolve(self, keys: list[int]) -> tuple[bool, CompoundCommand]:
         ok, lst = self.filter_by_keys(self.filtered, keys, self.level)
         if not ok:
             self.notify_func("NOT OK --> reset")
             self.reset()
-            return False
+            return False, None
         
         maybe_total = [c for c in lst if c.sub_commands[self.level].check_sub(keys) == SubCmdState.TOTAL_MATCH]
         if maybe_total:
             self.notify_func("some totals")
-            win = maybe_total[0]
-            if len(win.sub_commands) == self.level + 1:
+            win_cmd = maybe_total[0]
+            if len(win_cmd.sub_commands) == self.level + 1:
                 self.notify_func("WIN!!!")
-                win.func()
+                win_cmd.func()
                 self.reset()
-                return True
+                return True, win_cmd
             else:
                 self.notify_func("INC STATE")
                 self.filtered = list(lst)
                 self.inc_state()
-                return True
+                return False, None
             
         
         self.notify_func("recalc filtered")
         self.filtered = list(lst)
-        return False
+        return False, None
     
     def __str__(self):
         f = "AUTOMATON:" + "".join(["\n  " + str(f) for f in self.filtered])
@@ -108,10 +108,6 @@ class KbdResolver():
         self.curr_keys = set()
         self.curr_modifiers = set()
         self.prev_keys = set()
-        self.accept_press(16777249)
-        self.accept_press(84)
-        self.accept_press(16777249)
-        self.accept_press(88)
         
     def clear(self):
         self.curr_keys = set()
@@ -120,16 +116,17 @@ class KbdResolver():
     def accept_token(self, option: KbdOption, keys: list[int]):
         ...
         
-        success = self.automaton.try_resolve(keys)
-        if success:
-            print("success")
-        
+        success, cmd = self.automaton.try_resolve(keys)
+        ... # TODO passing cmds 
+                
     def accept_press(self, key: int, autorepeat: bool = False):
         if autorepeat:
             return
         if key not in self.curr_keys: 
             self.curr_keys.add(key)
-            self.notify_func(f"added: {key}")
+        
+        for ck in self.curr_keys:
+            print(ck)
         
         if is_modifier(key):
             return
@@ -142,5 +139,5 @@ class KbdResolver():
         
         if key in self.curr_keys: 
             self.curr_keys.remove(key)
-            self.notify_func(f"removed: {key}")
+            # self.notify_func(f"removed: {key}")
         
