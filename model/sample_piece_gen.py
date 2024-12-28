@@ -32,9 +32,8 @@ def generate_sample_piece(n_parts: int, n_measures: int):
                     Note(0, 7, duration=DurationBase.THIRTY_SECOND), 
                     Note(0, 7, duration=DurationBase.THIRTY_SECOND), 
                     Note(0, 7, duration=DurationBase.THIRTY_SECOND), 
-                    Note(0, 7, duration=DurationBase.THIRTY_SECOND), 
                     Note(0, 0, duration=DurationBase.SIXTEENTH), 
-                    Note(0, 7, duration=DurationBase.THIRTY_SECOND), 
+                    Note(0, 7, duration=DurationBase.SIXTEENTH), 
                     ]
                 measure = Measure(parent=part, notes=notes)
                 for note in notes:
