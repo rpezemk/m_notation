@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QApplication
 from widgets.views.file_list_view import FileBrowserView
 from widgets.views.daw_view import DawView
 from widgets.views.score_view import ScoreView
-from widgets.base_window import MyStyledWindow
+from widgets.base_window import BaseWindow
 from widgets.compound.base_compound import MyCompound
 from widgets.compound.stack_panels import HStack, VStack
 from widgets.compound.stretch import Stretch
@@ -10,7 +10,7 @@ from widgets.basics.my_button import AsyncButton, SyncButton
 import wirings.layouts.general as general
 
      
-class MainWindow(MyStyledWindow):
+class MainWindow(BaseWindow):
     def __init__(self):
         super().__init__()
         self.set_central(ScoreView())

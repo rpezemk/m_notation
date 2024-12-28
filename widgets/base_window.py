@@ -15,7 +15,7 @@ from PyQt5.QtWidgets import QMainWindow
 from typing import override
 
 
-class MyStyledWindow(QMainWindow):
+class BaseWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("m_notator")
