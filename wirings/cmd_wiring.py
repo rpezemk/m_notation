@@ -11,6 +11,7 @@ CTRL_R = SubCmd("CTRL_R", [Qt.Key_Control, Qt.Key_R])
 SPACE = SubCmd("PLAY", [Qt.Key_Space])
 RETURN = SubCmd("PLAY", [Qt.Key_Return])
 ARROW_RIGHT = SubCmd("ARROW_RIGHT", [Qt.Key_Right]) #16777236
+ARROW_LEFT = SubCmd("ARROW_LEFT", [Qt.Key_Left]) #16777236
 
 # ALL = CompoundCommand("ALL", [A], lambda: print("A-ALL")),
 # ALL = CompoundCommand("RENAME", [CTRL_R, CTRL_R], lambda: print("RENAME")),
@@ -19,13 +20,12 @@ ARROW_RIGHT = SubCmd("ARROW_RIGHT", [Qt.Key_Right]) #16777236
 # ALL = CompoundCommand("SPACE", [SPACE], lambda: print("SPACE")),
 # ALL = CompoundCommand("RETURN", [RETURN], lambda: print("RETURN")),
 NEXT = CompoundCommand("ARROW_RIGHT", [ARROW_RIGHT])
+PREV = CompoundCommand("ARROW_RIGHT", [ARROW_LEFT])
 
-class ScoreViewCommands():
-    NEXT = NEXT
-    
 
 my_wirings = [
-    NEXT
+    NEXT,
+    PREV
 ]
 
 Log = MLogger(print)

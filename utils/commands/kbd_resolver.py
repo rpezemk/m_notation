@@ -4,6 +4,8 @@ from PyQt5.QtCore import Qt
 from utils.commands.command import CompoundCommand, SubCmdState
 from typing import Callable
 
+from widgets.compound.base_compound import MyCompound
+
 modifiers = [Qt.Key_Shift, Qt.Key_Control, Qt.Key_Alt, Qt.Key_Meta]
 
 def is_modifier(key: int):
@@ -97,6 +99,10 @@ class KbdResolver():
         self.curr_keys = set()
         self.curr_modifiers = set()
         self.prev_keys = set()
+        self.controls: set[MyCompound] = set()
+        
+    def append_control(self, widget: MyCompound):
+        self.controls.add(widget)
         
     def clear_curr_input(self):
         self.curr_keys = set()
@@ -106,7 +112,14 @@ class KbdResolver():
         ...
         
         success, cmd = self.automaton.try_resolve(keys)
-        ... # TODO passing cmds 
+        if not success:
+            return
+        
+        for ctrl in self.controls:
+            match = [c for c in ctrl.commands if c[0] == cmd]
+            if not match:
+                continue
+            match[0][1]()
                 
     def accept_press(self, event):
         key, autorepeat = event.key(), event.isAutoRepeat()

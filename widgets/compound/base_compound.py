@@ -1,6 +1,8 @@
+from typing import Callable
 from PyQt5.QtWidgets import QWidget, QLayout
 
 from widgets.compound.stretch import Stretch
+from utils.commands.command import CompoundCommand, SubCmd
 
 class MyCompound(QWidget):
     def __init__(self, 
@@ -34,6 +36,8 @@ class MyCompound(QWidget):
             self.layout.setContentsMargins(*margin)
         else:
             self.layout.setContentsMargins(0, 0, 0, 0)
+            
+        self.commands: list[tuple[CompoundCommand, Callable]] = []
                 
     def add_stretch(self, Stretch):
         self.layout.addStretch()   

@@ -137,8 +137,29 @@ class StaffWidget(BarrableWidget):
     COMMAND METHODS
     """
     
+    def select_prev_note(self):
+        selected = [v_n for v_n in self.visual_notes if v_n.inner.is_selected][-1:]
+        if not selected:
+            return
+        
+        sel = selected[0]
+        
+        
+        idx = self.visual_notes.index(sel)
+
+        if idx == 0:
+            return
+        
+        sel.inner.is_selected = False
+        
+        nxt = self.visual_notes[idx - 1]
+        nxt.inner.is_selected = True
+        
+        self.update()
+    
+    
     def select_next_note(self):
-        selected = [d for d in self.visual_notes if d.inner.is_selected][:-1]
+        selected = [v_n for v_n in self.visual_notes if v_n.inner.is_selected][-1:]
         if not selected:
             return
         

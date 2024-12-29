@@ -10,7 +10,7 @@ from widgets.compound.stack_panels import HStack, VStack
 from widgets.lanes.PartWidget import PartWidget
 from widgets.lanes.RulerWidget import RulerWidget
 from widgets.note_widgets.VisualNote import VisualNote
-
+from wirings.cmd_wiring import my_wirings, root_kbd_resolver, NEXT, PREV
 
 class ScoreView(VStack):
     def __init__(self, margin = None, spacing = None, children = None, stretch=False, fixed_width=-1):
@@ -19,6 +19,9 @@ class ScoreView(VStack):
         self.widget.setFocusPolicy(Qt.NoFocus)
         self.piece = generate_sample_piece(4, 8)
         self.chunk = self.piece.to_chunk(0, 4)
+        
+        root_kbd_resolver.controls.clear()
+        root_kbd_resolver.append_control(self)
         
         ruler_widget = PartWidget(widget_type=RulerWidget, parent=self)
         ruler_widget.staff_widget.set_content(self.chunk)
@@ -56,7 +59,13 @@ class ScoreView(VStack):
         self.layout.update()
         self.delta = 1
         self.widget.resizeEvent = self.resizeEvent
-    
+
+        self.commands = [
+            (NEXT, self.select_next_note),
+            (PREV, self.select_prev_note)
+        ]
+        
+        
     def select_all(self):
         for p in self.part_widgets:
             p.staff_widget.select_all()
@@ -78,5 +87,12 @@ class ScoreView(VStack):
     """
 
     def select_next_note(self):
+        print("select next note (ScoreView)")
         for pt in self.part_widgets:
             pt.staff_widget.select_next_note()
+            
+    def select_prev_note(self):
+        print("select prev note (ScoreView)")
+        for pt in self.part_widgets:
+            pt.staff_widget.select_prev_note()
+            
