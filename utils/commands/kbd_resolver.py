@@ -119,7 +119,8 @@ class KbdResolver():
         success, cmd = self.automaton.try_resolve(keys)
         ... # TODO passing cmds 
                 
-    def accept_press(self, key: int, autorepeat: bool = False):
+    def accept_press(self, event):
+        key, autorepeat = event.key(), event.isAutoRepeat()
         if autorepeat:
             return
         if key not in self.curr_keys: 
@@ -133,7 +134,8 @@ class KbdResolver():
         
         self.accept_token(KbdOption.PRESS, self.curr_keys)     
             
-    def accept_release(self, key: int, autorepeat: bool = False):
+    def accept_release(self, event):
+        key, autorepeat = event.key(), event.isAutoRepeat()
         if autorepeat:
             return
         

@@ -46,8 +46,8 @@ class BaseWindow(QMainWindow):
 
     @override
     def keyPressEvent(self, event: QKeyEvent):
-        self.kbd_resolver.accept_press(event.key(), event.isAutoRepeat())
+        self.kbd_resolver.accept_press(event)
 
     @override
     def keyReleaseEvent(self, event: QKeyEvent):
-        self.kbd_resolver.accept_release(event.key(), event.isAutoRepeat())
+        self.kbd_resolver.accept_release(event)
