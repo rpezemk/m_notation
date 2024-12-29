@@ -3,9 +3,7 @@ from datetime import datetime
 from PyQt5.QtWidgets import QApplication, QLabel, QPushButton, QVBoxLayout, QWidget
 from PyQt5.QtCore import QThread, pyqtSignal
 
-from model.chunk import CsEvent
-from model.chunk import RulerEvent
-from model.chunk import Chunk
+from model.musical.structure import Chunk
 
 class RulerPlayer(QThread):
     signal = pyqtSignal(int, int)

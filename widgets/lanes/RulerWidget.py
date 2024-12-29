@@ -2,8 +2,8 @@ from typing import override
 from PyQt5.QtCore import QRect
 from PyQt5.QtGui import QColor, QPainter, QPen
 
+from model.musical.structure import Chunk
 from model.ratio import Ratio
-from model.chunk import Chunk
 from widgets.lanes.BarrableWidget import BarrableWidget
 
 class RulerWidget(BarrableWidget):

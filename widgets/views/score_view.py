@@ -10,7 +10,7 @@ from widgets.compound.stack_panels import HStack, VStack
 from widgets.lanes.PartWidget import PartWidget
 from widgets.lanes.RulerWidget import RulerWidget
 from widgets.note_widgets.VisualNote import VisualNote
-from wirings.cmd_wiring import my_wirings, root_kbd_resolver, NEXT, PREV
+from wirings.cmd_wiring import my_wirings, root_kbd_resolver, NEXT, PREV, UP, DOWN
 
 class ScoreView(VStack):
     def __init__(self, margin = None, spacing = None, children = None, stretch=False, fixed_width=-1):
@@ -60,7 +60,9 @@ class ScoreView(VStack):
 
         self.commands = [
             (NEXT, self.select_next_note),
-            (PREV, self.select_prev_note)
+            (PREV, self.select_prev_note),
+            (UP, self.select_note_above),
+            (DOWN, self.select_note_below),
         ]
         
         
@@ -94,3 +96,53 @@ class ScoreView(VStack):
         for pt in self.part_widgets:
             pt.staff_widget.select_prev_note()
             
+    def select_note_above(self):
+        maybe = self.order_notes_by_part_no()[:1]
+        if not maybe:
+            return
+        
+        src_m = maybe[0].inner.measure
+        p_no, m_no = src_m.part_no, src_m.m_no
+        if p_no == 0:
+            return
+        piece = maybe[0].inner.measure.part.piece
+        
+        part = piece.parts[p_no-1]
+        inner = maybe[0].inner
+        th_to_sel = sorted(part.measures[m_no].time_holders, key= lambda t: abs((t.offset_ratio - inner.offset_ratio).to_float()))[:1]
+        if not th_to_sel:
+            return
+        self.deselect_notes_but([th_to_sel[0]])
+        th_to_sel[0].is_selected = True
+        self.update()
+
+        
+    def select_note_below(self):
+        maybe = self.order_notes_by_part_no()[-1:]
+        if not maybe:
+            return
+        
+        src_m = maybe[0].inner.measure
+        parts = src_m.part.piece.parts
+        p_no, m_no = src_m.part_no, src_m.m_no
+        if len(parts) -1 == p_no:
+            return
+        
+        part = parts[p_no + 1]
+        
+        inner = maybe[0].inner
+        th_to_sel = [th for th in part.measures[m_no].time_holders][:1]
+        th_to_sel = sorted(part.measures[m_no].time_holders, key= lambda t: abs((t.offset_ratio - inner.offset_ratio).to_float()))[:1]
+        if not th_to_sel:
+            return
+        
+        self.deselect_notes_but([th_to_sel[0]])
+        th_to_sel[0].is_selected = True
+        self.update()
+        
+        
+    def order_notes_by_part_no(self):
+        maybe: list[VisualNote] = [n for pt in self.part_widgets for n in pt.staff_widget.get_last_selected_note()]
+        maybe = sorted(maybe, key=lambda x: x.inner.measure.m_no)
+        maybe = sorted(maybe, key=lambda x: x.inner.measure.part_no)
+        return maybe

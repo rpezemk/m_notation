@@ -4,7 +4,6 @@ from model.duration import DurationBase
 from model.ratio import Ratio
 from widgets.painters.painter_definitions import get_dotting_painters, get_painter_definitions
 from widgets.note_widgets.VisualNote import VisualNote
-from model.structure import TimeHolder
 from widgets.painters.elementary_painter import ElementaryPainter, HeadPainter, StemPainter, FlagPainter
 from utils.geometry.transform2d import Transform2D
 painter_data_list = get_painter_definitions()

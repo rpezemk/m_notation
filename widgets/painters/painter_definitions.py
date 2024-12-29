@@ -1,6 +1,6 @@
 from model.ratio import Ratio
 from widgets.note_widgets.VisualNote import VisualNote
-from model.structure import TimeHolder, Note, Rest
+from model.musical.structure import Note, Rest, TimeHolder
 from model.duration import DurationBase
 from fonts.glyphs import Glyphs
 

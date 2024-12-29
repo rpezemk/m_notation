@@ -1,6 +1,5 @@
-from model.piece import Piece
 from model.duration import DurationBase
-from model.structure import ConductorPart, Measure, Note, Part, TempoMark
+from model.musical.structure import ConductorPart, Measure, Note, Part, Piece, TempoMark
 from model.ratio import Ratio
 
 def generate_sample_piece(n_parts: int, n_measures: int):
@@ -15,7 +14,7 @@ def generate_sample_piece(n_parts: int, n_measures: int):
                          Note(0, 0, Ratio(t=(1, 4))).double_dot(), 
                          Note(0, 7, Ratio(t=(1, 16)))]
                 
-                measure = Measure(parent=part, notes=notes)
+                measure = Measure(part_no=part_no, m_no=measure_no, parent=part, notes=notes)
                 for note in notes:
                     note.measure = measure
             else:
@@ -35,7 +34,7 @@ def generate_sample_piece(n_parts: int, n_measures: int):
                     Note(0, 0, duration=DurationBase.SIXTEENTH), 
                     Note(0, 7, duration=DurationBase.SIXTEENTH), 
                     ]
-                measure = Measure(parent=part, notes=notes)
+                measure = Measure(part_no=part_no, m_no=measure_no, parent=part, notes=notes)
                 for note in notes:
                     note.measure = measure
             

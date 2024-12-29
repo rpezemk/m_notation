@@ -4,9 +4,8 @@ from PyQt5.QtGui import QPainter
 from PyQt5.QtCore import Qt
 
 from fonts.glyphs import Glyphs
-from model.chunk import HorizontalChunk
 from model.sample_piece_gen import Measure
-from model.structure import Note, Rest
+from model.musical.structure import HorizontalChunk, Note, Rest
 from utils.musical_layout.space import get_single_ruler, map_to
 from widgets.lanes.BarrableWidget import BarrableWidget
 from widgets.note_widgets.VisualNote import VisualNote
@@ -159,7 +158,7 @@ class StaffWidget(BarrableWidget):
     
     
     def select_next_note(self):
-        selected = [v_n for v_n in self.visual_notes if v_n.inner.is_selected][-1:]
+        selected = self.get_last_selected_note()
         if not selected:
             return
         
@@ -177,6 +176,10 @@ class StaffWidget(BarrableWidget):
         nxt.inner.is_selected = True
         
         self.update()
+
+    def get_last_selected_note(self):
+        selected = [v_n for v_n in self.visual_notes if v_n.inner.is_selected][-1:]
+        return selected
         
         
 # def custom_comparator(x: 'Ratio', y: 'Ratio'):

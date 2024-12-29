@@ -2,7 +2,6 @@
 from PyQt5.QtWidgets import QComboBox, QLabel
 from PyQt5.QtCore import Qt
 
-from model.piece import Piece
 from model.sample_piece_gen import generate_sample_piece
 from widgets.lanes.AudioWidget import AudioWidget
 from widgets.lanes.RulerWidget import RulerWidget
