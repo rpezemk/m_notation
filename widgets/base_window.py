@@ -34,7 +34,7 @@ class BaseWindow(QMainWindow):
     def resizeEvent(self, event):
         self.kbd_resolver.clear()
         size = event.size()
-        self.setWindowTitle(f"Window resized to: {size.width()} x {size.height()}")
+        self.setWindowTitle(f"m_notator")
         super().resizeEvent(event)
 
     @override

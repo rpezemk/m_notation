@@ -29,17 +29,17 @@ class Node():
     def __init__(self, ):
         pass
 
-def merge_comds_to_dictionary(commands: list[CompoundCommand], notify_func: Callable = None):
-    root = {}
-    curr_d = root
-    for c in commands:
-        for sub in c.sub_commands:
-            curr_d[sub.keys] = {}
-            curr_d = curr_d[sub]
-        curr_d["name"] = c.name
-        curr_d["func"] = c.func
-        curr_d = root
-    return root
+# def merge_comds_to_dictionary(commands: list[CompoundCommand], notify_func: Callable = None):
+#     root = {}
+#     curr_d = root
+#     for c in commands:
+#         for sub in c.sub_commands:
+#             curr_d[sub.keys] = {}
+#             curr_d = curr_d[sub]
+#         curr_d["name"] = c.name
+#         curr_d["func"] = c.func
+#         curr_d = root
+#     return root
 
 class Automaton():
     def __init__(self, commands: list[CompoundCommand], notify_func: Callable):
@@ -81,7 +81,7 @@ class Automaton():
             win_cmd = maybe_total[0]
             if len(win_cmd.sub_commands) == self.level + 1:
                 self.notify_func("WIN!!!")
-                win_cmd.func()
+                # win_cmd.func()
                 self.reset()
                 return True, win_cmd
             else:

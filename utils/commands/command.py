@@ -38,9 +38,8 @@ class SubCmd():
         
     
 class CompoundCommand():
-    def __init__(self, name: str, sub_commands: list[SubCmd], func: Callable[[Any], Any]):
+    def __init__(self, name: str, sub_commands: list[SubCmd]):
         self.name = name
-        self.func = func
         self.sub_commands = sub_commands
         self.sub_no = 0
         self.curr_sub_cmd = sub_commands[0]
@@ -69,3 +68,8 @@ class CompoundCommand():
     def __str__(self):
         abc = "".join(["\n    " + str(k) for k in self.sub_commands])
         return self.name + abc
+    
+
+class RunnableCommand():
+    def __init__(self):
+        pass
