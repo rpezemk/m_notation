@@ -87,6 +87,7 @@ class Automaton():
         f = "AUTOMATON:" + "".join(["\n  " + str(f) for f in self.filtered])
         return f
     
+    
 class KbdResolver():
     def __init__(self, commands: list[CompoundCommand], notify_func: Callable):
         self.curr_keys = []
