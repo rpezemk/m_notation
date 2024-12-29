@@ -4,11 +4,11 @@ from PyQt5.QtGui import QKeyEvent
 from PyQt5.QtWidgets import QMainWindow
 
 from utils.commands.kbd_resolver import KbdResolver
-from utils.logger import MLogger
+
 from utils.osc_udp.heartbeat_checker import HeartbeatChecker
 from utils.osc_udp.m_osc_server import MOscServer
 from widgets.basics.indicator_button import IndicatorButton
-from wirings.cmd_wiring import my_wirings
+from wirings.cmd_wiring import my_wirings, root_kbd_resolver
 from wirings.csd_instr_numbers import cs_to_py_port, local_ip
 from wirings.test_methods import quit_csound
 from widgets.styles import style
@@ -20,9 +20,7 @@ class BaseWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("m_notator")
         self.setFocusPolicy(Qt.StrongFocus)
-        self.setStyleSheet(style)
-        Log = MLogger(print)
-        self.kbd_resolver = KbdResolver(my_wirings, lambda s: Log.log(s))
+        self.setStyleSheet(style)        
         self.mosc_server = MOscServer(local_ip, cs_to_py_port,
                                        [("/heartbeat", lambda addr, args: self.heartbeat_checker.handle_flag(args))]
                                       ).start_async()
@@ -32,7 +30,7 @@ class BaseWindow(QMainWindow):
         
     @override
     def resizeEvent(self, event):
-        self.kbd_resolver.clear()
+        root_kbd_resolver.clear_curr_input()
         size = event.size()
         self.setWindowTitle(f"m_notator")
         super().resizeEvent(event)
@@ -46,8 +44,8 @@ class BaseWindow(QMainWindow):
 
     @override
     def keyPressEvent(self, event: QKeyEvent):
-        self.kbd_resolver.accept_press(event)
+        root_kbd_resolver.accept_press(event)
 
     @override
     def keyReleaseEvent(self, event: QKeyEvent):
-        self.kbd_resolver.accept_release(event)
+        root_kbd_resolver.accept_release(event)

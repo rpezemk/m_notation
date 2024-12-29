@@ -1,3 +1,4 @@
+from functools import cmp_to_key
 from PyQt5.QtCore import QRect, Qt
 from PyQt5.QtGui import QPainter
 from PyQt5.QtCore import Qt
@@ -10,7 +11,6 @@ from utils.musical_layout.space import get_single_ruler, map_to
 from widgets.lanes.BarrableWidget import BarrableWidget
 from widgets.note_widgets.VisualNote import VisualNote
 from widgets.painters.paint_manager import m_paint_visual
-
 
 
 
@@ -133,4 +133,38 @@ class StaffWidget(BarrableWidget):
             offsets.append(self.staff_offset + i*self.line_spacing)
         return offsets
     
+    """
+    COMMAND METHODS
+    """
     
+    def select_next_note(self):
+        selected = [d for d in self.visual_notes if d.inner.is_selected][:-1]
+        if not selected:
+            return
+        
+        sel = selected[0]
+        
+        
+        idx = self.visual_notes.index(sel)
+
+        if idx == len(self.visual_notes) - 1:
+            return
+        
+        sel.inner.is_selected = False
+        
+        nxt = self.visual_notes[idx + 1]
+        nxt.inner.is_selected = True
+        
+        self.update()
+        
+        
+# def custom_comparator(x: 'Ratio', y: 'Ratio'):
+#         if x < y:
+#             return -1  # x comes before y
+#         elif x > y:
+#             return 1   # x comes after y
+#         else:
+#             return 0   # x and y are equal    
+        
+        
+# custom_key = cmp_to_key(custom_comparator)

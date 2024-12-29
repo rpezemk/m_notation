@@ -70,3 +70,13 @@ class ScoreView(VStack):
         w = self.widget.width()
         if w - 100 > 0:
             self.back.setGeometry(0, 0, w, h)
+            
+    
+    
+    
+    """COMMANDS
+    """
+
+    def select_next_note(self):
+        for pt in self.part_widgets:
+            pt.staff_widget.select_next_note()

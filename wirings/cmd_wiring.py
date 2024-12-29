@@ -1,5 +1,7 @@
 from PyQt5.QtCore import Qt
 from utils.commands.command import CompoundCommand, SubCmd
+from utils.commands.kbd_resolver import KbdResolver
+from utils.logger import MLogger
 
 A = SubCmd("A", [Qt.Key_A])
 CTRL_T = SubCmd("CTRL_T", [Qt.Key_Control, Qt.Key_T])
@@ -25,3 +27,6 @@ class ScoreViewCommands():
 my_wirings = [
     NEXT
 ]
+
+Log = MLogger(print)
+root_kbd_resolver = KbdResolver(my_wirings, lambda s: Log.log(s))

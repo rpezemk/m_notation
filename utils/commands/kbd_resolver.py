@@ -109,7 +109,7 @@ class KbdResolver():
         self.curr_modifiers = set()
         self.prev_keys = set()
         
-    def clear(self):
+    def clear_curr_input(self):
         self.curr_keys = set()
         self.automaton.reset()
         
