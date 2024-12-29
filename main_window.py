@@ -12,9 +12,9 @@ import wirings.layouts.general as general
      
 class MainWindow(BaseWindow):
     def __init__(self):
+        self.attached = []
         super().__init__()
         self.set_central(ScoreView())
-    
 
     def load_piece(self):
         self.set_central(ScoreView())
@@ -30,7 +30,10 @@ class MainWindow(BaseWindow):
         super().close()
         
     def set_central(self, compound: MyCompound):
-
+        for att in self.attached:
+            att.detach()
+        self.attached.append(compound)
+        
         central_v_stack = VStack(
             children=
             [

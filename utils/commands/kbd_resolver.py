@@ -116,6 +116,8 @@ class KbdResolver():
             return
         
         for ctrl in self.controls:
+            if not ctrl.attached:
+                continue
             match = [c for c in ctrl.commands if c[0] == cmd]
             if not match:
                 continue

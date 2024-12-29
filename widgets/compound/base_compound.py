@@ -12,6 +12,7 @@ class MyCompound(QWidget):
                  children: list['MyCompound'] = None,
                  stretch = None
                  ):
+        self.attached = True
         self.widget = self
         super().__init__()
         self.layout = t(self.widget)
@@ -47,3 +48,5 @@ class MyCompound(QWidget):
             self.layout.addWidget(w)
         return self
             
+    def detach(self):
+        self.attached = False
