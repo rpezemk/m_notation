@@ -2,7 +2,7 @@ from PyQt5.QtWidgets import QWidget, QLayout
 
 from widgets.compound.stretch import Stretch
 
-class MyCompound():
+class MyCompound(QWidget):
     def __init__(self, 
                  t: type[QLayout], 
                  margin: tuple|list = None, 
@@ -10,7 +10,8 @@ class MyCompound():
                  children: list['MyCompound'] = None,
                  stretch = None
                  ):
-        self.widget = QWidget()
+        self.widget = self
+        super().__init__()
         self.layout = t(self.widget)
         if spacing is not None:
             self.layout.setSpacing(spacing)
