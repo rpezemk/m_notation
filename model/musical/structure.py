@@ -1,5 +1,5 @@
 import random
-from typing import Any
+from typing import Any, Callable
 from PyQt5.QtGui import QColor
 from model.duration import Dotting, DurationBase
 from model.ratio import Ratio
@@ -186,5 +186,12 @@ class Chunk:
         lanes_data2 = [v_ch.ratio_lanes_to_ruler() for v_ch in self.v_chunks]
         return lanes_data2
 
+    def all_time_holders(self):
+        time_holders = [th for v_ch in self.v_chunks for m in v_ch.vertical_measures for th in m.time_holders]
+        return time_holders
+            
 
-
+    def get_last_by(self, func: Callable[[TimeHolder], bool]):
+        time_holders = [th for v_ch in self.v_chunks for m in v_ch.vertical_measures for th in m.time_holders if func(th)]
+        return time_holders
+            

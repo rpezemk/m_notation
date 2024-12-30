@@ -1,6 +1,7 @@
 from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtWidgets import QFrame, QWidget
 
+from model.musical.structure import Chunk
 from model.sample_piece_gen import generate_sample_piece
 from widgets.chunk_player import RulerPlayer
 from widgets.basics.my_button import StateButton, SyncButton
@@ -18,7 +19,7 @@ class ScoreView(VStack):
         self.back = QWidget(self.widget)
         self.widget.setFocusPolicy(Qt.NoFocus)
         self.piece = generate_sample_piece(4, 8)
-        self.chunk = self.piece.to_chunk(0, 4)
+        self.chunk: Chunk = self.piece.to_chunk(0, 4)
         root_kbd_resolver.controls = set([self])
         
         ruler_widget = PartWidget(widget_type=RulerWidget, parent=self)
@@ -109,7 +110,7 @@ class ScoreView(VStack):
         
         part = piece.parts[p_no-1]
         inner = maybe[0].inner
-        th_to_sel = sorted(part.measures[m_no].time_holders, key= lambda t: abs((t.offset_ratio - inner.offset_ratio).to_float()))[:1]
+        th_to_sel = sorted(part.measures[m_no].time_holders, key=lambda t: abs((t.offset_ratio - inner.offset_ratio).to_float()))[:1]
         if not th_to_sel:
             return
         self.deselect_notes_but([th_to_sel[0]])
