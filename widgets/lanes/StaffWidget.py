@@ -191,14 +191,3 @@ class StaffWidget(BarrableWidget):
         selected = [v_n for v_n in self.visual_notes if v_n.inner.is_selected][-1:]
         return selected
         
-        
-# def custom_comparator(x: 'Ratio', y: 'Ratio'):
-#         if x < y:
-#             return -1  # x comes before y
-#         elif x > y:
-#             return 1   # x comes after y
-#         else:
-#             return 0   # x and y are equal    
-        
-        
-# custom_key = cmp_to_key(custom_comparator)
