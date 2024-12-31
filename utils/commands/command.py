@@ -1,6 +1,8 @@
-from enum import Enum
 from typing import Any, Callable
+from enum import Enum
+
 from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QFrame, QWidget
 
 class SubCmdState(Enum):
     FAIL = 0
@@ -70,6 +72,3 @@ class CompoundCommand():
         return self.name + abc
     
 
-class RunnableCommand():
-    def __init__(self):
-        pass

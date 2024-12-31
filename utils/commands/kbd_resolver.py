@@ -3,7 +3,9 @@ from PyQt5.QtGui import QKeyEvent
 from PyQt5.QtCore import Qt
 from utils.commands.command import CompoundCommand, SubCmdState
 from typing import Callable
+from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QHBoxLayout, QPushButton
 
+from utils.commands.command_containter import ViewBindingCollection
 from widgets.compound.base_compound import MyCompound
 
 modifiers = [Qt.Key_Shift, Qt.Key_Control, Qt.Key_Alt, Qt.Key_Meta]
@@ -91,39 +93,46 @@ class Automaton():
     
     
 class KbdResolver():
-    def __init__(self, commands: list[CompoundCommand], notify_func: Callable):
+    def __init__(self, bind_commands: list[ViewBindingCollection], notify_func: Callable = None):
         self.curr_keys = []
-        self.notify_func = notify_func
+        self.notify_func = notify_func if notify_func is not None else print
         self.state = None
-        self.automaton = Automaton(commands, notify_func)
+        self.bind_commands = bind_commands
         self.curr_keys = set()
         self.curr_modifiers = set()
         self.prev_keys = set()
-        self.controls: set[MyCompound] = set()
+        self.control = None
+        self.automaton: Automaton = None
         
-    def append_control(self, widget: MyCompound):
-        self.controls.add(widget)
+    def set_view(self, widget: MyCompound):
+        self.control = widget
+        commands = [c.c_cmd for bc in self.bind_commands for c in bc.binding_commands if bc.widget_type == type(widget)]
+        if not commands:
+            self.automaton = None
+            return
+        
+        self.automaton = Automaton(commands, self.notify_func)
         
     def clear_curr_input(self):
         self.curr_keys = set()
-        self.automaton.reset()
+        if self.automaton:
+            self.automaton.reset()
         
     def accept_token(self, option: KbdOption, keys: list[int]):
         ...
+        if not self.automaton:
+            return
         
         success, cmd = self.automaton.try_resolve(keys)
         if not success:
             return
         
-        for ctrl in self.controls:
-            if not ctrl.attached:
-                continue
-            match = [c for c in ctrl.commands if c[0] == cmd]
-            if not match:
-                continue
-            match[0][1]()
+        commands = [c for bc in self.bind_commands for c in bc.binding_commands if c.c_cmd == cmd]
+        if not commands: 
+            return
+        commands[0].func(self.control)
                 
-    def accept_press(self, event):
+    def accept_press(self, src_widget: QWidget, event):
         key, autorepeat = event.key(), event.isAutoRepeat()
         if autorepeat:
             return
@@ -138,7 +147,7 @@ class KbdResolver():
         
         self.accept_token(KbdOption.PRESS, self.curr_keys)     
             
-    def accept_release(self, event):
+    def accept_release(self, src_widget: QWidget, event):
         key, autorepeat = event.key(), event.isAutoRepeat()
         if autorepeat:
             return

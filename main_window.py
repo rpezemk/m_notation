@@ -34,6 +34,8 @@ class MainWindow(BaseWindow):
             att.detach()
         self.attached.append(compound)
         
+        self.root_kbd_resolver.set_view(compound)
+        
         central_v_stack = VStack(
             children=
             [

@@ -8,12 +8,10 @@ from utils.commands.kbd_resolver import KbdResolver
 from utils.osc_udp.heartbeat_checker import HeartbeatChecker
 from utils.osc_udp.m_osc_server import MOscServer
 from widgets.basics.indicator_button import IndicatorButton
-from wirings.cmd_wiring import my_wirings, root_kbd_resolver
 from wirings.csd_instr_numbers import cs_to_py_port, local_ip
 from wirings.test_methods import quit_csound
 from widgets.styles import style
-
-
+from wirings.cmd_wirings import root_kbd_resolver
 
 class BaseWindow(QMainWindow):
     def __init__(self):
@@ -27,10 +25,11 @@ class BaseWindow(QMainWindow):
         self.indicator = IndicatorButton("<>", ..., )
         self.heartbeat_checker = HeartbeatChecker(0.5).bind_to(self.indicator).start()
         self.setWindowFlags(Qt.FramelessWindowHint)
+        self.root_kbd_resolver: KbdResolver = root_kbd_resolver
         
     @override
     def resizeEvent(self, event):
-        root_kbd_resolver.clear_curr_input()
+        self.root_kbd_resolver.clear_curr_input()
         size = event.size()
         self.setWindowTitle(f"m_notator")
         super().resizeEvent(event)
@@ -44,8 +43,8 @@ class BaseWindow(QMainWindow):
 
     @override
     def keyPressEvent(self, event: QKeyEvent):
-        root_kbd_resolver.accept_press(event)
+        self.root_kbd_resolver.accept_press(self, event)
 
     @override
     def keyReleaseEvent(self, event: QKeyEvent):
-        root_kbd_resolver.accept_release(event)
+        self.root_kbd_resolver.accept_release(self, event)
