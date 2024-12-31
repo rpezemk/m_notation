@@ -12,6 +12,7 @@ K_X = Qt.Key_X
 K_Q = Qt.Key_Q
 K_R = Qt.Key_R
 K_SP = Qt.Key_Space
+K_DEL = Qt.Key_Delete
 
 K_LEFT = Qt.Key_Left
 K_RIGHT = Qt.Key_Right
@@ -43,6 +44,8 @@ CTRL_ARROW_RIGHT = SubCmd("sdf", [K_CTRL, K_RIGHT])
 CTRL_ARROW_UP = SubCmd("sdf", [K_CTRL, K_UP])
 CTRL_ARROW_DOWN = SubCmd("sdf", [K_CTRL, K_DOWN])
 
+S_DEL = SubCmd("sdf", [K_DEL])
+
 
 
 ######### COMMANDS ##########
@@ -57,4 +60,6 @@ CMD_PREV = CompoundCommand("ARROW_LEFT", [S_ARROW_LEFT])
 CMD_NEXT = CompoundCommand("ARROW_RIGHT", [S_ARROW_RIGHT])
 CMD_UP = CompoundCommand("ARROW_UP", [S_ARROW_UP])
 CMD_DOWN = CompoundCommand("ARROW_DOWN", [S_ARROW_DOWN])
+
+CMD_DEL = CompoundCommand("DEL", [S_DEL])
 

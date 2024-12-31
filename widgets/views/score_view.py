@@ -140,9 +140,15 @@ class ScoreView(VStack):
         th_to_sel[0].is_selected = True
         self.update()
         
+    def delete_selected_notes(self):
+        for pt in self.part_widgets:
+            pt.staff_widget.delete_selected_notes()
+        
         
     def order_notes_by_part_no(self):
         maybe: list[VisualNote] = [n for pt in self.part_widgets for n in pt.staff_widget.get_last_selected_note()]
         maybe = sorted(maybe, key=lambda x: x.inner.measure.m_no)
         maybe = sorted(maybe, key=lambda x: x.inner.measure.part_no)
         return maybe
+    
+    

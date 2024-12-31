@@ -107,6 +107,15 @@ class StaffWidget(BarrableWidget):
             s.inner.is_selected = True
         self.update()
             
+    def delete_selected_notes(self):
+        selected = [v_n for v_n in self.visual_notes if v_n.inner.is_selected]
+        if not selected:
+            return
+        self.remove_note(selected[0])
+        self.update()
+        
+        
+            
     def deselect_notes_but(self, v_notes: list[VisualNote]):
         deselected = [d for d in self.visual_notes if d not in v_notes]
         if not deselected:
@@ -119,12 +128,13 @@ class StaffWidget(BarrableWidget):
     def remove_note(self, v_n: VisualNote):
         m = v_n.inner.measure
         rest = Rest(duration=v_n.inner.real_duration, measure=m, dotting=v_n.inner.dotting)
+        
         inner_note_idx = m.time_holders.index(v_n.inner)
         m.time_holders[inner_note_idx] = rest
+        
         idx = self.visual_notes.index(v_n)
         self.visual_notes[idx] = VisualNote(rest, v_n.point)
         self.visual_notes[idx].inner.is_selected = True
-        self.update()
 
     def get_staff_line_offsets(self):
         offsets = []
