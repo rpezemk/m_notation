@@ -82,7 +82,7 @@ class ScoreView(VStack):
 
     
     
-    """COMMANDS
+    """COMMANDS' methods
     """
 
     def select_next_note(self):
@@ -104,6 +104,7 @@ class ScoreView(VStack):
         p_no, m_no = src_m.part_no, src_m.m_no
         if p_no == 0:
             return
+        
         piece = maybe[0].inner.measure.part.piece
         
         part = piece.parts[p_no-1]

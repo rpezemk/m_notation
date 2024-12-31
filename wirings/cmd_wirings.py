@@ -6,10 +6,10 @@ from wirings.cmd_definitions import *
 
 score_view_bindings = CommandContainer.for_widget(ScoreView).define_bindings(
     [
-        (C_NEXT, lambda v: v.select_next_note()),
-        (C_PREV, lambda v: v.select_prev_note()),
-        (C_UP, lambda v: v.select_note_above()),
-        (C_DOWN, lambda v: v.select_note_below()),
+        (CMD_NEXT, lambda view: view.select_next_note()),
+        (CMD_PREV, lambda view: view.select_prev_note()),
+        (CMD_UP, lambda view: view.select_note_above()),
+        (CMD_DOWN, lambda view: view.select_note_below()),
      ])
 
 root_kbd_resolver = KbdResolver([score_view_bindings])

@@ -32,8 +32,8 @@ C_DELETE = CompoundCommand("DELETE", [CTRL_T, CTRL_X]),
 C_PLAY = CompoundCommand("PLAY", [S_SPACE]),
 C_PLAY_SPECIAL = CompoundCommand("PLAY_SPECIAL", [S_RETURN]),
 
-C_PREV = CompoundCommand("ARROW_LEFT", [S_ARROW_LEFT])
-C_NEXT = CompoundCommand("ARROW_RIGHT", [S_ARROW_RIGHT])
-C_UP = CompoundCommand("ARROW_UP", [S_ARROW_UP])
-C_DOWN = CompoundCommand("ARROW_DOWN", [S_ARROW_DOWN])
+CMD_PREV = CompoundCommand("ARROW_LEFT", [S_ARROW_LEFT])
+CMD_NEXT = CompoundCommand("ARROW_RIGHT", [S_ARROW_RIGHT])
+CMD_UP = CompoundCommand("ARROW_UP", [S_ARROW_UP])
+CMD_DOWN = CompoundCommand("ARROW_DOWN", [S_ARROW_DOWN])
 
