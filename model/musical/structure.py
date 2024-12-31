@@ -5,8 +5,8 @@ from model.duration import Dotting, DurationBase
 from model.ratio import Ratio
 
 class TimeHolder():
-    def __init__(self, duration: DurationBase = None, measure: 'Measure' = None, dotting: Ratio = None):
-        self.base_duration = duration if duration is not None else DurationBase.QUARTER
+    def __init__(self, base_duration: DurationBase = None, measure: 'Measure' = None, dotting: Ratio = None):
+        self.base_duration = base_duration if base_duration is not None else DurationBase.QUARTER
         self.dotting = dotting if dotting is not None else Ratio.zero()
         self.real_duration = self.base_duration + self.base_duration * self.dotting
         self.measure = measure
@@ -27,8 +27,8 @@ class TimeHolder():
         return self
         
 class Rest(TimeHolder):
-    def __init__(self, duration: DurationBase = None, measure: 'Measure' = None, dotting: Dotting = None):
-        super().__init__(duration, measure, dotting)
+    def __init__(self, base_duration: DurationBase = None, measure: 'Measure' = None, dotting: Dotting = None):
+        super().__init__(base_duration, measure, dotting)
         self.measure = measure
 
     def __str__(self):
@@ -36,8 +36,8 @@ class Rest(TimeHolder):
     
     
 class Triplet(TimeHolder):
-    def __init__(self, duration: DurationBase = None, measure: 'Measure' = None, notes: list[TimeHolder]=None, parent=None):
-        super().__init__(duration, measure)
+    def __init__(self, base_duration: DurationBase = None, measure: 'Measure' = None, notes: list[TimeHolder]=None, parent=None):
+        super().__init__(base_duration, measure)
         self.notes = notes if notes is not None else []
         self.measure = measure
     
@@ -45,10 +45,9 @@ class Triplet(TimeHolder):
         return f"d: {self.base_duration}"
     
 class Note(TimeHolder):
-    def __init__(self, time, pitch, duration = None, measure: 'Measure' = None, dotting: Dotting = None):
-        super().__init__(duration, measure, dotting)
+    def __init__(self, pitch, base_duration = None, measure: 'Measure' = None, dotting: Dotting = None):
+        super().__init__(base_duration, measure, dotting)
         self.measure = measure
-        self.time = time
         self.pitch = pitch
                           
     def __str__(self):

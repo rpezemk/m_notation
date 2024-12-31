@@ -126,11 +126,11 @@ class StaffWidget(BarrableWidget):
         self.update()
             
     def remove_note(self, v_n: VisualNote):
-        m = v_n.inner.measure
-        rest = Rest(duration=v_n.inner.real_duration, measure=m, dotting=v_n.inner.dotting)
-        
-        inner_note_idx = m.time_holders.index(v_n.inner)
-        m.time_holders[inner_note_idx] = rest
+        msr = v_n.inner.measure
+        rest = Rest(base_duration=v_n.inner.base_duration, measure=msr, dotting=v_n.inner.dotting)
+        rest.offset_ratio = v_n.inner.offset_ratio
+        inner_note_idx = msr.time_holders.index(v_n.inner)
+        msr.time_holders[inner_note_idx] = rest
         
         idx = self.visual_notes.index(v_n)
         self.visual_notes[idx] = VisualNote(rest, v_n.point)

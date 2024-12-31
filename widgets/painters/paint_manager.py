@@ -1,6 +1,7 @@
 from PyQt5.QtGui import QPainter, QColor
 
 from model.duration import DurationBase
+from model.musical.structure import Rest
 from model.ratio import Ratio
 from widgets.painters.painter_definitions import get_dotting_painters, get_painter_definitions
 from widgets.note_widgets.VisualNote import VisualNote
@@ -20,6 +21,8 @@ red = QColor(200, 44, 44)
 def m_paint_visual(q_painter: QPainter, v_n: VisualNote):
     inner = v_n.inner
     t = type(inner)
+    if isinstance(v_n, Rest):
+        sdf = 234
     maybe = [p for p in painter_data_list if p.t == t and p.d == inner.base_duration]
     
     dot = v_n.inner.dotting
