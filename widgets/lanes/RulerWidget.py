@@ -1,7 +1,9 @@
+from datetime import datetime
 from typing import override
 from PyQt5.QtCore import QRect
 from PyQt5.QtGui import QColor, QPainter, QPen
-from PyQt5.QtCore import QThread, pyqtSignal
+from PyQt5.QtCore import QThread, pyqtSignal, QTimer, Qt
+
 
 from model.musical.structure import Chunk
 from model.ratio import Ratio
@@ -16,7 +18,17 @@ class RulerPlayer(QThread):
         self.is_running = False
         self.e_no = 0
         self.curr_e_no = 0
-
+        
+        self.timer = QTimer(self)
+        self.timer.timeout.connect(self.update_counter)
+        
+        self.dt = 20 # 1/50 sec
+        self.timer.start(self.dt) 
+        self.counter = 0
+        
+    def update_counter(self):
+        self.counter += 1
+        
     def run(self):
         self.is_running = True
         
@@ -38,7 +50,8 @@ class RulerPlayer(QThread):
             for th in grp_evt.inner_events:
                 if not self.is_running:
                     return                        
-            time.sleep(grp_evt.len_ratio.to_float()*4)
+            if not self.try_sleep(grp_evt.len_ratio.to_float()*4):
+                return
                     
     def stop(self):
         self.is_running = False
@@ -46,7 +59,19 @@ class RulerPlayer(QThread):
     def reset(self):
         self.is_running = False
         self.curr_e_no = 0
+    
+    def try_sleep(self, n_secs):
+        cps = 1000//int(self.dt)
+        cnt_end = self.counter + n_secs * cps
+        cnt_now = self.counter 
+        while cnt_now < cnt_end:
+            time.sleep(self.dt/1000)
+            cnt_now = self.counter 
+            if not self.is_running:
+                return False
+        return True
         
+            
 class RulerWidget(BarrableWidget):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
