@@ -21,6 +21,7 @@ class ScoreView(View):
         self.widget.setFocusPolicy(Qt.NoFocus)
         self.piece = generate_sample_piece(4, 8)
         self.chunk: Chunk = self.piece.to_chunk(0, 4)
+        self.mode = ScoreViewModeEnum.UNDEFINED
         
         ruler_widget = PartWidget(widget_type=RulerWidget, parent=self)
         ruler_widget.staff_widget.set_content(self.chunk)
@@ -38,7 +39,7 @@ class ScoreView(View):
             self.layout.addWidget(part_widget)
 
         self.layout.addStretch()
-        self.mode = ScoreViewModeEnum.UNDEFINED
+
 
         bottom_panel = HStack(
                     children=
