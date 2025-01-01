@@ -94,9 +94,12 @@ class StaffWidget(BarrableWidget):
             if not maybe:
                 return
             
-            maybe[0].inner.is_selected = True
-            self.update()
-            self.staff_widget.deselect_notes_but([maybe[0]])
+            self.select_note(maybe[0])
+
+    def select_note(self, v_n: VisualNote):
+        v_n.inner.is_selected = True
+        self.update()
+        self.staff_widget.deselect_notes_but([v_n])
     
     def select_all(self):
         selected = [d for d in self.visual_notes]
@@ -141,6 +144,16 @@ class StaffWidget(BarrableWidget):
         for i in range(0, 5):
             offsets.append(self.staff_offset + i*self.line_spacing)
         return offsets
+    
+    def get_last_selected_note(self):
+        selected = [v_n for v_n in self.visual_notes if v_n.inner.is_selected][-1:]
+        return selected
+        
+    def get_first_selected_note(self):
+        selected = [v_n for v_n in self.visual_notes if v_n.inner.is_selected][:1]
+        return selected
+    
+    
     
     """
     COMMAND METHODS
@@ -192,7 +205,6 @@ class StaffWidget(BarrableWidget):
         if not selected:
             return
         
-        
         sel = selected[0]
         m = sel.inner.measure
         if m not in self.measures:
@@ -214,8 +226,7 @@ class StaffWidget(BarrableWidget):
         selected = self.get_first_selected_note()
         if not selected:
             return
-        
-        
+    
         sel = selected[0]
         m = sel.inner.measure
         if m not in self.measures:
@@ -232,11 +243,4 @@ class StaffWidget(BarrableWidget):
         
         self.update()
         
-    def get_last_selected_note(self):
-        selected = [v_n for v_n in self.visual_notes if v_n.inner.is_selected][-1:]
-        return selected
-        
-    def get_first_selected_note(self):
-        selected = [v_n for v_n in self.visual_notes if v_n.inner.is_selected][:1]
-        return selected
         
