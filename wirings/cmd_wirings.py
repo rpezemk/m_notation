@@ -15,6 +15,15 @@ score_view_bindings = CommandContainer         \
         (CMD_UP, lambda view: view.select_note_above()),
         (CMD_DOWN, lambda view: view.select_note_below()),
         (CMD_DEL, lambda view: view.delete_selected_notes()),
+        
+        (CMD_CTRL_NEXT, lambda view: view.select_next_note_in_next_measure()),
+        (CMD_CTRL_PREV, lambda view: view.select_prev_note_in_prev_measure()),
      ])
 
 root_kbd_resolver = KbdResolver([score_view_bindings])
+
+
+CMD_CTRL_PREV = CompoundCommand("ARROW_LEFT", [CTRL_ARROW_LEFT])
+CMD_CTRL_NEXT = CompoundCommand("ARROW_RIGHT", [CTRL_ARROW_RIGHT])
+CMD_CTRL_UP = CompoundCommand("ARROW_UP", [CTRL_ARROW_UP])
+CMD_CTRL_DOWN = CompoundCommand("ARROW_DOWN", [CTRL_ARROW_DOWN])

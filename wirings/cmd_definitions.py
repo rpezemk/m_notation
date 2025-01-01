@@ -61,5 +61,12 @@ CMD_NEXT = CompoundCommand("ARROW_RIGHT", [S_ARROW_RIGHT])
 CMD_UP = CompoundCommand("ARROW_UP", [S_ARROW_UP])
 CMD_DOWN = CompoundCommand("ARROW_DOWN", [S_ARROW_DOWN])
 
+CMD_CTRL_PREV = CompoundCommand("ARROW_LEFT", [CTRL_ARROW_LEFT])
+CMD_CTRL_NEXT = CompoundCommand("ARROW_RIGHT", [CTRL_ARROW_RIGHT])
+CMD_CTRL_UP = CompoundCommand("ARROW_UP", [CTRL_ARROW_UP])
+CMD_CTRL_DOWN = CompoundCommand("ARROW_DOWN", [CTRL_ARROW_DOWN])
+
+
+
 CMD_DEL = CompoundCommand("DEL", [S_DEL])
 

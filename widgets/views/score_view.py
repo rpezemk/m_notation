@@ -93,6 +93,16 @@ class ScoreView(View):
         for pt in self.part_widgets:
             pt.staff_widget.select_next_note()
             
+    def select_next_note_in_next_measure(self):
+        print("select next note (ScoreView)")
+        for pt in self.part_widgets:
+            pt.staff_widget.select_next_note_in_next_measure()
+            
+    def select_prev_note_in_prev_measure(self):
+        print("select next note (ScoreView)")
+        for pt in self.part_widgets:
+            pt.staff_widget.select_prev_note_in_prev_measure()
+            
     def select_prev_note(self):
         print("select prev note (ScoreView)")
         for pt in self.part_widgets:

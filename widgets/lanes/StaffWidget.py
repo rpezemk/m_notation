@@ -147,7 +147,7 @@ class StaffWidget(BarrableWidget):
     """
     
     def select_prev_note(self):
-        selected = [v_n for v_n in self.visual_notes if v_n.inner.is_selected][-1:]
+        selected = self.get_first_selected_note()
         if not selected:
             return
         
@@ -159,7 +159,7 @@ class StaffWidget(BarrableWidget):
         if idx == 0:
             return
         
-        sel.inner.is_selected = False
+        self.deselect_notes_but([])
         
         nxt = self.visual_notes[idx - 1]
         nxt.inner.is_selected = True
@@ -180,14 +180,63 @@ class StaffWidget(BarrableWidget):
         if idx == len(self.visual_notes) - 1:
             return
         
-        sel.inner.is_selected = False
+        self.deselect_notes_but([])
         
         nxt = self.visual_notes[idx + 1]
         nxt.inner.is_selected = True
         
         self.update()
+        
+    def select_next_note_in_next_measure(self):
+        selected = self.get_last_selected_note()
+        if not selected:
+            return
+        
+        
+        sel = selected[0]
+        m = sel.inner.measure
+        if m not in self.measures:
+            return
+        
+        idx = self.measures.index(m)
+        
+        if idx == len(self.measures) - 1:
+            return
+        
+        self.deselect_notes_but([])
+        
+        m_to_sel = self.measures[idx+1]
+        m_to_sel.time_holders[0].is_selected = True;
+   
+        self.update()
 
+    def select_prev_note_in_prev_measure(self):
+        selected = self.get_first_selected_note()
+        if not selected:
+            return
+        
+        
+        sel = selected[0]
+        m = sel.inner.measure
+        if m not in self.measures:
+            return
+        
+        idx = self.measures.index(m)
+        if idx == 0:
+            return
+        
+        self.deselect_notes_but([])
+        
+        m_to_sel = self.measures[idx-1]
+        m_to_sel.time_holders[0].is_selected = True;
+        
+        self.update()
+        
     def get_last_selected_note(self):
         selected = [v_n for v_n in self.visual_notes if v_n.inner.is_selected][-1:]
+        return selected
+        
+    def get_first_selected_note(self):
+        selected = [v_n for v_n in self.visual_notes if v_n.inner.is_selected][:1]
         return selected
         
