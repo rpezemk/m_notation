@@ -16,7 +16,7 @@ class RulerPlayer(QThread):
         self.is_running = False
         self.e_no = 0
         self.curr_e_no = 0
-        
+
     def run(self):
         self.is_running = True
         
@@ -30,9 +30,10 @@ class RulerPlayer(QThread):
                             ])
                     ][self.curr_e_no:]
         
-        for self.curr_e_no, b_no, gr_idx, grp_evt in filtered:
+        for abs_e_no, b_no, gr_idx, grp_evt in filtered:
             if not self.is_running:
                 return
+            self.curr_e_no = abs_e_no
             self.signal.emit(b_no, gr_idx)
             for th in grp_evt.inner_events:
                 if not self.is_running:
@@ -42,7 +43,10 @@ class RulerPlayer(QThread):
     def stop(self):
         self.is_running = False
 
-
+    def reset(self):
+        self.is_running = False
+        self.curr_e_no = 0
+        
 class RulerWidget(BarrableWidget):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
@@ -51,7 +55,7 @@ class RulerWidget(BarrableWidget):
         self.chunk = None
         self.m_no = 0
         self.e_no = 0
-        
+        self.player = None
 
     def mark_at(self, m_no: int, e_no: int):
         self.m_no = m_no
@@ -62,6 +66,13 @@ class RulerWidget(BarrableWidget):
     
     def stop(self):
         self.player.stop()
+    
+    def reset(self):
+        if self.player:    
+            if self.player.is_running:
+                self.player.stop()
+            self.player.reset()
+        self.mark_at(0, 0)
         
     @override
     def paintEvent(self, event):

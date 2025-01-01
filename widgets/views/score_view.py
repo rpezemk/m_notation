@@ -43,7 +43,7 @@ class ScoreView(View):
                     children=
                     [
                         Stretch(),
-                        SyncButton("<<", None), 
+                        SyncButton("<<", self.ruler_widget.staff_widget.reset), 
                         SyncButton("<", None), 
                         StateButton(
                             "PLAY", 
@@ -77,12 +77,7 @@ class ScoreView(View):
         w = self.widget.width()
         if w - 100 > 0:
             self.back.setGeometry(0, 0, w, h)
-            
-    def set_cursor_at(self, m_no, e_no):
-        self.ruler_widget.staff_widget.mark_at(m_no, e_no)
-    
-
-    
+                        
     """COMMANDS' methods
     """
 
