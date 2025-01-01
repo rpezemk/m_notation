@@ -1,3 +1,4 @@
+from enum import Enum
 from typing import Any, Callable, TypeVar, Generic
 from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QHBoxLayout, QPushButton
 
@@ -14,8 +15,17 @@ class BindCmd():
         self.func(view)
 
 class ViewBindingCollection():
+    def __init__(self):
+        self.widget_type: type[QWidget] = None
+        self.binding_commands: list[BindCmd] = []
+        self.view_mode: Enum = None
+        
     def for_widget(self, widget_type: type[QWidget]):
         self.widget_type = widget_type
+        return self
+    
+    def for_mode(self, view_mode: Enum):
+        self.view_mode = view_mode
         return self
         
     def define_bindings(self, binding_commands: list[tuple[CompoundCommand, Callable[[QWidget], None]]]):

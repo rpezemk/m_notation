@@ -11,8 +11,10 @@ from widgets.compound.stack_panels import HStack, VStack
 from widgets.lanes.PartWidget import PartWidget
 from widgets.lanes.RulerWidget import RulerWidget
 from widgets.note_widgets.VisualNote import VisualNote
+from widgets.views.score_view_modes import ScoreViewModeEnum
+from widgets.views.view import View
 
-class ScoreView(VStack):
+class ScoreView(View):
     def __init__(self, margin = None, spacing = None, children = None, stretch=False, fixed_width=-1):
         super().__init__(margin, spacing, children, stretch, fixed_width)
         self.back = QWidget(self.widget)
@@ -36,7 +38,7 @@ class ScoreView(VStack):
             self.layout.addWidget(part_widget)
 
         self.layout.addStretch()
-
+        self.mode = ScoreViewModeEnum.UNDEFINED
 
         bottom_panel = HStack(
                     children=

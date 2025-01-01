@@ -7,6 +7,7 @@ from PyQt5.QtWidgets import QMainWindow, QVBoxLayout, QWidget, QHBoxLayout, QPus
 
 from utils.commands.command_containter import ViewBindingCollection
 from widgets.compound.base_compound import MyCompound
+from widgets.views.view import View
 
 modifiers = [Qt.Key_Shift, Qt.Key_Control, Qt.Key_Alt, Qt.Key_Meta]
 
@@ -104,9 +105,9 @@ class KbdResolver():
         self.control = None
         self.automaton: Automaton = None
         
-    def set_view(self, widget: MyCompound):
+    def set_view(self, widget: View):
         self.control = widget
-        commands = [c.c_cmd for bc in self.bind_commands for c in bc.binding_commands if bc.widget_type == type(widget)]
+        commands = [c.c_cmd for bc in self.bind_commands for c in bc.binding_commands if bc.widget_type == type(widget) and bc.view_mode == self.control.mode]
         if not commands:
             self.automaton = None
             return
