@@ -5,4 +5,5 @@ class ScoreViewModeEnum(Enum):
     ALL_MODES = 1
     CHANGE_PITCH = 5
     INSERT_NOTES = 10
+    PLAYING_NOW = 100
     

@@ -3,7 +3,6 @@ from PyQt5.QtWidgets import QFrame, QWidget
 
 from model.musical.structure import Chunk
 from model.sample_piece_gen import generate_sample_piece
-from widgets.chunk_player import RulerPlayer
 from widgets.basics.my_button import StateButton, SyncButton
 from widgets.compound.stretch import Stretch
 from widgets.lanes.StaffWidget import StaffWidget
@@ -23,12 +22,11 @@ class ScoreView(View):
         self.chunk: Chunk = self.piece.to_chunk(0, 4)
         self.mode = ScoreViewModeEnum.UNDEFINED
         
-        ruler_widget = PartWidget(widget_type=RulerWidget, parent=self)
-        ruler_widget.staff_widget.set_content(self.chunk)
-        self.layout.addWidget(ruler_widget)
+        self.cursor_pos = (0, 0)
         
-        self.player = RulerPlayer(self.chunk)
-        self.player.signal.connect(lambda m_no, e_no: ruler_widget.staff_widget.mark_at(m_no, e_no))
+        self.ruler_widget = PartWidget(widget_type=RulerWidget, parent=self)
+        self.ruler_widget.staff_widget.set_content(self.chunk)
+        self.layout.addWidget(self.ruler_widget)
            
         self.part_widgets: list[PartWidget] = []                
         for h_chunk in self.chunk.h_chunks:
@@ -39,7 +37,7 @@ class ScoreView(View):
             self.layout.addWidget(part_widget)
 
         self.layout.addStretch()
-
+        
 
         bottom_panel = HStack(
                     children=
@@ -47,8 +45,14 @@ class ScoreView(View):
                         Stretch(),
                         SyncButton("<<", None), 
                         SyncButton("<", None), 
-                        StateButton("PLAY", self.player.start, color_hex_off="#334477", color_hex_on="#4477FF"),
-                        SyncButton("STOP", None),
+                        StateButton(
+                            "PLAY", 
+                            state_on_func=self.ruler_widget.staff_widget.start, 
+                            state_off_func=self.ruler_widget.staff_widget.stop, 
+                            color_hex_off="#334477", 
+                            color_hex_on="#4477FF"
+                            ),
+                        SyncButton("STOP", self.ruler_widget.staff_widget.stop),
                         SyncButton(">", None),
                         SyncButton(">>", None),
                     ],
@@ -59,14 +63,6 @@ class ScoreView(View):
         self.layout.update()
         self.delta = 1
         self.widget.resizeEvent = self.resizeEvent
-
-        # self.commands = [
-        #     (NEXT, self.select_next_note),
-        #     (PREV, self.select_prev_note),
-        #     (UP, self.select_note_above),
-        #     (DOWN, self.select_note_below),
-        # ]
-        
         
     def select_all(self):
         for p in self.part_widgets:
@@ -82,8 +78,10 @@ class ScoreView(View):
         if w - 100 > 0:
             self.back.setGeometry(0, 0, w, h)
             
-
+    def set_cursor_at(self, m_no, e_no):
+        self.ruler_widget.staff_widget.mark_at(m_no, e_no)
     
+
     
     """COMMANDS' methods
     """

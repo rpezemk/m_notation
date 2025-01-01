@@ -20,10 +20,9 @@ red = QColor(200, 44, 44)
 
 def m_paint_visual(q_painter: QPainter, v_n: VisualNote):
     inner = v_n.inner
-    t = type(inner)
-    if isinstance(v_n, Rest):
-        sdf = 234
-    maybe = [p for p in painter_data_list if p.t == t and p.d == inner.base_duration]
+    inner_type = type(inner)
+    
+    maybe = [p for p in painter_data_list if p.t == inner_type and p.d == inner.base_duration]
     
     dot = v_n.inner.dotting
     

@@ -22,8 +22,3 @@ score_view_bindings = CommandContainer         \
 
 root_kbd_resolver = KbdResolver([score_view_bindings])
 
-
-CMD_CTRL_PREV = CompoundCommand("ARROW_LEFT", [CTRL_ARROW_LEFT])
-CMD_CTRL_NEXT = CompoundCommand("ARROW_RIGHT", [CTRL_ARROW_RIGHT])
-CMD_CTRL_UP = CompoundCommand("ARROW_UP", [CTRL_ARROW_UP])
-CMD_CTRL_DOWN = CompoundCommand("ARROW_DOWN", [CTRL_ARROW_DOWN])
