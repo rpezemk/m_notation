@@ -98,18 +98,12 @@ class Piece():
     def filter_by_measures(self, m_idx, m_count):
         filtered = [p.measures[m_idx:][:m_count] for p in self.parts]
         return filtered
-
-    def to_ratio_lanes(self, m_idx, m_count):
-        shown_area = self.filter_by_measures(m_idx, m_count)
-        lanes_data: list[list[Ratio]] = []
-        for p in shown_area:
-            new_lane: list[Ratio] = []
-            for m in p:
-                for th in m.time_holders:
-                    new_lane.append(th.base_duration)
-            lanes_data.append(new_lane)
-        return lanes_data
     
+    def n_measures(self):
+        if not self.parts:
+            return 0
+        
+        return len(self.parts[0].measures)
     
     
 
@@ -145,6 +139,7 @@ class VerticalChunk():
         for v_m in self.vertical_measures:
             curr_pos = Ratio.zero()
             for th in v_m.time_holders:
+                print(curr_pos)
                 th.offset_ratio = curr_pos
                 curr_pos += th.real_duration
         moving_sum_lanes: list[tuple[list[Ratio], list[Ratio]]] = [(lane, VerticalChunk.to_moving_sum(lane)) for lane in lanes]

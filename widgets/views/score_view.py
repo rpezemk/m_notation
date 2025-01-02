@@ -1,3 +1,4 @@
+from typing import override
 from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtWidgets import QFrame, QWidget
 
@@ -18,12 +19,12 @@ class ScoreView(View):
         super().__init__(margin, spacing, children, stretch, fixed_width)
         self.back = QWidget(self.widget)
         self.widget.setFocusPolicy(Qt.NoFocus)
-        self.piece = generate_sample_piece(4, 8)
-        self.chunk: Chunk = self.piece.to_chunk(0, 4)
+        self.piece = generate_sample_piece(4, 11)
+        self.max_n_measures = 4
+        self.curr_range: tuple[int, int] = (0, self.max_n_measures)
+        self.chunk: Chunk = self.piece.to_chunk(self.curr_range[0], self.curr_range[1])
         self.mode = ScoreViewModeEnum.UNDEFINED
-        
-        self.cursor_pos = (0, 0)
-        
+                
         self.ruler_widget = PartWidget(widget_type=RulerWidget, parent=self)
         self.ruler_widget.staff_widget.set_content(self.chunk)
         self.layout.addWidget(self.ruler_widget)
@@ -43,7 +44,7 @@ class ScoreView(View):
                     children=
                     [
                         Stretch(),
-                        SyncButton("<<", self.ruler_widget.staff_widget.reset), 
+                        SyncButton("<<", self.load_prev), 
                         SyncButton("<", None), 
                         StateButton(
                             "PLAY", 
@@ -54,9 +55,10 @@ class ScoreView(View):
                             ),
                         SyncButton("STOP", self.ruler_widget.staff_widget.stop),
                         SyncButton(">", None),
-                        SyncButton(">>", None),
+                        SyncButton(">>", self.load_next),
                     ],
                     stretch=False)
+        
         self.layout.addWidget(bottom_panel.widget)
         
         self.layout.parentWidget().update()
@@ -71,13 +73,59 @@ class ScoreView(View):
     def deselect_notes_but(self, v_notes: list[VisualNote]):
         for p in self.part_widgets:
             p.staff_widget.deselect_notes_but(v_notes)
-                          
-    def resizeEvent(self, event):
-        h = self.widget.height()
-        w = self.widget.width()
-        if w - 100 > 0:
-            self.back.setGeometry(0, 0, w, h)
-                        
+
+    
+    def load_prev(self):
+        max_idx = self.piece.n_measures() - 1
+        if max_idx == 0:
+            return
+        if self.curr_range[0] == 0:
+            return
+        
+        next_start_idx = self.curr_range[0] - self.max_n_measures
+        
+        if next_start_idx < 0:
+            next_start_idx = 0
+        
+        next_width = min(self.max_n_measures, max_idx + 1)
+        
+        self.curr_range = (next_start_idx, next_width)
+        self.chunk: Chunk = self.piece.to_chunk(self.curr_range[0], self.curr_range[1])
+        # for th in self.chunk.all_time_holders():
+        #     print(f"{th.offset_ratio}")
+        
+        print(self.curr_range)
+        self.ruler_widget.staff_widget.set_content(self.chunk)
+        for idx, p in enumerate(self.part_widgets):
+            h_chunk = self.chunk.h_chunks[idx]
+            p.staff_widget.set_content(h_chunk)
+            p.staff_widget.update()
+        self.update()
+    
+    def load_next(self):
+        max_idx = self.piece.n_measures() - 1
+        if max_idx == 0:
+            return
+        
+        next_start_idx = self.curr_range[0] + self.max_n_measures
+        
+        if next_start_idx > max_idx:
+            return
+        
+        next_width = min(self.max_n_measures, max_idx - next_start_idx + 1)
+        self.curr_range = (next_start_idx, next_width)
+        self.chunk: Chunk = self.piece.to_chunk(self.curr_range[0], self.curr_range[1])
+        # for th in self.chunk.all_time_holders():
+        #     print(f"{th.offset_ratio}")
+            
+        print(self.curr_range)
+        self.ruler_widget.staff_widget.set_content(self.chunk)
+        for idx, p in enumerate(self.part_widgets):
+            h_chunk = self.chunk.h_chunks[idx]
+            p.staff_widget.set_content(h_chunk)
+            p.staff_widget.update()
+        self.update()
+            
     """COMMANDS' methods
     """
 
@@ -157,4 +205,12 @@ class ScoreView(View):
         maybe = sorted(maybe, key=lambda x: x.inner.measure.part_no)
         return maybe
     
-    
+    """
+    OVERRIDEN
+    """    
+    @override                          
+    def resizeEvent(self, event):
+        h = self.widget.height()
+        w = self.widget.width()
+        if w - 100 > 0:
+            self.back.setGeometry(0, 0, w, h)
