@@ -10,7 +10,7 @@ rel_font_path = "fonts/bravura/Bravura.otf"
 class FontLoadError(Exception):
     def __init__(self, *args):
         super().__init__(*args)
-    pass
+
 
 def try_get_music_font() -> Tuple[bool,QFont]:
     ok, res_font = False, None

@@ -9,8 +9,7 @@ class BindCmd():
         self.v_type = v_type
         self.c_cmd = c_cmd
         self.func = func
-        pass
-    
+
     def run(self, view: QWidget):
         self.func(view)
 

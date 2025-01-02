@@ -56,7 +56,6 @@ class DirModel(FsItem):
 class TreeProvider(ItemsProvider):
     def __init__(self, nice_get_dir_content: Callable[[str],tuple[bool, list[str], list[str], str]]):
         self.dir_content_func = nice_get_dir_content
-        pass
 
     def get_dir_content(self,*, abs_path: Union[str, 'DirModel'] = None) -> Tuple[bool,list[FsItem]]:
         tmp_path = None

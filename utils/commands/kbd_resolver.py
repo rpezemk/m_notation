@@ -26,13 +26,12 @@ class KbdOption(Enum):
     
 
 class KbdEvent():
-    def __init__(self, ):
-        pass
+    def __init__(self):
         self.key: int
 
 class Node():
-    def __init__(self, ):
-        pass
+    def __init__(self):
+        ...
 
 class Automaton():
     def __init__(self, commands: list[CompoundCommand], notify_func: Callable):

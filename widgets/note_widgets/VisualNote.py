@@ -9,4 +9,3 @@ class VisualNote():
         self.inner = note
         self.point = point
         self.is_selected = False
-        pass

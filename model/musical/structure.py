@@ -81,7 +81,7 @@ class ConductorPart():
     def __init__(self, initial_tempo_mark: TempoMark):
         self.base_tempo_mark = initial_tempo_mark
         self.tempo_marks: list[TempoMark] = [initial_tempo_mark]
-        pass
+
     
     
 class Piece():
@@ -118,7 +118,7 @@ class RulerEvent():
     
 class CsEvent():
     def __init__(self, i_no: int, start_offset: float, duration: float):
-        pass
+        ...
         
         
 class HorizontalChunk():
