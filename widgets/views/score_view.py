@@ -40,21 +40,23 @@ class ScoreView(View):
         self.layout.addStretch()
         
 
-        bottom_panel = HStack(
-                    children=
-                    [
-                        Stretch(),
-                        SyncButton("<<", lambda: self.move_by(-self.max_n_measures)), 
-                        SyncButton("<", None), 
-                        StateButton(
+        self.play_button = StateButton(
                             "PLAY", 
                             state_on_func=self.ruler_widget.staff_widget.start, 
                             state_off_func=self.ruler_widget.staff_widget.stop, 
                             color_hex_off="#334477", 
                             color_hex_on="#4477FF"
-                            ),
-                        SyncButton("STOP", self.ruler_widget.staff_widget.stop),
-                        SyncButton(">", None),
+                            )
+        
+        bottom_panel = HStack(
+                    children=
+                    [
+                        Stretch(),
+                        SyncButton("<<", lambda: self.move_by(-self.max_n_measures)), 
+                        SyncButton("<", lambda: self.move_by(-1)), 
+                        self.play_button,
+                        SyncButton("STOP", self.stop),
+                        SyncButton(">", lambda: self.move_by(1)),
                         SyncButton(">>",  lambda: self.move_by(self.max_n_measures)),
                     ],
                     stretch=False)
@@ -65,6 +67,10 @@ class ScoreView(View):
         self.layout.update()
         self.delta = 1
         self.widget.resizeEvent = self.resizeEvent
+    
+    def stop(self):
+        self.ruler_widget.staff_widget.stop()
+        self.play_button.set_state(False)
         
     def select_all(self):
         for p in self.part_widgets:
@@ -84,6 +90,11 @@ class ScoreView(View):
         if next_start_idx > max_idx or next_end_idx < 0:
             return
         
+        if k_msrs > 0 and self.curr_range[0] + self.curr_range[1] - 1 >= max_idx:
+            return
+        
+        if k_msrs < 0 and self.curr_range[0] <= 0:
+            return
         
         next_start_idx = max(0, next_start_idx)
         next_end_idx = min(next_end_idx, max_idx)

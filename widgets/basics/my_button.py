@@ -54,7 +54,10 @@ class StateButton(QPushButton):
         self.setFixedHeight(30)
     
     def flip_state(self):
-        self.state = not self.state
+        self.set_state(not self.state)
+
+    def set_state(self, state: bool):
+        self.state = state
         if self.state and self.state_on_func:
             self.state_on_func()
         elif not self.state and self.state_off_func:
@@ -64,7 +67,7 @@ class StateButton(QPushButton):
             self.set_color(self.color_hex_on)
         else:
             self.set_color(self.color_hex_off)
-        
+                    
     def set_color(self, color):
         self.setStyleSheet(f"""
             QPushButton, AsyncButton, SyncButton {{

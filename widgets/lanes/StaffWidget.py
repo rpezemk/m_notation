@@ -31,9 +31,10 @@ class StaffWidget(BarrableWidget):
         self.measures = h_chunk.measures
 
     def paintEvent(self, event):
+        self.no_of_measures = len(self.measures)
+        self.get_x_offsets()
         if self.width() < 30 or self.height() < 30:
             return
-        self.y_offsets = self.get_x_offsets()
         self.place_vis_notes()
         self.draw_content()
 
@@ -82,7 +83,7 @@ class StaffWidget(BarrableWidget):
 
     def draw_bar_lines(self, painter):
         painter.drawRect(QRect(0, self.staff_offset, 1, 4*self.line_spacing))
-        for x in self.y_offsets[1:]:
+        for x in self.x_offsets[1:]:
             painter.drawRect(QRect(x, self.staff_offset, 1, 4*self.line_spacing))
 
     def mousePressEvent(self, event):

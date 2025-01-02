@@ -101,6 +101,8 @@ class RulerWidget(BarrableWidget):
         
     @override
     def paintEvent(self, event):
+        self.no_of_measures = len(self.chunk.h_chunks[0].measures)
+        self.get_x_offsets()
         self.draw_content()
         self.update()
         
@@ -121,7 +123,6 @@ class RulerWidget(BarrableWidget):
         self.draw_frame(painter)
         pen = QPen(QColor(255, 255, 255, 80))
         painter.setPen(pen)
-        self.y_offsets = self.get_x_offsets()
         bar_segments = self.get_h_segments()
         self.visual_notes = []
         

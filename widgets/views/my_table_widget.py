@@ -5,7 +5,6 @@ from PyQt5.QtGui import QStandardItemModel, QStandardItem
 
 from model.sample_piece_gen import generate_sample_piece
 from utils.file_utils.fs_model import DirModel, FsItem
-from widgets.basics.button_delegate import ButtonDelegate
 from widgets.compound.stack_panels import HStack, VStack
 from widgets.basics.my_button import SyncButton
 from widgets.lanes.PartWidget import PartWidget

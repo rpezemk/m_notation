@@ -139,7 +139,6 @@ class VerticalChunk():
         for v_m in self.vertical_measures:
             curr_pos = Ratio.zero()
             for th in v_m.time_holders:
-                print(curr_pos)
                 th.offset_ratio = curr_pos
                 curr_pos += th.real_duration
         moving_sum_lanes: list[tuple[list[Ratio], list[Ratio]]] = [(lane, VerticalChunk.to_moving_sum(lane)) for lane in lanes]

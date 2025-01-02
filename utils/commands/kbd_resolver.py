@@ -140,9 +140,6 @@ class KbdResolver():
         if key not in self.curr_keys: 
             self.curr_keys.add(key)
         
-        for ck in self.curr_keys:
-            print(ck)
-        
         if is_modifier(key):
             return
         
