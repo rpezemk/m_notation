@@ -187,4 +187,44 @@ class Chunk:
     def get_last_by(self, func: Callable[[TimeHolder], bool]):
         time_holders = [th for v_ch in self.v_chunks for m in v_ch.vertical_measures for th in m.time_holders if func(th)]
         return time_holders
-            
+
+
+class PointObject():
+    def __init__(self, note: Note):
+        pass
+    
+class Staccato():
+    def __init__(self, note: Note):
+        pass
+    
+class Tenuto():
+    def __init__(self, note: Note):
+        pass
+
+class Dynamics():
+    def __init__(self, note: Note, offset: Ratio):
+        ...
+        
+class Ligature():
+    def __init__(self, start_note: Note, end_note: Note):
+        ...
+        
+class LongHObject():
+    def __init__(self, start_note: Note, start_offset: Ratio, end_note: Note, end_offset: Ratio):
+        ...
+        
+class FadeDynamics(LongHObject):
+    def __init__(self, start_note, start_offset, end_note, end_offset):
+        super().__init__(start_note, start_offset, end_note, end_offset)
+        
+class FadeInDynamics(FadeDynamics):
+    def __init__(self, start_note, start_offset, end_note, end_offset):
+        super().__init__(start_note, start_offset, end_note, end_offset)
+        
+class FadeOutDynamics(FadeDynamics):
+    def __init__(self, start_note, start_offset, end_note, end_offset):
+        super().__init__(start_note, start_offset, end_note, end_offset)
+        
+class Legato(LongHObject):
+    def __init__(self, start_note, start_offset, end_note, end_offset):
+        super().__init__(start_note, start_offset, end_note, end_offset)
