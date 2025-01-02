@@ -44,7 +44,7 @@ class ScoreView(View):
                     children=
                     [
                         Stretch(),
-                        SyncButton("<<", self.load_prev), 
+                        SyncButton("<<", lambda: self.move_by(-self.max_n_measures)), 
                         SyncButton("<", None), 
                         StateButton(
                             "PLAY", 
@@ -55,7 +55,7 @@ class ScoreView(View):
                             ),
                         SyncButton("STOP", self.ruler_widget.staff_widget.stop),
                         SyncButton(">", None),
-                        SyncButton(">>", self.load_next),
+                        SyncButton(">>",  lambda: self.move_by(self.max_n_measures)),
                     ],
                     stretch=False)
         
@@ -75,21 +75,21 @@ class ScoreView(View):
             p.staff_widget.deselect_notes_but(v_notes)
 
     
-    def load_prev(self):
+    def move_by(self, k_msrs):
+        next_start_idx = self.curr_range[0] + k_msrs
+        next_end_idx = next_start_idx + self.max_n_measures - 1
+        
         max_idx = self.piece.n_measures() - 1
-        if max_idx == 0:
+        
+        if next_start_idx > max_idx or next_end_idx < 0:
             return
-        if self.curr_range[0] == 0:
-            return
         
-        next_start_idx = self.curr_range[0] - self.max_n_measures
         
-        if next_start_idx < 0:
-            next_start_idx = 0
+        next_start_idx = max(0, next_start_idx)
+        next_end_idx = min(next_end_idx, max_idx)
+        next_len = next_end_idx - next_start_idx + 1
+        self.curr_range = (next_start_idx, next_len)
         
-        next_width = min(self.max_n_measures, max_idx + 1)
-        
-        self.curr_range = (next_start_idx, next_width)
         self.chunk: Chunk = self.piece.to_chunk(self.curr_range[0], self.curr_range[1])
 
         print(self.curr_range)
@@ -99,29 +99,7 @@ class ScoreView(View):
             p.staff_widget.set_content(h_chunk)
             p.staff_widget.update()
         self.update()
-    
-    def load_next(self):
-        max_idx = self.piece.n_measures() - 1
-        if max_idx == 0:
-            return
-        
-        next_start_idx = self.curr_range[0] + self.max_n_measures
-        
-        if next_start_idx > max_idx:
-            return
-        
-        next_width = min(self.max_n_measures, max_idx - next_start_idx + 1)
-        self.curr_range = (next_start_idx, next_width)
-        self.chunk: Chunk = self.piece.to_chunk(self.curr_range[0], self.curr_range[1])
-
-        print(self.curr_range)
-        self.ruler_widget.staff_widget.set_content(self.chunk)
-        for idx, p in enumerate(self.part_widgets):
-            h_chunk = self.chunk.h_chunks[idx]
-            p.staff_widget.set_content(h_chunk)
-            p.staff_widget.update()
-        self.update()
-            
+                    
     """COMMANDS' methods
     """
 
