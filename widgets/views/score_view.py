@@ -91,9 +91,7 @@ class ScoreView(View):
         
         self.curr_range = (next_start_idx, next_width)
         self.chunk: Chunk = self.piece.to_chunk(self.curr_range[0], self.curr_range[1])
-        # for th in self.chunk.all_time_holders():
-        #     print(f"{th.offset_ratio}")
-        
+
         print(self.curr_range)
         self.ruler_widget.staff_widget.set_content(self.chunk)
         for idx, p in enumerate(self.part_widgets):
@@ -115,9 +113,7 @@ class ScoreView(View):
         next_width = min(self.max_n_measures, max_idx - next_start_idx + 1)
         self.curr_range = (next_start_idx, next_width)
         self.chunk: Chunk = self.piece.to_chunk(self.curr_range[0], self.curr_range[1])
-        # for th in self.chunk.all_time_holders():
-        #     print(f"{th.offset_ratio}")
-            
+
         print(self.curr_range)
         self.ruler_widget.staff_widget.set_content(self.chunk)
         for idx, p in enumerate(self.part_widgets):
