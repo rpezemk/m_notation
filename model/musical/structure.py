@@ -11,7 +11,8 @@ class TimeHolder():
         self.offset_ratio = Ratio.zero()
         self.is_selected = False
         self.scale = Ratio(t=(1, 1))
-        
+        self.tuple_start = False
+        self.tuple_end = False
         
     def real_duration(self):
         res = (self.base_duration + self.base_duration * self.dotting) * self.scale
@@ -39,9 +40,14 @@ class Rest(TimeHolder):
     
 class MTuple():
     def apply(scale: Ratio, notes: list[TimeHolder]):
+        if not notes:
+            return notes
+        
         for n in notes:
             n.scale = scale.clone()
         
+        notes[:1][0].tuple_start = True
+        notes[-1:][0].tuple_end = True
         return notes
     
 class Note(TimeHolder):
