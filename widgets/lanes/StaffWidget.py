@@ -102,7 +102,7 @@ class StaffWidget(BarrableWidget):
         for y_offset in self.get_staff_line_offsets():
             painter.drawRect(QRect(0, y_offset, self.width(), 1))
 
-    def draw_bar_lines(self, painter):
+    def draw_bar_lines(self, painter: QPainter):
         painter.drawRect(QRect(0, self.staff_offset, 1, 4*self.line_spacing))
         for x in self.x_offsets[1:]:
             painter.drawRect(QRect(x, self.staff_offset, 1, 4*self.line_spacing))
