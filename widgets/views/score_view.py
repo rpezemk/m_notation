@@ -25,14 +25,14 @@ class ScoreView(View):
         self.chunk: Chunk = self.piece.to_chunk(self.curr_range[0], self.curr_range[1])
         self.mode = ScoreViewModeEnum.UNDEFINED
                 
-        self.ruler_widget = PartWidget(widget_type=RulerWidget, parent=self)
-        self.ruler_widget.staff_widget.set_content(self.chunk)
+        self.ruler_widget = RulerWidget(parent=self)
+        self.ruler_widget.set_content(self.chunk)
         self.layout.addWidget(self.ruler_widget)
            
-        self.part_widgets: list[PartWidget] = []
+        self.part_widgets: list[StaffWidget] = []
         
         for h_chunk in self.chunk.h_chunks:
-            part_widget = PartWidget(parent=self, widget_type=StaffWidget)
+            part_widget = StaffWidget(parent=None)
             self.part_widgets.append(part_widget)
             self.layout.addWidget(part_widget)
             
@@ -42,8 +42,8 @@ class ScoreView(View):
 
         self.play_button = StateButton(
                             "PLAY", 
-                            state_on_func=self.ruler_widget.staff_widget.start, 
-                            state_off_func=self.ruler_widget.staff_widget.stop, 
+                            state_on_func=self.ruler_widget.start, 
+                            state_off_func=self.ruler_widget.stop, 
                             color_hex_off="#334477", 
                             color_hex_on="#4477FF"
                             )
@@ -74,11 +74,11 @@ class ScoreView(View):
         
     def select_all(self):
         for p in self.part_widgets:
-            p.staff_widget.select_all()
+            p.select_all()
             
     def deselect_notes_but(self, v_notes: list[VisualNote]):
         for p in self.part_widgets:
-            p.staff_widget.deselect_notes_but(v_notes)
+            p.deselect_notes_but(v_notes)
 
     
     def move_by(self, k_msrs):
@@ -104,14 +104,14 @@ class ScoreView(View):
         self.chunk: Chunk = self.piece.to_chunk(self.curr_range[0], self.curr_range[1])
 
         print(self.curr_range)
-        self.ruler_widget.staff_widget.set_content(self.chunk)
+        self.ruler_widget.set_content(self.chunk)
         self.refresh_parts()
 
     def refresh_parts(self):
         for idx, h_chunk in enumerate(self.chunk.h_chunks):
             p = self.part_widgets[idx]
-            p.staff_widget.set_content(h_chunk)
-            p.staff_widget.update()
+            p.set_content(h_chunk)
+            p.update()
         self.update()
                     
     """COMMANDS' methods
@@ -120,22 +120,22 @@ class ScoreView(View):
     def select_next_note(self):
         print("select next note (ScoreView)")
         for pt in self.part_widgets:
-            pt.staff_widget.select_next_note()
+            pt.select_next_note()
             
     def select_next_note_in_next_measure(self):
         print("select next note (ScoreView)")
         for pt in self.part_widgets:
-            pt.staff_widget.select_next_note_in_next_measure()
+            pt.select_next_note_in_next_measure()
             
     def select_prev_note_in_prev_measure(self):
         print("select next note (ScoreView)")
         for pt in self.part_widgets:
-            pt.staff_widget.select_prev_note_in_prev_measure()
+            pt.select_prev_note_in_prev_measure()
             
     def select_prev_note(self):
         print("select prev note (ScoreView)")
         for pt in self.part_widgets:
-            pt.staff_widget.select_prev_note()
+            pt.select_prev_note()
             
     def select_note_above(self):
         maybe = self.order_notes_by_part_no()[:1]
@@ -184,11 +184,11 @@ class ScoreView(View):
         
     def delete_selected_notes(self):
         for pt in self.part_widgets:
-            pt.staff_widget.delete_selected_notes()
+            pt.delete_selected_notes()
         
         
     def order_notes_by_part_no(self):
-        maybe: list[VisualNote] = [n for pt in self.part_widgets for n in pt.staff_widget.get_last_selected_note()]
+        maybe: list[VisualNote] = [n for pt in self.part_widgets for n in pt.get_last_selected_note()]
         maybe = sorted(maybe, key=lambda x: x.inner.measure.m_no)
         maybe = sorted(maybe, key=lambda x: x.inner.measure.part_no)
         return maybe

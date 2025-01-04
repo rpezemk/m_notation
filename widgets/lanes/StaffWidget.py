@@ -121,7 +121,7 @@ class StaffWidget(BarrableWidget):
     def select_note(self, v_n: VisualNote):
         v_n.inner.is_selected = True
         self.update()
-        self.staff_widget.deselect_notes_but([v_n])
+        self.deselect_notes_but([v_n])
     
     def select_all(self):
         selected = [d for d in self.visual_notes]
