@@ -73,18 +73,10 @@ class StaffWidget(BarrableWidget):
                     res_y = int( (-note.pitch * self.line_spacing) / 2) + self.line_spacing * 8
                 elif isinstance(note, Rest):
                     res_y = int( (0) / 2) + self.line_spacing * 8
-                elif isinstance(note, MTuple):
-                    mtup: MTuple = note
 
-                    
-                    
-                    scale = mtup.get_scale()
-                    
-                    
-                
                 vis_note = VisualNote(note, (curr_x, res_y))
                 self.visual_notes.append(vis_note)
-
+                
     def draw_staff_lines(self, painter: QPainter):
         for y_offset in self.get_staff_line_offsets():
             painter.drawRect(QRect(0, y_offset, self.width(), 1))
