@@ -37,7 +37,7 @@ class Rest(TimeHolder):
         return f"d: {self.base_duration}"
     
     
-class MTuple(TimeHolder):
+class MTuple():
     def apply(scale: Ratio, notes: list[TimeHolder]):
         for n in notes:
             n.scale = scale.clone()
