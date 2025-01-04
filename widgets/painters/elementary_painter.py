@@ -52,7 +52,14 @@ class MTuplePainter():
         p2 = v_notes[-1:][0].point
         
         
-        d = 12
+        a = (p2[1] - p1[1])/(p2[0] - p1[0])
+        inbetween = v_notes[1:][:-1]
+        if inbetween:
+            min_val, max_val = self.get_min_max_diff(a, p1[0], p1[1], v_notes[1:][:-1])
+        else:
+            min_val, max_val = (0, 0)
+        fix = int(max_val)
+        d = 12 + fix
         h = 15
         w = 30
         q_painter.drawLine(p1[0], p1[1] + d, p1[0], p1[1] + h + d)
@@ -60,8 +67,18 @@ class MTuplePainter():
         q_painter.drawLine(p2[0], p2[1] + d, p2[0], p2[1] + h + d)
         x_m = int((p1[0] + p2[0])/2)
         y_m = int((p1[1] + p2[1])/2)
-        # aleft: int, atop: int, awidth: int, aheight: int) -> None: ...
-        text_rect = QRect(int(x_m - w/2), y_m + 30, w, w)
+        text_rect = QRect(int(x_m - w/2), y_m + 30 + fix, w, w)
         q_painter.drawText(text_rect, Qt.AlignCenter | Qt.AlignVCenter, Glyphs.Tuplet_3) 
         
+    def get_min_max_diff(self, a: float, x_0: float, y_0, inbetween_notes: list[VisualNote]):
+        diffs = self.get_diffs(a, x_0, y_0, inbetween_notes)
+        min_val = min(diffs)
+        max_val = max(diffs)
         
+        return min_val, max_val
+
+    def get_diffs(self, a, x_0, y_0, inbetween_notes: list[VisualNote]):
+        res = [(n.point[1] - a*(n.point[0] - x_0)) - y_0  for n in inbetween_notes]
+        
+        return res
+    
