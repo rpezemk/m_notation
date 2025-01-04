@@ -7,24 +7,27 @@ class TimeHolder():
     def __init__(self, base_duration: Ratio = None, measure: 'Measure' = None, dotting: Ratio = None):
         self.base_duration = base_duration if base_duration is not None else Ratio.QUARTER
         self.dotting = dotting if dotting is not None else Ratio.zero()
-        self.real_duration = self.base_duration + self.base_duration * self.dotting
         self.measure = measure
         self.offset_ratio = Ratio.zero()
         self.is_selected = False
-
-    def __str__(self):
-        return f"d: {self.base_duration}"
-
+        self.scale = Ratio(t=(1, 1))
+        
+        
+    def real_duration(self):
+        res = (self.base_duration + self.base_duration * self.dotting) * self.scale
+        return res
+    
     def dot(self):
         self.dotting = Ratio(t=(1, 2))
-        self.real_duration = self.base_duration + self.base_duration * self.dotting
         return self
 
     def double_dot(self):
         self.dotting = Ratio(t=(3, 4))
-        self.real_duration = self.base_duration + self.base_duration * self.dotting
         return self
         
+    def __str__(self):
+        return f"d: {self.base_duration}"
+    
 class Rest(TimeHolder):
     def __init__(self, base_duration: Ratio = None, measure: 'Measure' = None, dotting: Dotting = None):
         super().__init__(base_duration, measure, dotting)
@@ -35,26 +38,11 @@ class Rest(TimeHolder):
     
     
 class MTuple(TimeHolder):
-    def __init__(self, base_duration: Ratio = None, measure: 'Measure' = None, notes: list[TimeHolder]=None, parent=None):
-        super().__init__(base_duration, measure)
-        if not notes:
-            notes = []
-        
+    def apply(scale: Ratio, notes: list[TimeHolder]):
         for n in notes:
-            n.mtuple = self    
-            
-        self.notes = notes if notes is not None else []
-        self.measure = measure
-    
-    def get_scale(self):
-        s = Ratio(t=(0, 1))
-        for n in self.notes:
-            s += n.real_duration
-        res = self.real_duration / s
-        return res
+            n.scale = scale.clone()
         
-    def __str__(self):
-        return f"d: {self.base_duration}"
+        return notes
     
 class Note(TimeHolder):
     def __init__(self, pitch, base_duration = None, measure: 'Measure' = None, dotting: Dotting = None):
@@ -147,12 +135,12 @@ class VerticalChunk():
         self.vertical_measures = one_measure_parts
 
     def ratio_lanes_to_ruler(self) -> list[RulerEvent]:
-        lanes = [[th.real_duration for th in m.time_holders] for m in self.vertical_measures]
+        lanes = [[th.real_duration() for th in m.time_holders] for m in self.vertical_measures]
         for v_m in self.vertical_measures:
             curr_pos = Ratio.zero()
             for th in v_m.time_holders:
                 th.offset_ratio = curr_pos
-                curr_pos += th.real_duration
+                curr_pos += th.real_duration()
         moving_sum_lanes: list[tuple[list[Ratio], list[Ratio]]] = [(lane, VerticalChunk.to_moving_sum(lane)) for lane in lanes]
         mov_ordered_list =[Ratio.zero(), *sorted(set([r for bar_ratios in moving_sum_lanes for r in bar_ratios[1]]), key=lambda r: r.to_float())]
         ruler_events: list[RulerEvent] = []

@@ -20,7 +20,7 @@ def generate_sample_piece(n_parts: int, n_measures: int):
                 # notes = [Note(0, 0), Note(0, 7), Note(0, 0), Note(0, 7)]
                 notes = [
                     Note(0, base_duration=Ratio.QUARTER()), 
-                    MTuple(base_duration= Ratio.QUARTER(), 
+                    *MTuple.apply(scale = Ratio(t=(2, 3)),
                            notes=[
                                 Note(7, base_duration=Ratio.EIGHTH()), 
                                 Note(0, base_duration=Ratio.EIGHTH()), 

@@ -121,6 +121,9 @@ class Ratio():
         res = self.numerator / self.denominator
         return res
     
+    def clone(self):
+        return Ratio(t=(self.numerator, self.denominator))
+    
     def zero():
         """
         Returns:
@@ -135,7 +138,7 @@ class Ratio():
         """
         return Ratio(t=(1, 1))
     
-    
+
     
 class Dotting(Enum):
     NO_DOT = Ratio(t=(1,1))
