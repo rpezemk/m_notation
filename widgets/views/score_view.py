@@ -29,14 +29,14 @@ class ScoreView(View):
         self.ruler_widget.staff_widget.set_content(self.chunk)
         self.layout.addWidget(self.ruler_widget)
            
-        self.part_widgets: list[PartWidget] = []                
+        self.part_widgets: list[PartWidget] = []
+        
         for h_chunk in self.chunk.h_chunks:
             part_widget = PartWidget(parent=self, widget_type=StaffWidget)
-            part_widget.staff_widget.set_content(h_chunk)
-            part_widget.staff_widget.update()
             self.part_widgets.append(part_widget)
             self.layout.addWidget(part_widget)
-
+            
+        self.refresh_parts()    
         self.layout.addStretch()
         
 
@@ -105,8 +105,11 @@ class ScoreView(View):
 
         print(self.curr_range)
         self.ruler_widget.staff_widget.set_content(self.chunk)
-        for idx, p in enumerate(self.part_widgets):
-            h_chunk = self.chunk.h_chunks[idx]
+        self.refresh_parts()
+
+    def refresh_parts(self):
+        for idx, h_chunk in enumerate(self.chunk.h_chunks):
+            p = self.part_widgets[idx]
             p.staff_widget.set_content(h_chunk)
             p.staff_widget.update()
         self.update()
