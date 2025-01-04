@@ -35,7 +35,7 @@ class StaffWidget(BarrableWidget):
         self.get_x_offsets()
         if self.width() < 30 or self.height() < 30:
             return
-        self.place_vis_notes()
+        self.calculate_vis_notes()
         self.draw_content()
 
     def draw_content(self):
@@ -59,7 +59,7 @@ class StaffWidget(BarrableWidget):
     def draw_clef(self, painter: QPainter):
         painter.drawText(QRect(0, -23, 40, 200), Qt.AlignTop, Glyphs.G_Clef)
 
-    def place_vis_notes(self):
+    def calculate_vis_notes(self):
         bar_segments = self.get_h_segments()
         self.visual_notes = []
         self.res_mtuples: list[list[VisualNote]] = []
