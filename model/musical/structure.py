@@ -68,6 +68,7 @@ class Measure():
         self.time_holders = [] if notes is None else notes
 
 
+        
 class Part():
     def __init__(self, measures: list[Measure]=None, piece: 'Piece'=None):
         self.piece = piece

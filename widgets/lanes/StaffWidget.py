@@ -5,11 +5,11 @@ from PyQt5.QtCore import Qt
 
 from fonts.glyphs import Glyphs
 from model.sample_piece_gen import Measure
-from model.musical.structure import HorizontalChunk, MTuple, Note, Rest
+from model.musical.structure import HorizontalChunk, MTuple, Note, Rest, TimeHolder
 from utils.musical_layout.space import get_single_ruler, map_to
 from widgets.lanes.BarrableWidget import BarrableWidget
 from widgets.note_widgets.VisualNote import VisualNote
-from widgets.painters.paint_manager import m_paint_visual
+from widgets.painters.paint_manager import m_paint_visual, m_paint_tuple
 
 
 
@@ -18,7 +18,7 @@ class StaffWidget(BarrableWidget):
         super().__init__(parent=parent)
         self.staff_widget = parent
         self.setCursor(Qt.CrossCursor)
-
+        self.res_mtuples: list[list[VisualNote]] = []
         self.staff_offset = 30
 
 
@@ -51,6 +51,9 @@ class StaffWidget(BarrableWidget):
         painter.setBrush(self.light_gray)
         for v_n in self.visual_notes:
             m_paint_visual(painter, v_n)
+            
+        for mt in self.res_mtuples:
+            m_paint_tuple(painter, mt)
         painter.end()
 
     def draw_clef(self, painter: QPainter):
@@ -59,6 +62,9 @@ class StaffWidget(BarrableWidget):
     def place_vis_notes(self):
         bar_segments = self.get_h_segments()
         self.visual_notes = []
+        self.res_mtuples: list[list[VisualNote]] = []
+        new_mtuple: list[VisualNote] = []
+        mtuple_opened = False
 
         for m_no, bar in enumerate(self.measures):
             seg_start = bar_segments[m_no][0]
@@ -76,6 +82,21 @@ class StaffWidget(BarrableWidget):
 
                 vis_note = VisualNote(note, (curr_x, res_y))
                 self.visual_notes.append(vis_note)
+                
+                
+                if note.tuple_start:
+                    mtuple_opened = True
+                    
+                if mtuple_opened:    
+                    new_mtuple.append(vis_note)
+                    
+                if note.tuple_end:
+                    self.res_mtuples.append(new_mtuple)
+                    new_mtuple = []
+                    mtuple_opened = False
+        
+                            
+            
                 
     def draw_staff_lines(self, painter: QPainter):
         for y_offset in self.get_staff_line_offsets():
@@ -132,6 +153,9 @@ class StaffWidget(BarrableWidget):
     def remove_note(self, v_n: VisualNote):
         msr = v_n.inner.measure
         rest = Rest(base_duration=v_n.inner.base_duration, measure=msr, dotting=v_n.inner.dotting)
+        rest.scale = v_n.inner.scale
+        rest.tuple_start = v_n.inner.tuple_start
+        rest.tuple_end = v_n.inner.tuple_end
         rest.offset_ratio = v_n.inner.offset_ratio
         inner_note_idx = msr.time_holders.index(v_n.inner)
         msr.time_holders[inner_note_idx] = rest

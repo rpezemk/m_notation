@@ -4,7 +4,7 @@ from model.musical.structure import Rest
 from model.ratio import Ratio
 from widgets.painters.painter_definitions import get_dotting_painters, get_painter_definitions
 from widgets.note_widgets.VisualNote import VisualNote
-from widgets.painters.elementary_painter import ElementaryPainter, HeadPainter, StemPainter, FlagPainter
+from widgets.painters.elementary_painter import ElementaryPainter, HeadPainter, MTuplePainter, StemPainter, FlagPainter
 from utils.geometry.transform2d import Transform2D
 painter_data_list = get_painter_definitions()
 dot_painters = get_dotting_painters()
@@ -12,6 +12,8 @@ dot_painters = get_dotting_painters()
 head_painter = HeadPainter()
 beam_painter = StemPainter()
 flag_painter = FlagPainter()
+tuple_painter = MTuplePainter()
+
 dark_gray = QColor(100, 100, 100)
 light_gray = QColor(140, 140, 140)
 very_light_gray = QColor(160, 160, 160)
@@ -49,3 +51,8 @@ def m_paint_visual(q_painter: QPainter, v_n: VisualNote):
     if inner.is_selected:
         q_painter.setPen(light_gray)
         q_painter.setBrush(light_gray)
+        
+        
+        
+def m_paint_tuple(q_painter: QPainter, v_notes: list[VisualNote]):
+    tuple_painter.paint(q_painter, v_notes)
