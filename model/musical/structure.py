@@ -1,12 +1,11 @@
 import random
 from typing import Any, Callable
 from PyQt5.QtGui import QColor
-from model.duration import Dotting, DurationBase
-from model.ratio import Ratio
+from model.ratio import Dotting, Ratio
 
 class TimeHolder():
-    def __init__(self, base_duration: DurationBase = None, measure: 'Measure' = None, dotting: Ratio = None):
-        self.base_duration = base_duration if base_duration is not None else DurationBase.QUARTER
+    def __init__(self, base_duration: Ratio = None, measure: 'Measure' = None, dotting: Ratio = None):
+        self.base_duration = base_duration if base_duration is not None else Ratio.QUARTER
         self.dotting = dotting if dotting is not None else Ratio.zero()
         self.real_duration = self.base_duration + self.base_duration * self.dotting
         self.measure = measure
@@ -27,7 +26,7 @@ class TimeHolder():
         return self
         
 class Rest(TimeHolder):
-    def __init__(self, base_duration: DurationBase = None, measure: 'Measure' = None, dotting: Dotting = None):
+    def __init__(self, base_duration: Ratio = None, measure: 'Measure' = None, dotting: Dotting = None):
         super().__init__(base_duration, measure, dotting)
         self.measure = measure
 
@@ -35,12 +34,25 @@ class Rest(TimeHolder):
         return f"d: {self.base_duration}"
     
     
-class Triplet(TimeHolder):
-    def __init__(self, base_duration: DurationBase = None, measure: 'Measure' = None, notes: list[TimeHolder]=None, parent=None):
+class MTuple(TimeHolder):
+    def __init__(self, base_duration: Ratio = None, measure: 'Measure' = None, notes: list[TimeHolder]=None, parent=None):
         super().__init__(base_duration, measure)
+        if not notes:
+            notes = []
+        
+        for n in notes:
+            n.mtuple = self    
+            
         self.notes = notes if notes is not None else []
         self.measure = measure
     
+    def get_scale(self):
+        s = Ratio(t=(0, 1))
+        for n in self.notes:
+            s += n.real_duration
+        res = self.real_duration / s
+        return res
+        
     def __str__(self):
         return f"d: {self.base_duration}"
     
@@ -69,7 +81,7 @@ class Part():
 
 
 class TempoMark():
-    def __init__(self, bpm: float, bpm_base: DurationBase, bar_no: int, bar_offset: Ratio):
+    def __init__(self, bpm: float, bpm_base: Ratio, bar_no: int, bar_offset: Ratio):
         self.bar_no = 0
         self.bpm = bpm
         self.bmp_base = bpm_base

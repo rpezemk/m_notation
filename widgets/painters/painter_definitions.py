@@ -1,7 +1,6 @@
 from model.ratio import Ratio
 from widgets.note_widgets.VisualNote import VisualNote
 from model.musical.structure import Note, Rest, TimeHolder
-from model.duration import DurationBase
 from fonts.glyphs import Glyphs
 
 def get_default_if_none(maybe_filled, default_value):
@@ -9,7 +8,7 @@ def get_default_if_none(maybe_filled, default_value):
     return filled
 
 class PainterData():
-    def __init__(self, t: type, d: DurationBase):
+    def __init__(self, t: type, d: Ratio):
         self.t = t
         self.d = d
         self.stemed = False
@@ -19,7 +18,7 @@ class PainterData():
         self.stem_str = None
     
     @staticmethod    
-    def emit(t: type, d: DurationBase):
+    def emit(t: type, d: Ratio):
         return PainterData(t, d)    
     
     
@@ -40,9 +39,9 @@ class PainterData():
     
     
 def get_painter_definitions() -> list[PainterData]:
-    all_durations = DurationBase.get_all_durations()
-    simple_durations = [DurationBase.LONGA, DurationBase.BREVE, DurationBase.WHOLE]
-    only_stemed_durations = [DurationBase.HALF, DurationBase.QUARTER]
+    all_durations = Ratio.get_all_durations()
+    simple_durations = [Ratio.LONGA(), Ratio.BREVE(), Ratio.WHOLE()]
+    only_stemed_durations = [Ratio.HALF(), Ratio.QUARTER()]
     flagged = all_durations[5:]
     
     heads = [Glyphs.LongaNote, Glyphs.BreveNote, Glyphs.WholeNote, Glyphs.Notehead_Half, Glyphs.Notehead_Black]

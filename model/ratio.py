@@ -1,9 +1,38 @@
+from enum import Enum
 from functools import cmp_to_key
 
 from math import gcd
 
 
+
+    
+
+
 class Ratio():
+    def LONGA(): return Ratio(t=(4,1))               # 4 times a whole note
+    def BREVE(): return Ratio(t=(2,1))               # 2 times a whole note
+    def WHOLE(): return Ratio(t=(1,1))               # 1 whole note
+    def HALF(): return Ratio(t=(1,2))                # 1/2 of a whole note
+    def QUARTER(): return Ratio(t=(1,4))             # 1/4 of a whole note
+    def EIGHTH(): return Ratio(t=(1,8))              # 1/8 of a whole note
+    def SIXTEENTH(): return Ratio(t=(1,16))          # 1/16 of a whole note
+    def THIRTY_SECOND(): return Ratio(t=(1,32))      # 1/32 of a whole note
+    def SIXTY_FOURTH(): return Ratio(t=(1,64))      
+    
+    def get_all_durations():
+        all_durations = [
+            Ratio.LONGA(),
+            Ratio.BREVE(),
+            Ratio.WHOLE(),
+            Ratio.HALF(),
+            Ratio.QUARTER(),
+            Ratio.EIGHTH(),
+            Ratio.SIXTEENTH(),
+            Ratio.THIRTY_SECOND(),
+            Ratio.SIXTY_FOURTH(),
+        ]
+        return all_durations
+    
     def __init__(self, *, numerator: int = 1, denominator: int = 1, t: tuple[int, int] = None):
         if t is not None:
             numerator = t[0]
@@ -30,7 +59,6 @@ class Ratio():
         res = self.numerator * other.denominator >= other.numerator * self.denominator
         return res
 
-
     def __eq__(self, other: 'Ratio'):
         res = self.numerator * other.denominator == other.numerator * self.denominator
         return res
@@ -43,15 +71,20 @@ class Ratio():
         new_num = (self.numerator * other.denominator + other.numerator * self.denominator)
         new_den = self.denominator * other.denominator
         return Ratio(numerator=new_num, denominator=new_den).simplify()
+    
+    def __sub__(self, other: 'Ratio'):
+        new_num = (self.numerator * other.denominator - other.numerator * self.denominator)
+        new_den = self.denominator * other.denominator
+        return Ratio(numerator=new_num, denominator=new_den).simplify()
 
     def __mul__(self, other: 'Ratio'):
         new_num = self.numerator * other.numerator
         new_den = self.denominator * other.denominator
         return Ratio(numerator=new_num, denominator=new_den).simplify()
     
-    def __sub__(self, other: 'Ratio'):
-        new_num = (self.numerator * other.denominator - other.numerator * self.denominator)
-        new_den = self.denominator * other.denominator
+    def __truediv__(self, other: 'Ratio'):
+        new_num = self.numerator * other.denominator
+        new_den = self.denominator * other.numerator
         return Ratio(numerator=new_num, denominator=new_den).simplify()
 
     def simplify(self):
@@ -101,5 +134,14 @@ class Ratio():
             Ratio(t=(1, 1))
         """
         return Ratio(t=(1, 1))
+    
+    
+    
+class Dotting(Enum):
+    NO_DOT = Ratio(t=(1,1))
+    ONE_DOT = Ratio(t=(3,2))
+    TWO_DOTS = Ratio(t=(7,4))
+    THREE_DOTS = Ratio(t=(15,8))
+    FOUR_DOTS = Ratio(t=(31,16))    
     
 custom_key = cmp_to_key(Ratio.custom_comparator)

@@ -1,6 +1,5 @@
 from PyQt5.QtGui import QPainter, QColor
 
-from model.duration import DurationBase
 from model.musical.structure import Rest
 from model.ratio import Ratio
 from widgets.painters.painter_definitions import get_dotting_painters, get_painter_definitions

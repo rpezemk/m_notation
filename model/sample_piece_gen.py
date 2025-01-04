@@ -1,9 +1,8 @@
-from model.duration import DurationBase
-from model.musical.structure import ConductorPart, Measure, Note, Part, Piece, TempoMark
+from model.musical.structure import ConductorPart, MTuple, Measure, Note, Part, Piece, TempoMark
 from model.ratio import Ratio
 
 def generate_sample_piece(n_parts: int, n_measures: int):
-    piece = Piece(conductor_part=ConductorPart(TempoMark(90, DurationBase.QUARTER, 0, Ratio(t=(0, 4)))))
+    piece = Piece(conductor_part=ConductorPart(TempoMark(90, Ratio.QUARTER(), 0, Ratio(t=(0, 4)))))
     
     for part_no in range(0, n_parts):
         part = Part(piece=piece)
@@ -20,19 +19,23 @@ def generate_sample_piece(n_parts: int, n_measures: int):
             else:
                 # notes = [Note(0, 0), Note(0, 7), Note(0, 0), Note(0, 7)]
                 notes = [
-                    Note(0, base_duration=DurationBase.QUARTER), 
-                    Note(7, base_duration=DurationBase.EIGHTH), 
-                    Note(0, base_duration=DurationBase.EIGHTH), 
-                    Note(0, base_duration=DurationBase.SIXTEENTH), 
-                    Note(0, base_duration=DurationBase.SIXTEENTH), 
-                    Note(0, base_duration=DurationBase.SIXTEENTH), 
-                    Note(0, base_duration=DurationBase.SIXTEENTH), 
-                    Note(7, base_duration=DurationBase.THIRTY_SECOND), 
-                    Note(7, base_duration=DurationBase.THIRTY_SECOND), 
-                    Note(7, base_duration=DurationBase.THIRTY_SECOND), 
-                    Note(7, base_duration=DurationBase.THIRTY_SECOND), 
-                    Note(0, base_duration=DurationBase.SIXTEENTH), 
-                    Note(7, base_duration=DurationBase.SIXTEENTH), 
+                    Note(0, base_duration=Ratio.QUARTER()), 
+                    MTuple(base_duration= Ratio.QUARTER(), 
+                           notes=[
+                                Note(7, base_duration=Ratio.EIGHTH()), 
+                                Note(0, base_duration=Ratio.EIGHTH()), 
+                                Note(0, base_duration=Ratio.EIGHTH()), 
+                               ]), 
+                    Note(0, base_duration=Ratio.SIXTEENTH()), 
+                    Note(0, base_duration=Ratio.SIXTEENTH()), 
+                    Note(0, base_duration=Ratio.SIXTEENTH()), 
+                    Note(0, base_duration=Ratio.SIXTEENTH()), 
+                    Note(7, base_duration=Ratio.THIRTY_SECOND()), 
+                    Note(7, base_duration=Ratio.THIRTY_SECOND()), 
+                    Note(7, base_duration=Ratio.THIRTY_SECOND()), 
+                    Note(7, base_duration=Ratio.THIRTY_SECOND()), 
+                    Note(0, base_duration=Ratio.SIXTEENTH()), 
+                    Note(7, base_duration=Ratio.SIXTEENTH()), 
                     ]
                 measure = Measure(part_no=part_no, m_no=measure_no, parent=part, notes=notes)
                 for note in notes:

@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt
 
 from fonts.glyphs import Glyphs
 from model.sample_piece_gen import Measure
-from model.musical.structure import HorizontalChunk, Note, Rest
+from model.musical.structure import HorizontalChunk, MTuple, Note, Rest
 from utils.musical_layout.space import get_single_ruler, map_to
 from widgets.lanes.BarrableWidget import BarrableWidget
 from widgets.note_widgets.VisualNote import VisualNote
@@ -73,7 +73,15 @@ class StaffWidget(BarrableWidget):
                     res_y = int( (-note.pitch * self.line_spacing) / 2) + self.line_spacing * 8
                 elif isinstance(note, Rest):
                     res_y = int( (0) / 2) + self.line_spacing * 8
+                elif isinstance(note, MTuple):
+                    mtup: MTuple = note
 
+                    
+                    
+                    scale = mtup.get_scale()
+                    
+                    
+                
                 vis_note = VisualNote(note, (curr_x, res_y))
                 self.visual_notes.append(vis_note)
 

@@ -1,4 +1,3 @@
-from model.duration import DurationBase
 import math
 
 def duration_to_space(time: float):
