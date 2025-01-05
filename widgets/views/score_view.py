@@ -73,6 +73,9 @@ class ScoreView(View):
         self.delta = 1
         self.widget.resizeEvent = self.resizeEvent
     
+    def paintEvent(self, event):
+        ...
+    
     def stop(self):
         self.ruler_widget.staff_widget.stop()
         self.play_button.set_state(False)

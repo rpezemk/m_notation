@@ -36,16 +36,18 @@ class StaffWidget(BarrableWidget):
         if self.width() < 30 or self.height() < 30:
             return
         self.calculate_vis_notes()
-        self.draw_content()
-
-    def draw_content(self):
         painter = QPainter(self)
+        self.draw_content(painter, self.width())
+        painter.end()
+        
+    def draw_content(self, painter: QPainter, width: int):
+        
         painter.setFont(self.bravura_font)
         painter.setPen(self.dark_gray)
         painter.setBrush(self.dark_gray)
 
         self.draw_clef(painter)
-        self.draw_staff_lines(painter)
+        self.draw_staff_lines(painter, width)
         self.draw_bar_lines(painter)
         painter.setPen(self.light_gray)
         painter.setBrush(self.light_gray)
@@ -54,7 +56,6 @@ class StaffWidget(BarrableWidget):
             
         for mt in self.res_mtuples:
             m_paint_tuple(painter, mt)
-        painter.end()
 
     def draw_clef(self, painter: QPainter):
         painter.drawText(QRect(0, -23, 40, 200), Qt.AlignTop, Glyphs.G_Clef)
@@ -98,9 +99,9 @@ class StaffWidget(BarrableWidget):
                             
             
                 
-    def draw_staff_lines(self, painter: QPainter):
+    def draw_staff_lines(self, painter: QPainter, width: int):
         for y_offset in self.get_staff_line_offsets():
-            painter.drawRect(QRect(0, y_offset, self.width(), 1))
+            painter.drawRect(QRect(0, y_offset, width, 1))
 
     def draw_bar_lines(self, painter: QPainter):
         painter.drawRect(QRect(0, self.staff_offset, 1, 4*self.line_spacing))
