@@ -1,6 +1,7 @@
 from typing import override
 from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtWidgets import QFrame, QWidget
+from PyQt5.QtGui import QPainter
 
 from model.musical.structure import Chunk
 from model.sample_piece_gen import generate_sample_piece
@@ -8,7 +9,7 @@ from widgets.basics.my_button import StateButton, SyncButton
 from widgets.compound.stretch import Stretch
 from widgets.lanes.drawable_widget import DrawableWidget
 
-from widgets.lanes.StaffWidget import StaffWidget
+from widgets.lanes.StaffWidget import VirtualStaff
 from widgets.compound.stack_panels import HStack, VStack
 from widgets.lanes.PartWidget import PartWidget
 from widgets.lanes.RulerWidget import RulerWidget
@@ -31,15 +32,15 @@ class ScoreView(View):
         self.ruler_widget.set_content(self.chunk)
         self.layout.addWidget(self.ruler_widget)
            
-        self.part_widgets: list[StaffWidget] = []
+        self.part_widgets: list[VirtualStaff] = []
         
         for h_chunk in self.chunk.h_chunks:
-            part_widget = StaffWidget(parent=None)
+            part_widget = VirtualStaff(parent=None)
             self.part_widgets.append(part_widget)
-            self.layout.addWidget(part_widget)
+            # self.layout.addWidget(part_widget)
         
-        self.drawable = DrawableWidget(parent=None)
-        
+        self.drawable = DrawableWidget(parent=None, redraw_func=self.paint_content)
+        self.drawable.setFixedHeight(500)
         self.layout.addWidget(self.drawable)
         self.refresh_parts()    
         self.layout.addStretch()
@@ -74,6 +75,13 @@ class ScoreView(View):
         self.widget.resizeEvent = self.resizeEvent
     
     def paintEvent(self, event):
+        self.drawable.update()
+        ...
+    
+    def paint_content(self, painter: QPainter, width: int):
+        for idx, h_chunk in enumerate(self.chunk.h_chunks):
+            painter.translate(0, idx*100)
+            self.part_widgets[idx].draw_content(painter, width)
         ...
     
     def stop(self):
@@ -119,7 +127,6 @@ class ScoreView(View):
         for idx, h_chunk in enumerate(self.chunk.h_chunks):
             p = self.part_widgets[idx]
             p.set_content(h_chunk)
-            p.update()
         self.update()
                     
     """COMMANDS' methods

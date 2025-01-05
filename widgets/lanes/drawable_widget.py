@@ -1,3 +1,4 @@
+from typing import Callable
 from fonts.glyphs import Glyphs
 from model.musical.structure import HorizontalChunk, Note, Rest
 from widgets.lanes.BarrableWidget import BarrableWidget
@@ -10,53 +11,30 @@ from PyQt5.QtGui import QPainter
 
 
 class DrawableWidget(BarrableWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, redraw_func: Callable[[QPainter, int],None] = None):
         super().__init__(parent=parent)
         self.staff_widget = parent
         self.setCursor(Qt.CrossCursor)
         self.res_mtuples: list[list[VisualNote]] = []
         self.staff_offset = 30
-
+        self.redraw_func = redraw_func
 
         self.visual_notes: list[VisualNote] = []
         self.notes = []
         self.note_size = 120
         self.line_spacing = 10
 
-    def set_content(self, h_chunk: HorizontalChunk):
-        self.measures = h_chunk.measures
 
     def paintEvent(self, event):
-        self.no_of_measures = len(self.measures)
         if self.width() < 30 or self.height() < 30:
             return
-        self.draw_content()
-
-    def draw_content(self):
         painter = QPainter(self)
-        painter.setFont(self.bravura_font)
-        painter.setPen(self.dark_gray)
-        painter.setBrush(self.dark_gray)
+        # painter.setFont(self.bravura_font)
+        # painter.setPen(self.very_dark_gray)
+        # painter.setBrush(self.very_dark_gray)
 
-        self.draw_clef(painter)
-        self.draw_staff_lines(painter)
-        
-        painter.setPen(self.light_gray)
-        painter.setBrush(self.light_gray)
+        # painter.setPen(self.light_gray)
+        # painter.setBrush(self.light_gray)
+        if self.redraw_func:
+            self.redraw_func(painter, self.width())
         painter.end()
-
-    def draw_clef(self, painter: QPainter):
-        painter.drawText(QRect(0, -23, 40, 200), Qt.AlignTop, Glyphs.G_Clef)
-
-   
-    def get_staff_line_offsets(self):
-        offsets = []
-        for i in range(0, 5):
-            offsets.append(self.staff_offset + i*self.line_spacing)
-        return offsets
-
-    def draw_staff_lines(self, painter: QPainter):
-        for y_offset in self.get_staff_line_offsets():
-            painter.drawRect(QRect(0, y_offset, self.width(), 1))
-
-   

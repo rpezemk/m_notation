@@ -5,7 +5,7 @@ from PyQt5.QtCore import Qt
 from model.sample_piece_gen import generate_sample_piece
 from widgets.lanes.AudioWidget import AudioWidget
 from widgets.lanes.RulerWidget import RulerWidget
-from widgets.lanes.StaffWidget import StaffWidget
+from widgets.lanes.StaffWidget import VirtualStaff
 from wirings.test_methods import quit_csound, save_file, start_CSOUND, play_ding, static_play_file
 from utils.logger import MLogger
 from widgets.compound.stack_panels import HStack, VStack

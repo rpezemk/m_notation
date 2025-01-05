@@ -12,6 +12,7 @@ class LaneWidget(QWidget):
     def __init__(self):
         super().__init__(parent=None)
         res, self.bravura_font = fonts.loader.try_get_music_font()
+        self.very_dark_gray = QColor(40, 40, 40)
         self.dark_gray = QColor(100, 100, 100)
         self.light_gray = QColor(140, 140, 140)
         self.very_light_gray = QColor(160, 160, 160)
