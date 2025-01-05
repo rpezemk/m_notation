@@ -268,4 +268,3 @@ class StaffWidget(BarrableWidget):
         
         self.update()
         
-        

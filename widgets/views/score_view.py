@@ -6,6 +6,8 @@ from model.musical.structure import Chunk
 from model.sample_piece_gen import generate_sample_piece
 from widgets.basics.my_button import StateButton, SyncButton
 from widgets.compound.stretch import Stretch
+from widgets.lanes.drawable_widget import DrawableWidget
+
 from widgets.lanes.StaffWidget import StaffWidget
 from widgets.compound.stack_panels import HStack, VStack
 from widgets.lanes.PartWidget import PartWidget
@@ -35,7 +37,10 @@ class ScoreView(View):
             part_widget = StaffWidget(parent=None)
             self.part_widgets.append(part_widget)
             self.layout.addWidget(part_widget)
-            
+        
+        self.drawable = DrawableWidget(parent=None)
+        
+        self.layout.addWidget(self.drawable)
         self.refresh_parts()    
         self.layout.addStretch()
         
