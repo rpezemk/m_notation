@@ -132,6 +132,12 @@ class ScoreView(View):
     """COMMANDS' methods
     """
 
+    def rotate_selected_notes(self):
+        print("ROTATE")
+        for pt in self.part_widgets:
+            pt.rotate_selected_notes()
+        self.update()    
+        
     def select_next_note(self):
         print("select next note (ScoreView)")
         for pt in self.part_widgets:

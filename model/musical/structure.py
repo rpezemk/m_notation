@@ -13,6 +13,10 @@ class TimeHolder():
         self.scale = Ratio(t=(1, 1))
         self.tuple_start = False
         self.tuple_end = False
+        self.orientation_up = True
+        
+    def flip_orientation(self):
+        ...
         
     def real_duration(self):
         res = (self.base_duration + self.base_duration * self.dotting) * self.scale
@@ -55,10 +59,14 @@ class Note(TimeHolder):
         super().__init__(base_duration, measure, dotting)
         self.measure = measure
         self.pitch = pitch
+        self.orientation_up = True
                           
     def __str__(self):
         return f"d: {self.base_duration}"
     
+    def flip_orientation(self):
+        self.orientation_up = not self.orientation_up
+        
                 
 class Measure():
     def __init__(self, part_no: int, m_no: int, notes: list[TimeHolder]=None, parent: 'Part'=None):

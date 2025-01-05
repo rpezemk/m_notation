@@ -24,11 +24,11 @@ K_DOWN = Qt.Key_Down
 ######## PART COMMANDS ##########
 
 A = SubCmd("A", [Qt.Key_A])
-CTRL_A = SubCmd("CTRL_A", [K_CTRL, K_A])
-CTRL_T = SubCmd("CTRL_T", [K_CTRL, K_T])
-CTRL_X = SubCmd("CTRL_X", [K_CTRL, K_X])
-CTRL_Q = SubCmd("CTRL_Q", [K_CTRL, K_Q])
-CTRL_R = SubCmd("CTRL_R", [K_CTRL, K_R])
+S_CTRL_A = SubCmd("CTRL_A", [K_CTRL, K_A])
+S_CTRL_T = SubCmd("CTRL_T", [K_CTRL, K_T])
+S_CTRL_X = SubCmd("CTRL_X", [K_CTRL, K_X])
+S_CTRL_Q = SubCmd("CTRL_Q", [K_CTRL, K_Q])
+S_CTRL_R = SubCmd("CTRL_R", [K_CTRL, K_R])
 
 S_SPACE = SubCmd("PLAY", [Qt.Key_Space])
 S_RETURN = SubCmd("PLAY", [Qt.Key_Return])
@@ -38,6 +38,7 @@ S_ARROW_RIGHT = SubCmd("ARROW_RIGHT", [K_RIGHT])
 S_ARROW_UP = SubCmd("ARROW_UP", [K_UP])
 S_ARROW_DOWN = SubCmd("ARROW_DOWN", [K_DOWN])
 
+S_R = SubCmd("ROTATE", [K_R])
 
 CTRL_ARROW_LEFT = SubCmd("sdf", [K_CTRL, K_LEFT])
 CTRL_ARROW_RIGHT = SubCmd("sdf", [K_CTRL, K_RIGHT])
@@ -50,9 +51,9 @@ S_DEL = SubCmd("sdf", [K_DEL])
 
 ######### COMMANDS ##########
 
-C_SELECT_ALL = CompoundCommand("SELECT_ALL", [CTRL_A]),
-C_RENAME = CompoundCommand("RENAME", [CTRL_R, CTRL_R]),
-C_DELETE = CompoundCommand("DELETE", [CTRL_T, CTRL_X]),
+C_SELECT_ALL = CompoundCommand("SELECT_ALL", [S_CTRL_A]),
+C_RENAME = CompoundCommand("RENAME", [S_CTRL_R, S_CTRL_R]),
+C_DELETE = CompoundCommand("DELETE", [S_CTRL_T, S_CTRL_X]),
 C_PLAY = CompoundCommand("PLAY", [S_SPACE]),
 C_PLAY_SPECIAL = CompoundCommand("PLAY_SPECIAL", [S_RETURN]),
 
@@ -67,6 +68,6 @@ CMD_CTRL_UP = CompoundCommand("ARROW_UP", [CTRL_ARROW_UP])
 CMD_CTRL_DOWN = CompoundCommand("ARROW_DOWN", [CTRL_ARROW_DOWN])
 
 
-
 CMD_DEL = CompoundCommand("DEL", [S_DEL])
+CMD_ROTATE = CompoundCommand("ROTATE", [S_R])
 

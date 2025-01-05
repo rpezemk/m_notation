@@ -120,10 +120,8 @@ class VirtualStaff():
                     self.res_mtuples.append(new_mtuple)
                     new_mtuple = []
                     mtuple_opened = False
-        
-                            
-            
-                
+
+
     def draw_staff_lines(self, painter: QPainter, width: int):
         for y_offset in self.get_staff_line_offsets():
             painter.drawRect(QRect(0, y_offset, width, 1))
@@ -205,6 +203,11 @@ class VirtualStaff():
     """
     COMMAND METHODS
     """
+    
+    def rotate_selected_notes(self):
+        selected = [v_n for v_n in self.visual_notes if v_n.inner.is_selected]
+        for v_n in selected:
+            v_n.inner.flip_orientation()
     
     def select_prev_note(self):
         selected = self.get_first_selected_note()
