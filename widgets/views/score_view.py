@@ -34,12 +34,12 @@ class ScoreView(View):
            
         self.part_widgets: list[VirtualStaff] = []
         
-        for h_chunk in self.chunk.h_chunks:
-            part_widget = VirtualStaff(parent=None)
+        for idx, h_chunk in enumerate(self.chunk.h_chunks):
+            part_widget = VirtualStaff(parent=None, y_offset=idx * 100)
             self.part_widgets.append(part_widget)
             # self.layout.addWidget(part_widget)
         
-        self.drawable = DrawableWidget(parent=None, redraw_func=self.paint_content)
+        self.drawable = DrawableWidget(parent=None, redraw_func=self.paint_content, staffs=self.part_widgets)
         self.drawable.setFixedHeight(500)
         self.layout.addWidget(self.drawable)
         self.refresh_parts()    
@@ -80,12 +80,11 @@ class ScoreView(View):
     
     def paint_content(self, painter: QPainter, width: int):
         for idx, h_chunk in enumerate(self.chunk.h_chunks):
-            painter.translate(0, idx*100)
             self.part_widgets[idx].draw_content(painter, width)
         ...
     
     def stop(self):
-        self.ruler_widget.staff_widget.stop()
+        self.ruler_widget.stop()
         self.play_button.set_state(False)
         
     def select_all(self):

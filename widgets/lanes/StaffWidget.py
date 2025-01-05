@@ -16,7 +16,7 @@ from widgets.painters.paint_manager import m_paint_visual, m_paint_tuple
 
 
 class VirtualStaff():
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, y_offset:int = None):
         super().__init__()
         self.staff_widget = parent
         self.res_mtuples: list[list[VisualNote]] = []
@@ -35,6 +35,7 @@ class VirtualStaff():
         self.bar_left_margin = 25
         self.bar_right_margin = 5
         self.x_offsets = None
+        self.y_offset = y_offset if y_offset else 0
         
     def set_content(self, h_chunk: HorizontalChunk):
         self.measures = h_chunk.measures
@@ -60,6 +61,7 @@ class VirtualStaff():
 
         
     def draw_content(self, painter: QPainter, width: int):
+        painter.translate(0, self.y_offset)
         self.no_of_measures = len(self.measures)
         self.get_x_offsets(width)
         if width < 30 :
@@ -135,7 +137,7 @@ class VirtualStaff():
         if event.button() == Qt.LeftButton:
             click_pos = event.pos()
             x0 = click_pos.x()
-            y0 = click_pos.y()
+            y0 = click_pos.y() - self.y_offset
             maybe = [v_n for v_n in self.visual_notes if abs(v_n.point[0] - x0) < 7 and abs(v_n.point[1] - y0) < 7]
             if not maybe:
                 return
@@ -144,7 +146,6 @@ class VirtualStaff():
 
     def select_note(self, v_n: VisualNote):
         v_n.inner.is_selected = True
-        self.update()
         self.deselect_notes_but([v_n])
     
     def select_all(self):
@@ -154,17 +155,15 @@ class VirtualStaff():
         
         for s in selected:
             s.inner.is_selected = True
-        self.update()
+
             
     def delete_selected_notes(self):
         selected = [v_n for v_n in self.visual_notes if v_n.inner.is_selected]
         if not selected:
             return
         self.remove_note(selected[0])
-        self.update()
         
         
-            
     def deselect_notes_but(self, v_notes: list[VisualNote]):
         deselected = [d for d in self.visual_notes if d not in v_notes]
         if not deselected:
@@ -172,8 +171,7 @@ class VirtualStaff():
         
         for d in deselected:
             d.inner.is_selected = False
-        self.update()
-            
+
     def remove_note(self, v_n: VisualNote):
         msr = v_n.inner.measure
         rest = Rest(base_duration=v_n.inner.base_duration, measure=msr, dotting=v_n.inner.dotting)
@@ -225,9 +223,7 @@ class VirtualStaff():
         
         nxt = self.visual_notes[idx - 1]
         nxt.inner.is_selected = True
-        
-        self.update()
-    
+            
     
     def select_next_note(self):
         selected = self.get_last_selected_note()
@@ -247,7 +243,6 @@ class VirtualStaff():
         nxt = self.visual_notes[idx + 1]
         nxt.inner.is_selected = True
         
-        self.update()
         
     def select_next_note_in_next_measure(self):
         selected = self.get_last_selected_note()
@@ -269,7 +264,6 @@ class VirtualStaff():
         m_to_sel = self.measures[idx+1]
         m_to_sel.time_holders[0].is_selected = True;
    
-        self.update()
 
     def select_prev_note_in_prev_measure(self):
         selected = self.get_first_selected_note()
@@ -290,7 +284,7 @@ class VirtualStaff():
         m_to_sel = self.measures[idx-1]
         m_to_sel.time_holders[0].is_selected = True;
         
-        self.update()
+
         
 # class StaffWidget(BarrableWidget):
 #     def __init__(self, parent=None):
