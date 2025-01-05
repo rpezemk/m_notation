@@ -75,11 +75,9 @@ class MTuplePainter():
         diffs = self.get_diffs(a, x_0, y_0, inbetween_notes)
         min_val = min(diffs)
         max_val = max(diffs)
-        
         return min_val, max_val
 
     def get_diffs(self, a, x_0, y_0, inbetween_notes: list[VisualNote]):
         res = [(n.point[1] - a*(n.point[0] - x_0)) - y_0  for n in inbetween_notes]
-        
         return res
     
