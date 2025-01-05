@@ -37,5 +37,5 @@ class DrawableWidget(QWidget):
     def mousePressEvent(self, event):
         print('clicked')
         for staff in self.staffs:
-                staff.mousePressEvent(event)                
+                staff.mouse_press(event)
         self.update()

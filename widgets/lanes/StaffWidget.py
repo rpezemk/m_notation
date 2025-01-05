@@ -133,7 +133,7 @@ class VirtualStaff():
         for x in self.x_offsets[1:]:
             painter.drawRect(QRect(x, self.staff_offset, 1, 4*self.line_spacing))
 
-    def mousePressEvent(self, event):
+    def mouse_press(self, event):
         if event.button() == Qt.LeftButton:
             click_pos = event.pos()
             x0 = click_pos.x()
