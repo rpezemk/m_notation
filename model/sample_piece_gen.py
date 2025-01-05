@@ -9,9 +9,13 @@ def generate_sample_piece(n_parts: int, n_measures: int):
         for measure_no in range(0, n_measures):
             if (part_no + measure_no) % 2 == 0:
                 notes = [Note(0, Ratio(t=(1, 4))).dot(), 
-                         Note(7, Ratio(t=(1, 8))), 
-                         Note(0, Ratio(t=(1, 4))).double_dot(), 
-                         Note(7, Ratio(t=(1, 16)))]
+                         Note(7, Ratio(t=(1, 4))).dot(), 
+                         *MTuple.apply(scale = Ratio(t=(2, 3)),
+                           notes=[
+                                Note(-2, base_duration=Ratio.EIGHTH()), 
+                                Note(13, base_duration=Ratio.EIGHTH()), 
+                                Note(-3, base_duration=Ratio.EIGHTH()), 
+                               ]),]
                 
                 measure = Measure(part_no=part_no, m_no=measure_no, parent=part, notes=notes)
                 for note in notes:
@@ -23,8 +27,8 @@ def generate_sample_piece(n_parts: int, n_measures: int):
                     *MTuple.apply(scale = Ratio(t=(2, 3)),
                            notes=[
                                 Note(10, base_duration=Ratio.EIGHTH()), 
-                                Note(4, base_duration=Ratio.EIGHTH()), 
-                                Note(10, base_duration=Ratio.EIGHTH()), 
+                                Note(0, base_duration=Ratio.EIGHTH()), 
+                                Note(-3, base_duration=Ratio.EIGHTH()), 
                                ]), 
                     Note(0, base_duration=Ratio.SIXTEENTH()), 
                     Note(0, base_duration=Ratio.SIXTEENTH()), 

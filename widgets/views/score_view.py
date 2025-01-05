@@ -22,7 +22,7 @@ class ScoreView(View):
         super().__init__(margin, spacing, children, stretch, fixed_width)
         self.back = QWidget(self.widget)
         self.widget.setFocusPolicy(Qt.NoFocus)
-        self.piece = generate_sample_piece(5, 11)
+        self.piece = generate_sample_piece(7, 11)
         self.max_n_measures = 4
         self.curr_range: tuple[int, int] = (0, self.max_n_measures)
         self.chunk: Chunk = self.piece.to_chunk(self.curr_range[0], self.curr_range[1])
@@ -35,7 +35,7 @@ class ScoreView(View):
         self.part_widgets: list[VirtualStaff] = []
         
         for idx, h_chunk in enumerate(self.chunk.h_chunks):
-            part_widget = VirtualStaff(parent=None, y_offset=idx * 100)
+            part_widget = VirtualStaff(parent=None, y_offset=idx * 130)
             self.part_widgets.append(part_widget)
             # self.layout.addWidget(part_widget)
         
