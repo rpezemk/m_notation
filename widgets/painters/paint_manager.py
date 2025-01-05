@@ -26,7 +26,7 @@ def m_paint_visual(q_painter: QPainter, v_n: VisualNote):
     maybe = [p for p in painter_data_list if p.t == inner_type and p.d == inner.base_duration]
     
     dot = v_n.inner.dotting
-    
+    is_up = v_n.inner.orientation_up
     dot_str = ""
     dptr = [dptr2 for dptr2 in dot_painters if dptr2[0] == dot]
     if dptr:
