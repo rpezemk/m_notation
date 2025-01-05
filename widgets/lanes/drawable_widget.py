@@ -35,7 +35,6 @@ class DrawableWidget(QWidget):
         painter.end()
         
     def mousePressEvent(self, event):
-        print('clicked')
         for staff in self.staffs:
                 staff.mouse_press(event)
         self.update()
