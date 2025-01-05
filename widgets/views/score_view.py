@@ -204,7 +204,7 @@ class ScoreView(View):
     def delete_selected_notes(self):
         for pt in self.part_widgets:
             pt.delete_selected_notes()
-        
+        self.update()
         
     def order_notes_by_part_no(self):
         maybe: list[VisualNote] = [n for pt in self.part_widgets for n in pt.get_last_selected_note()]
