@@ -5,14 +5,14 @@ from widgets.lanes.BarrableWidget import BarrableWidget
 from widgets.lanes.StaffWidget import VirtualStaff
 from widgets.note_widgets.VisualNote import VisualNote
 from widgets.painters.paint_manager import m_paint_tuple, m_paint_visual
-
+from PyQt5.QtWidgets import QWidget
 
 from PyQt5.QtCore import QRect, Qt
 from PyQt5.QtGui import QPainter
 
 
-class DrawableWidget(BarrableWidget):
-    def __init__(self, parent=None, redraw_func: Callable[[QPainter, int],None] = None, staffs: list[VirtualStaff] = None):
+class DrawableWidget(QWidget):
+    def __init__(self, parent=None, redraw_func: Callable[[int, QWidget],None] = None, staffs: list[VirtualStaff] = None):
         super().__init__(parent=parent)
         self.staff_widget = parent
         self.setCursor(Qt.CrossCursor)
@@ -31,7 +31,7 @@ class DrawableWidget(BarrableWidget):
             return
         painter = QPainter(self)
         if self.redraw_func:
-            self.redraw_func(painter, self.width())
+            self.redraw_func(self.width(), self)
         painter.end()
         
     def mousePressEvent(self, event):

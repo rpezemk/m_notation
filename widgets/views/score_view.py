@@ -22,7 +22,7 @@ class ScoreView(View):
         super().__init__(margin, spacing, children, stretch, fixed_width)
         self.back = QWidget(self.widget)
         self.widget.setFocusPolicy(Qt.NoFocus)
-        self.piece = generate_sample_piece(2, 11)
+        self.piece = generate_sample_piece(5, 11)
         self.max_n_measures = 4
         self.curr_range: tuple[int, int] = (0, self.max_n_measures)
         self.chunk: Chunk = self.piece.to_chunk(self.curr_range[0], self.curr_range[1])
@@ -40,8 +40,8 @@ class ScoreView(View):
             # self.layout.addWidget(part_widget)
         
         self.drawable = DrawableWidget(parent=None, redraw_func=self.paint_content, staffs=self.part_widgets)
-        self.drawable.setFixedHeight(500)
         self.layout.addWidget(self.drawable)
+        self.layout.setStretch(1, 1)
         self.refresh_parts()    
         self.layout.addStretch()
         
@@ -75,14 +75,15 @@ class ScoreView(View):
         self.widget.resizeEvent = self.resizeEvent
     
     def paintEvent(self, event):
-        self.drawable.update()
+        # self.drawable.update()
         ...
     
-    def paint_content(self, painter: QPainter, width: int):
+    def paint_content(self, width: int, widget):
         for idx, h_chunk in enumerate(self.chunk.h_chunks):
-            self.part_widgets[idx].draw_content(painter, width)
-        ...
-    
+            painter2 = QPainter(widget)
+            self.part_widgets[idx].draw_content(painter2, width)
+            painter2.end()
+
     def stop(self):
         self.ruler_widget.stop()
         self.play_button.set_state(False)
@@ -135,22 +136,26 @@ class ScoreView(View):
         print("select next note (ScoreView)")
         for pt in self.part_widgets:
             pt.select_next_note()
+        self.update()    
             
     def select_next_note_in_next_measure(self):
         print("select next note (ScoreView)")
         for pt in self.part_widgets:
             pt.select_next_note_in_next_measure()
+        self.update()    
             
     def select_prev_note_in_prev_measure(self):
         print("select next note (ScoreView)")
         for pt in self.part_widgets:
             pt.select_prev_note_in_prev_measure()
+        self.update()    
             
     def select_prev_note(self):
         print("select prev note (ScoreView)")
         for pt in self.part_widgets:
             pt.select_prev_note()
-            
+        self.update()    
+        
     def select_note_above(self):
         maybe = self.order_notes_by_part_no()[:1]
         if not maybe:
