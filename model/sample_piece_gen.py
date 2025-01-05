@@ -8,14 +8,21 @@ def generate_sample_piece(n_parts: int, n_measures: int):
         part = Part(piece=piece)
         for measure_no in range(0, n_measures):
             if (part_no + measure_no) % 2 == 0:
-                notes = [Note(0, Ratio(t=(1, 4))).dot(), 
-                         Note(7, Ratio(t=(1, 4))).dot(), 
+                notes = [Note(0, Ratio(t=(1, 4))), 
+                         Note(7, Ratio(t=(1, 4))), 
                          *MTuple.apply(scale = Ratio(t=(2, 3)),
                            notes=[
-                                Note(-2, base_duration=Ratio.EIGHTH()), 
-                                Note(13, base_duration=Ratio.EIGHTH()), 
-                                Note(-3, base_duration=Ratio.EIGHTH()), 
-                               ]),]
+                                Note(0, base_duration=Ratio.EIGHTH()), 
+                                Note(0, base_duration=Ratio.EIGHTH()), 
+                                Note(0, base_duration=Ratio.EIGHTH()), 
+                               ]),
+                         *MTuple.apply(scale = Ratio(t=(2, 3)),
+                           notes=[
+                                Note(0, base_duration=Ratio.EIGHTH()), 
+                                Note(0, base_duration=Ratio.EIGHTH()), 
+                                Note(0, base_duration=Ratio.EIGHTH()), 
+                               ]),
+                         ]
                 
                 measure = Measure(part_no=part_no, m_no=measure_no, parent=part, notes=notes)
                 for note in notes:
@@ -26,20 +33,20 @@ def generate_sample_piece(n_parts: int, n_measures: int):
                     Note(0, base_duration=Ratio.QUARTER()), 
                     *MTuple.apply(scale = Ratio(t=(2, 3)),
                            notes=[
-                                Note(10, base_duration=Ratio.EIGHTH()), 
                                 Note(0, base_duration=Ratio.EIGHTH()), 
-                                Note(-3, base_duration=Ratio.EIGHTH()), 
+                                Note(0, base_duration=Ratio.EIGHTH()), 
+                                Note(0, base_duration=Ratio.EIGHTH()), 
                                ]), 
                     Note(0, base_duration=Ratio.SIXTEENTH()), 
                     Note(0, base_duration=Ratio.SIXTEENTH()), 
                     Note(0, base_duration=Ratio.SIXTEENTH()), 
                     Note(0, base_duration=Ratio.SIXTEENTH()), 
-                    Note(7, base_duration=Ratio.THIRTY_SECOND()), 
-                    Note(7, base_duration=Ratio.THIRTY_SECOND()), 
-                    Note(7, base_duration=Ratio.THIRTY_SECOND()), 
-                    Note(7, base_duration=Ratio.THIRTY_SECOND()), 
+                    Note(0, base_duration=Ratio.THIRTY_SECOND()), 
+                    Note(0, base_duration=Ratio.THIRTY_SECOND()), 
+                    Note(0, base_duration=Ratio.THIRTY_SECOND()), 
+                    Note(0, base_duration=Ratio.THIRTY_SECOND()), 
                     Note(0, base_duration=Ratio.SIXTEENTH()), 
-                    Note(7, base_duration=Ratio.SIXTEENTH()), 
+                    Note(0, base_duration=Ratio.SIXTEENTH()), 
                     ]
                 measure = Measure(part_no=part_no, m_no=measure_no, parent=part, notes=notes)
                 for note in notes:
