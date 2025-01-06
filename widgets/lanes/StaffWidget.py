@@ -98,7 +98,9 @@ class VirtualStaff():
 
             if seg_end - seg_start < 10:
                 return
-            width_in_beats = sum(th.real_duration().to_float() for th in bar.time_holders)
+            
+            width_in_beats = bar.ruler_bar.total_len_ratio.to_float()
+            
             for note in bar.time_holders:
                 curr_x = int(note.ruler_event.offset_ratio.to_float() * (seg_end - seg_start)/width_in_beats + seg_start)
                 if isinstance(note, Note):

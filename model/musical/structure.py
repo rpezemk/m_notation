@@ -142,6 +142,7 @@ class Measure():
         self.part_no = part_no
         self.time_holders = [] if notes is None else notes
         self.calc_offsets()
+        self.ruler_bar: RulerBar = None
         
     def replace_note(self, old: TimeHolder, new: TimeHolder):
         if not old in self.time_holders:
@@ -219,6 +220,12 @@ class RulerBar():
     def __init__(self, events: list[RulerEvent]):
         self.events = events
         
+        curr = Ratio(t=(0, 1))
+        for e in self.events:
+            curr += e.len_ratio
+            
+        self.total_len_ratio = curr
+        
 class HorizontalChunk():
     """model for vertical one-measure length, n-parts height section.
     """
@@ -251,6 +258,9 @@ class VerticalChunk():
                 th.ruler_event = evt
                 
         ruler_bar = RulerBar(ruler_events)
+        for m in self.vertical_measures:
+            m.ruler_bar = ruler_bar
+        
         return ruler_bar
 
     def to_moving_sum(lane: list[Ratio]) -> list[Ratio]:
