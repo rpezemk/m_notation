@@ -11,12 +11,13 @@ K_T = Qt.Key_T
 K_V = Qt.Key_V
 K_H = Qt.Key_H
 K_X = Qt.Key_X
+K_O = Qt.Key_O
 K_Q = Qt.Key_Q
 K_R = Qt.Key_R
 K_SP = Qt.Key_Space
 K_DEL = Qt.Key_Delete
 K_ESC = Qt.Key_Escape
-
+K_SHIFT = Qt.Key_Shift
 K_LEFT = Qt.Key_Left
 K_RIGHT = Qt.Key_Right
 K_UP = Qt.Key_Up
@@ -42,7 +43,8 @@ S_ARROW_LEFT = SubCmd("ARROW_LEFT", [K_LEFT])
 S_ARROW_RIGHT = SubCmd("ARROW_RIGHT", [K_RIGHT]) 
 S_ARROW_UP = SubCmd("ARROW_UP", [K_UP])
 S_ARROW_DOWN = SubCmd("ARROW_DOWN", [K_DOWN])
-
+S_SHIFT_ARR_LEFT = SubCmd("sdfsdf", [K_SHIFT, K_LEFT])
+S_SHIFT_ARR_RIGHT = SubCmd("sdfsdf", [K_SHIFT, K_RIGHT])
 S_R = SubCmd("ROTATE", [K_R])
 
 CTRL_ARROW_LEFT = SubCmd("sdf", [K_CTRL, K_LEFT])
@@ -80,3 +82,6 @@ CMD_ESC = CompoundCommand("ESC", [S_ESC])
 
 C_SEL_VERTICAL_MEASURE = CompoundCommand("SEL_VERT_MEASURE", [S_CTRL_T, S_CTRL_V])
 C_SEL_HORIZONTAL_MEASURES = CompoundCommand("SEL_VERT_MEASURE", [S_CTRL_T, S_CTRL_H])
+C_ADD_PREV_TO_SEL = CompoundCommand("SEL_VERT_MEASURE", [S_SHIFT_ARR_LEFT])
+C_ADD_NEXT_TO_SEL = CompoundCommand("SEL_VERT_MEASURE", [S_SHIFT_ARR_RIGHT])
+

@@ -132,6 +132,36 @@ class ScoreView(View):
     """COMMANDS' methods
     """
     
+    def add_next_to_sel(self):
+        for pt in self.part_widgets:
+            last_sel = pt.get_last_selected_note()
+            if not last_sel:
+                continue
+            sel = last_sel[0]
+            idx = pt.visual_notes.index(sel)
+
+            if idx == len(pt.visual_notes) - 1:
+                continue
+            nxt = pt.visual_notes[idx + 1]
+            nxt.inner.is_selected = True
+            
+        self.update()
+        
+    def add_prev_to_sel(self):
+        for pt in self.part_widgets:
+            last_sel = pt.get_first_selected_note()
+            if not last_sel:
+                continue
+            sel = last_sel[0]
+            idx = pt.visual_notes.index(sel)
+
+            if idx == 0:
+                continue
+            nxt = pt.visual_notes[idx - 1]
+            nxt.inner.is_selected = True
+        self.update()    
+        
+        
     def select_vertical(self):
         for v_c in self.chunk.v_chunks:
             sel = [th for m in v_c.vertical_measures for th in m.time_holders if th.is_selected]
