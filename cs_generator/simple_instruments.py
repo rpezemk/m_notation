@@ -6,7 +6,7 @@ max_time = 7200 # two hours
 class GlobalTempPath(GlobalVariable):
     def __init__(self, name):
         self.name = name
-        
+
     def get_variable_def(self):
         res = f'{self.name} init "" ; '
         return res
@@ -14,7 +14,7 @@ class OscHandle(GlobalVariable):
     def __init__(self, port, name):
         self.port = port
         self.name = name
-        
+
     def get_variable_def(self):
         res = f"{self.name} OSCinit {self.port}"
         return res
@@ -40,8 +40,8 @@ class OscPanicReceive(CsdInstrument):
         endif
     """
         self.eternal_events = [{"p1":0, "p2":max_time}]
-    
-    
+
+
 class OscMetroReceive(CsdInstrument):
     def __init__(self, osc_handle:OscHandle, **kwargs):
         super().__init__(**kwargs)
@@ -58,8 +58,8 @@ class OscMetroReceive(CsdInstrument):
         endif
     """
         self.eternal_events = [{"p1":0, "p2":max_time}]
-    
-    
+
+
 class BeepInstr(CsdInstrument):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -67,7 +67,7 @@ class BeepInstr(CsdInstrument):
         a1 oscili 0.5, 4*440
         outs 0.1*a1, 0.1*a1
         """
-        
+
 class TestInstr(CsdInstrument):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -76,16 +76,16 @@ class TestInstr(CsdInstrument):
         outs 0.07*a1, 0.07*a1
         event_i "i", 2, 60, p3
         """
-        
+
         self.eternal_events = [{"p1":0, "p2":max_time}]
-        
-        
+
+
 class CsHeartBeatToPy(CsdInstrument):
     def __init__(self, freq:int, port:int, **kwargs):
         super().__init__(**kwargs)
         self.freq = freq
         self.port = port
-        
+
         self.body_str = f"""
             ktime init 0
             kvalue init 0
@@ -97,23 +97,23 @@ class CsHeartBeatToPy(CsdInstrument):
             OSCsend kvalue, "", {self.port}, "/heartbeat", "i", kvalue
             kprevTrig = ktrig
         """
-        
+
         self.eternal_events = [{"p1":0, "p2":max_time}]
-        
-        
+
+
 class TapeNoiseInstr(CsdInstrument):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        
+
         self.body_str = f"""
-            aNoise rand -1, 1           
+            aNoise rand -1, 1
             aOut = aNoise * 0.002
-            outs aOut, aOut             
+            outs aOut, aOut
         """
-        
+
         self.eternal_events = [{"p1":0, "p2":max_time}]
 
-        
 
-        
-        
+
+
+

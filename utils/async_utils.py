@@ -9,10 +9,10 @@ class WrappedJob():
     def try_run(self):
         if not self.job_func or self.is_running:
             return
-        
+
         t1 = threading.Thread(target=self.__inner_job__, args=[])
         t1.start()
-        
+
     def __inner_job__(self):
         t1 = threading.Thread(target=self.job_func, args=[])
         t1.start()

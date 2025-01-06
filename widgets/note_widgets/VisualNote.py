@@ -9,7 +9,7 @@ class VisualNote():
         self.inner = note
         self.point = point
         self.is_selected = False
-        
+
 class VisualTuple():
     def __init__(self, v_notes: list[VisualNote]):
         self.notes = v_notes

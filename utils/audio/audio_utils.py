@@ -11,7 +11,7 @@ def list_audio_devices():
         for k in keys:
             new_dict[k] = dev[k]
         res_dicts.append(new_dict)
-        
+
     return res_dicts
 
 def calculate_simplified_rms(samples, chunk_size=10):
@@ -20,13 +20,13 @@ def calculate_simplified_rms(samples, chunk_size=10):
 
     # Compute the number of chunks
     n_chunks = len(samples) // chunk_size
-    
+
     # Reshape the samples array into chunks
     chunks = samples[:n_chunks * chunk_size].reshape(-1, chunk_size)
-    
+
     # Compute the maximum absolute value for each chunk
     max_abs = np.max(np.abs(chunks), axis=1)
-    
+
     return max_abs.tolist()
 
 

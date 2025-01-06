@@ -24,8 +24,8 @@ synth = """
 
 {% for instrument in numbered_instruments %}
 
-    ; I_NAME: {{ instrument["i_name"] }} 
-    ; INSTR_NO: {{ instrument["i_no"] }} 
+    ; I_NAME: {{ instrument["i_name"] }}
+    ; INSTR_NO: {{ instrument["i_no"] }}
     instr {{ instrument["i_no"] }}
 {{     instrument["body"] }}
     endin
@@ -36,7 +36,7 @@ synth = """
 <CsScore>
 {% for ev_dict in all_events %}
   ; ################# INSTR_NO: {{ ev_dict["i_no"] }} ####################
-  {% for single_event in ev_dict["instr_events"] -%} 
+  {% for single_event in ev_dict["instr_events"] -%}
     i {{ ev_dict["i_no"] }}  {% for k in single_event.keys() %} {{ single_event[k] }} {% endfor %};
   {% endfor -%}
 {% endfor %}

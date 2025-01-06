@@ -5,7 +5,7 @@ import os
 def get_file_size(path):
     """Return the file size in human-readable format (e.g., MB, GB)."""
     size_bytes = os.path.getsize(path)  # Get size in bytes
-    
+
     # Define size units
     units = ["B", "KB", "MB", "GB", "TB", "PB"]
     size = size_bytes
@@ -28,7 +28,7 @@ def try_get_dir_content(path='.') -> tuple[bool, list[str], list[str], str]:
         files = [entry.name for entry in entries if entry.is_file()]
         dirs = ["../", *list([entry.name + "/" for entry in entries if entry.is_dir()])]
         return (True, dirs, files, None)
-    
+
     except FileNotFoundError:
         return (False, [*dirs], [*files], f"Directory '{path}' not found.")
     except PermissionError:
@@ -43,13 +43,13 @@ def get_nice_dir_content(path='.') -> tuple[bool, list[str], list[str], str]:
         files = [entry.__fspath__() for entry in entries if entry.is_file()]
         dirs = [*list([entry.__fspath__() for entry in entries if entry.is_dir()])]
         return (True, dirs, files, None)
-    
+
     except FileNotFoundError:
         return (False, [*dirs], [*files], f"Directory '{path}' not found.")
     except PermissionError:
         return (False, [*dirs], [*files], f"Permission denied to access '{path}'.")
-    
-    
+
+
 def get_absolute_path(relative_path: str) -> str:
     current_dir = os.getcwd()
     return os.path.abspath(os.path.join(current_dir, relative_path))

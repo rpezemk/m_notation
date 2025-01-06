@@ -11,11 +11,11 @@ class LogLevel(Enum):
 class MLogger():
     def __init__(self, log_func: Callable[[str],None]):
         self.log_func = log_func
-        
-    
+
+
     def log(self, txt: str, level: LogLevel = LogLevel.INFO):
         if self.log_func is not None:
             self.log_func(txt)
-            
+
 
 Log: MLogger = None

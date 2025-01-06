@@ -15,41 +15,41 @@ class SubCmd():
     def __init__(self, name: str, keys: list[Qt.Key|str|Qt.MouseButton]):
         self.name = name
         self.keys = keys
-        
+
     def check_sub(self, keys) -> SubCmdState:
         if len(keys) > len(self.keys):
             return SubCmdState.FAIL
-        
+
         for idx, k in enumerate(keys):
             i = idx
             el = k
-        
+
         maybe_matching = [k in self.keys for idx, k in enumerate(keys)]
         is_match = all(maybe_matching)
-        
+
         if not is_match:
             return SubCmdState.FAIL
         elif len(keys) == len(self.keys):
             return SubCmdState.TOTAL_MATCH
         else:
             return SubCmdState.PART_OK
-        
+
     def __str__(self):
         abc = ", ".join([str(k) for k in self.keys])
         return self.name + ":  " + abc
-        
-    
+
+
 class CompoundCommand():
     def __init__(self, name: str, sub_commands: list[SubCmd]):
         self.name = name
         self.sub_commands = sub_commands
         self.sub_no = 0
         self.curr_sub_cmd = sub_commands[0]
-        
+
     def reset(self):
         self.sub_no = 0
         self.curr_sub_cmd = self.sub_commands[0]
-        
+
 
     def check_match(self, keys) -> SubCmdState:
         sub_res = self.curr_sub_cmd.check_sub(keys)
@@ -65,10 +65,10 @@ class CompoundCommand():
                 return SubCmdState.PART_OK
         elif sub_res == SubCmdState.PART_OK:
             return SubCmdState.PART_OK
-        
+
 
     def __str__(self):
         abc = "".join(["\n    " + str(k) for k in self.sub_commands])
         return self.name + abc
-    
+
 

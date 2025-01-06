@@ -19,8 +19,8 @@ red = QColor(200, 44, 44)
 
 def m_paint_visual(q_painter: QPainter, v_n: VisualNote):
     el_painter.paint_visual_note(q_painter, v_n)
-        
-        
-        
+
+
+
 def m_paint_tuple(q_painter: QPainter, v_notes: list[VisualNote]):
     el_painter.paint_tuple(q_painter, v_notes)

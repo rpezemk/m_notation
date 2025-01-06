@@ -24,7 +24,7 @@
 
 
     ; ################ OSC RECEIVER #################
-    instr 99077 
+    instr 99077
         kDestInstrNo init 0
         kInstanceNo init 0
         kParamNo init 0
@@ -40,7 +40,7 @@
 
 
     ;############## ROUTING INSTR ################
-    instr 39 
+    instr 39
         kPitch chnget "PORTAMENTO_OUT_01"
         kVel chnget "MIDI_VELOCITY_01"
         kstatus, kchan, kdata1, kdata2 midiin;
@@ -48,7 +48,7 @@
         kVolume init 0
         if(kstatus==224) then
             kbend= 2*(kdata2/64 - 1)
-        endif 
+        endif
         if kstatus == 176 then
             if kdata1 == 1 then
                 kModWheel = kdata2 / 127.0
@@ -57,7 +57,7 @@
                 kVolume = kdata2 / 127.0
             endif
         endif
-    
+
         kPitch = kPitch + kbend
         kLfo_1 chnget "LFO_OUT_1"
         kLfo_2 chnget "LFO_OUT_2"
@@ -88,7 +88,7 @@
         iBase = 0.2
         kAmpEnv chnget "ENV_1"
         kAmpEnv = kAmpEnv * (iBase + (1-iBase) * kVel)
-        asumL = (asig4 + asig5 + asig6) * kAmpEnv 
+        asumL = (asig4 + asig5 + asig6) * kAmpEnv
         asumR = (asig*0.7 + asig2*1.5 + asig3) * kAmpEnv
 
         ;######## PASS AUDIO THROUTH FILTERS ###########
@@ -113,7 +113,7 @@
 
 
     ; ######### MASTER EFFECTS && OUTPUT ##########
-    instr 99999 
+    instr 99999
         ain1 init 0.2
         ain2 init 0.2
         ain1 chnget "MASTER_INPUT_L_01"
@@ -123,20 +123,20 @@
         aRvbL,aRvbR freeverb ain1, ain2,kroomsize,kHFDamp
         outs aRvbL, aRvbR ; send audio to outputs
     endin
-    
+
     instr 5 ; ########### LFO MODULATOR #############
         iInstanceNo init p4
-        kfreq init p5    
-        kamp = 0.5     
-        koffset = 0.5  
-        klfo lfo kamp, kfreq, 1 ; TRI 
+        kfreq init p5
+        kamp = 0.5
+        koffset = 0.5
+        klfo lfo kamp, kfreq, 1 ; TRI
         klfo_shifted = klfo + koffset
         SOutputName sprintf "%s%d", "LFO_OUT_", iInstanceNo
         chnset klfo_shifted, SOutputName
     endin
-    
+
     ;################# GENERATOR ###################
-    instr 19 
+    instr 19
         iFilterNo init  p4 ;A
         SInputName sprintf "%s%d", "GEN_NOTE_", iFilterNo
         kCV chnget SInputName
@@ -147,11 +147,11 @@
     endin
 
     ;############## FILTER ################
-    instr 20 
+    instr 20
         iFilterNo init  p4 ;A
         SInputName sprintf "%s%d", "FILTER_INPUT_", iFilterNo
         SOutputName sprintf "%s%d", "FILTER_OUT_", iFilterNo
-        
+
         SFreqName sprintf "%s%d", "FILTER_FREQ_", iFilterNo
         SResName sprintf "%s%d", "FILTER_RES_", iFilterNo
 
@@ -162,7 +162,7 @@
         asig moogvcf asig, cpsmidinn(kPitchEnv + 40), kRes
         asig = asig
         chnset asig, SOutputName
-    endin 
+    endin
 
     ;################ MIDI DETECTOR #################
     instr 1	
@@ -187,7 +187,7 @@
 
 
     ;############# PORTAMENTO ################
-    instr 8 
+    instr 8
         kCurr init 5
         kPrevNote init 5
         kNote init 5
@@ -200,7 +200,7 @@
 
 
     ;############## ENVELOPE INSTR ##############
-    instr 21 
+    instr 21
         iAtt_01 init  p4 ;A
         iDec_01 init  p5 ;D
         iSus_01 init  p6 ;S
@@ -252,9 +252,9 @@
             kAttTimer_01 = 0
         endif
 
-        if kState_01 == 2 then 
+        if kState_01 == 2 then
             kDecTimer_01 = kTime - kDecSnap_01
-        else 
+        else
             kDecTimer_01 = 0
         endif
 
@@ -297,7 +297,7 @@
         if kState_01 == 1 then
             kEnv_01 = kAttTimer_01 / iAtt_01
         elseif kState_01 == 2 then
-            kEnv_01 = iSus_01 +  (1 - iSus_01) * (iDec_01 - kDecTimer_01)/iDec_01 
+            kEnv_01 = iSus_01 +  (1 - iSus_01) * (iDec_01 - kDecTimer_01)/iDec_01
         elseif kState_01 == 3 then
             kEnv_01 = iSus_01
         elseif kState_01 == 4 then
@@ -315,11 +315,11 @@
 
     endin
 
-    instr 1000 ; REMOVE KEYPRESS 
+    instr 1000 ; REMOVE KEYPRESS
         kPress = 0
         chnset kPress, "KEY_PRESSED"
     endin
-        
+
 </CsInstruments>
 <CsScore>
     ; TABLES
@@ -331,7 +331,7 @@
 ;##########################################
 ;########### INSTRUMENT EVENTS ############
 ;##########################################
-; instrNo   start  dur.  
+; instrNo   start  dur.
     i5      0.01   7200  1   5; LFO1
     i5      0.01   7200  2   0.5; LFO2
 

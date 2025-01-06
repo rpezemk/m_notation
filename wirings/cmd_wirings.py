@@ -8,14 +8,14 @@ from wirings.cmd_definitions import *
 score_view_bindings = CommandContainer         \
     .for_widget(ScoreView)                     \
     .for_mode(ScoreViewModeEnum.UNDEFINED)     \
-    .define_bindings(    
+    .define_bindings(
     [
         (CMD_NEXT, lambda view: view.select_next_note()),
         (CMD_PREV, lambda view: view.select_prev_note()),
         (CMD_UP, lambda view: view.select_note_above()),
         (CMD_DOWN, lambda view: view.select_note_below()),
         (CMD_DEL, lambda view: view.delete_selected_notes()),
-        
+
         (CMD_CTRL_NEXT, lambda view: view.select_next_note_in_next_measure()),
         (CMD_CTRL_PREV, lambda view: view.select_prev_note_in_prev_measure()),
         (CMD_ROTATE, lambda view: view.rotate_selected_notes()),

@@ -18,7 +18,7 @@ class BaseWindow(QMainWindow):
         super().__init__()
         self.setWindowTitle("m_notator")
         self.setFocusPolicy(Qt.StrongFocus)
-        self.setStyleSheet(style)        
+        self.setStyleSheet(style)
         self.mosc_server = MOscServer(local_ip, cs_to_py_port,
                                        [("/heartbeat", lambda addr, args: self.heartbeat_checker.handle_flag(args))]
                                       ).start_async()
@@ -26,7 +26,7 @@ class BaseWindow(QMainWindow):
         self.heartbeat_checker = HeartbeatChecker(0.5).bind_to(self.indicator).start()
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.root_kbd_resolver: KbdResolver = root_kbd_resolver
-        
+
     @override
     def resizeEvent(self, event):
         self.root_kbd_resolver.clear_curr_input()

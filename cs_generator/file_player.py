@@ -11,7 +11,7 @@ class FilePlayerInstr(CsdInstrument):
         iduration init p3
         ioffset init p4
         a_L, a_R diskin2 Spath, 1, ioffset;
-        outs a_L, a_R    
+        outs a_L, a_R
         """
 
 

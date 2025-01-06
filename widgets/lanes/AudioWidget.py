@@ -20,7 +20,7 @@ class AudioWidget(LaneWidget):
         self.audiofile = AudioFile(self.abs_path_sample)
         self.simple = self.audiofile.get_simplified(10, 10)
         self.audio_ranges = g_audio_ranges
-        
+
     @override
     def set_content(self, data: Any):
         if isinstance(data, str):
@@ -43,8 +43,8 @@ class AudioWidget(LaneWidget):
         pen = QPen(self.very_light_gray)  # Set the pen color to black
         self.draw_lane()
         self.draw_all_data()
-        
-        
+
+
     def draw_lane(self):
         painter = QPainter(self)
         painter.setPen(self.dark_gray)
@@ -54,7 +54,7 @@ class AudioWidget(LaneWidget):
         rect = QRect(0, 0, w-1, h-1)
         painter.drawRect(rect)
         painter.end()
-        
+
     def draw_all_data(self):
         for rng in self.audio_ranges:
             start = rng[0]

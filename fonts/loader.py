@@ -27,6 +27,5 @@ def try_get_music_font() -> Tuple[bool,QFont]:
         ok = True
     except Exception as e:
         print(f"Error loading font: {e}")
-        
+
     return ok, res_font
-    

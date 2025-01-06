@@ -14,14 +14,14 @@ class TimeHolder():
         self.tuple_start = False
         self.tuple_end = False
         self.orientation_up = True
-        
+
     def flip_orientation(self):
         ...
-        
+
     def real_duration(self):
         res = (self.base_duration + self.base_duration * self.dotting) * self.scale
         return res
-    
+
     def dot(self):
         self.dotting = Ratio(t=(1, 2))
         return self
@@ -29,10 +29,10 @@ class TimeHolder():
     def double_dot(self):
         self.dotting = Ratio(t=(3, 4))
         return self
-        
+
     def __str__(self):
         return f"d: {self.base_duration}"
-    
+
     def clone_as_rest(self):
         rest = Rest(base_duration=self.base_duration, measure=self.measure, dotting=self.dotting)
         rest.scale = self.scale
@@ -40,11 +40,11 @@ class TimeHolder():
         rest.tuple_end = self.tuple_end
         rest.offset_ratio = self.offset_ratio
         return rest
-    
+
     def set_selected(self):
         self.is_selected = True
         return self
-        
+
 class Rest(TimeHolder):
     def __init__(self, base_duration: Ratio = None, measure: 'Measure' = None, dotting: Dotting = None):
         super().__init__(base_duration, measure, dotting)
@@ -52,34 +52,34 @@ class Rest(TimeHolder):
 
     def __str__(self):
         return f"d: {self.base_duration}"
-    
-    
+
+
 class MTuple():
     def apply(scale: Ratio, notes: list[TimeHolder]):
         if not notes:
             return notes
-        
+
         for n in notes:
             n.scale = scale.clone()
-        
+
         notes[:1][0].tuple_start = True
         notes[-1:][0].tuple_end = True
         return notes
-    
+
 class Note(TimeHolder):
     def __init__(self, pitch, base_duration = None, measure: 'Measure' = None, dotting: Dotting = None):
         super().__init__(base_duration, measure, dotting)
         self.measure = measure
         self.pitch = pitch
         self.orientation_up = True
-                          
+
     def __str__(self):
         return f"d: {self.base_duration}"
-    
+
     def flip_orientation(self):
         self.orientation_up = not self.orientation_up
-        
-                
+
+
 class Measure():
     def __init__(self, part_no: int, m_no: int, notes: list[TimeHolder]=None, parent: 'Part'=None):
         self.part = parent
@@ -90,10 +90,10 @@ class Measure():
     def replace_note(self, old: TimeHolder, new: TimeHolder):
         if not old in self.time_holders:
             return
-          
+
         idx = self.time_holders.index(old)
         self.time_holders[idx] = new
-        
+
 class Part():
     def __init__(self, measures: list[Measure]=None, piece: 'Piece'=None):
         self.piece = piece
@@ -114,8 +114,8 @@ class ConductorPart():
         self.base_tempo_mark = initial_tempo_mark
         self.tempo_marks: list[TempoMark] = [initial_tempo_mark]
 
-    
-    
+
+
 class Piece():
     def __init__(self, parts: list[Part]=None, conductor_part: ConductorPart = None):
         self.parts = [] if parts is None else parts
@@ -130,29 +130,29 @@ class Piece():
     def filter_by_measures(self, m_idx, m_count):
         filtered = [p.measures[m_idx:][:m_count] for p in self.parts]
         return filtered
-    
+
     def n_measures(self):
         if not self.parts:
             return 0
-        
+
         return len(self.parts[0].measures)
-    
-    
+
+
 
 class RulerEvent():
     def __init__(self, len_ratio: Ratio, offset_ratio: Ratio):
         self.len_ratio = len_ratio
         self.offset_ratio = offset_ratio
         self.inner_events:list[TimeHolder] = []
-    
+
     def __str__(self):
         return f"at: {self.offset_ratio}, d:{self.len_ratio}, i_es:{len(self.inner_events)}"
-    
+
 class CsEvent():
     def __init__(self, i_no: int, start_offset: float, duration: float):
         ...
-        
-        
+
+
 class HorizontalChunk():
     """model for vertical one-measure length, n-parts height section.
     """
@@ -176,17 +176,17 @@ class VerticalChunk():
         moving_sum_lanes: list[tuple[list[Ratio], list[Ratio]]] = [(lane, VerticalChunk.to_moving_sum(lane)) for lane in lanes]
         mov_ordered_list =[Ratio.zero(), *sorted(set([r for bar_ratios in moving_sum_lanes for r in bar_ratios[1]]), key=lambda r: r.to_float())]
         ruler_events: list[RulerEvent] = []
-         
+
 
         for idx, offset_ratio in enumerate(mov_ordered_list[:-1]):
             len_ratio = mov_ordered_list[idx+1] - offset_ratio
             evt = RulerEvent(len_ratio, offset_ratio)
             ruler_events.append(evt)
-        
+
         for evt in ruler_events:
             time_holders = [th for m in self.vertical_measures for th in m.time_holders if th.offset_ratio == evt.offset_ratio]
             evt.inner_events = time_holders
-        
+
         return ruler_events
 
     def to_moving_sum(lane: list[Ratio]) -> list[Ratio]:
@@ -196,7 +196,7 @@ class VerticalChunk():
             curr = curr + r
             res.append(curr)
         return res
-    
+
 class Chunk:
     def __init__(self, v_chunks: list[VerticalChunk]):
         self.v_chunks = v_chunks
@@ -214,7 +214,7 @@ class Chunk:
     def all_time_holders(self):
         time_holders = [th for v_ch in self.v_chunks for m in v_ch.vertical_measures for th in m.time_holders]
         return time_holders
-            
+
 
     def get_last_by(self, func: Callable[[TimeHolder], bool]):
         time_holders = [th for v_ch in self.v_chunks for m in v_ch.vertical_measures for th in m.time_holders if func(th)]
@@ -224,11 +224,11 @@ class Chunk:
 class PointObject():
     def __init__(self, note: Note):
         pass
-    
+
 class Staccato():
     def __init__(self, note: Note):
         pass
-    
+
 class Tenuto():
     def __init__(self, note: Note):
         pass
@@ -236,27 +236,27 @@ class Tenuto():
 class Dynamics():
     def __init__(self, note: Note, offset: Ratio):
         ...
-        
+
 class Ligature():
     def __init__(self, start_note: Note, end_note: Note):
         ...
-        
+
 class LongHObject():
     def __init__(self, start_note: Note, start_offset: Ratio, end_note: Note, end_offset: Ratio):
         ...
-        
+
 class FadeDynamics(LongHObject):
     def __init__(self, start_note, start_offset, end_note, end_offset):
         super().__init__(start_note, start_offset, end_note, end_offset)
-        
+
 class FadeInDynamics(FadeDynamics):
     def __init__(self, start_note, start_offset, end_note, end_offset):
         super().__init__(start_note, start_offset, end_note, end_offset)
-        
+
 class FadeOutDynamics(FadeDynamics):
     def __init__(self, start_note, start_offset, end_note, end_offset):
         super().__init__(start_note, start_offset, end_note, end_offset)
-        
+
 class Legato(LongHObject):
     def __init__(self, start_note, start_offset, end_note, end_offset):
         super().__init__(start_note, start_offset, end_note, end_offset)

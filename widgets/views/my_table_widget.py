@@ -20,9 +20,9 @@ def finish_path(fsItem: FsItem):
 
 
 class MyTableView(QWidget):
-    def __init__(self, 
-                 columns: list[tuple[str, int, bool]], 
-                 get_data_func: Callable[[], list[list[Any]]], 
+    def __init__(self,
+                 columns: list[tuple[str, int, bool]],
+                 get_data_func: Callable[[], list[list[Any]]],
                  on_selection_changed: Callable[[Any, Any], None]):
         """MyTableView
 
@@ -33,29 +33,29 @@ class MyTableView(QWidget):
         super().__init__()
         self.get_data_func = get_data_func
         self.columns = columns
-            
+
         self.table_widget = QTableWidget(self)
         defs = [c[0] for c in columns]
         print(defs)
-        self.table_widget.setSelectionBehavior(QTableWidget.SelectRows) 
+        self.table_widget.setSelectionBehavior(QTableWidget.SelectRows)
         self.table_widget.selectionModel().selectionChanged.connect(on_selection_changed)
         self.table_widget.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
         self.table_widget.cellClicked.connect(self.on_cell_clicked)
         self.table_widget.cellDoubleClicked.connect(self.on_cell_double_clicked)
-        
+
         n_cols = len(self.columns)
         self.table_widget.setColumnCount(n_cols)
-        
+
         for idx, col_no in enumerate(columns):
-            self.table_widget.setColumnWidth(idx, col_no[1])  
-            
+            self.table_widget.setColumnWidth(idx, col_no[1])
+
         self.table_widget.setHorizontalHeaderLabels(defs)
         self.refresh_view()
-    
+
         layout = QVBoxLayout(self)
 
         layout.addWidget(self.table_widget)
-    
+
     def refresh_view(self):
         data = self.get_data_func()
         self.data = data
@@ -67,19 +67,18 @@ class MyTableView(QWidget):
                 item = QTableWidgetItem(str(row[col_no]))
                 item.setFlags(item.flags() & ~Qt.ItemIsEditable)
                 self.table_widget.setItem(idx, col_no, item)
-        
+
     def on_cell_clicked(self, row_idx, column_idx):
         click_func = self.columns[column_idx][3]
         if click_func:
             row_data = self.data[row_idx]
             click_func(row_data, row_idx)
-        
+
     def on_cell_double_clicked(self, row_idx, column_idx):
         double_click_func = self.columns[column_idx][4]
         if double_click_func:
             row_data = self.data[row_idx]
             double_click_func(row_data, row_idx)
-        
 
-            
-        
+
+

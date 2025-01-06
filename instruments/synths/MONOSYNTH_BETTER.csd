@@ -29,7 +29,7 @@
         knum init inum
 
         gkPitch[iMidiChan] = knum
-     
+
 
         iVel    veloc    ;
         kVel = iVel
@@ -64,40 +64,40 @@
 
 
     ;############## ENVELOPE INSTR ##############
-    instr 21 
+    instr 21
         iChan   init   p4 ;Ch
- 
+
         kAtt_01 init   p5  ; A1
         kDec_01 init   p6  ; D1
         kSus_01 init   p7  ; S1
         kRel_01 init   p8  ; R1
- 
+
         kAtt_02 init   p9  ; A2
         kDec_02 init   p10 ; D2
         kSus_02 init   p11 ; S2
         kRel_02 init   p12 ; R2
- 
+
         kReson  init   p13
         kg1Type init   p14
         kg2Type init   p15
         kg3Type init   p16
-          
-        kg1oct  init   p17 
-        kg2oct  init   p18 
-        kg3oct  init   p19 
-  
-        kg1det  init   p20 
-        kg2det  init   p21 
-        kg3det  init   p22 
-  
-        kg1mix  init   p23 
-        kg2mix  init   p24 
-        kg3mix  init   p25 
+
+        kg1oct  init   p17
+        kg2oct  init   p18
+        kg3oct  init   p19
+
+        kg1det  init   p20
+        kg2det  init   p21
+        kg3det  init   p22
+
+        kg1mix  init   p23
+        kg2mix  init   p24
+        kg3mix  init   p25
         kPortTime init p26
 
         kNsMix  init   p27
         kNsType init   p28 ;  0/1 => pink/white
-          
+
         kDryWet init   p29 ; 0/1 => dry/wet
         kFltDet init   p30 ; filter detune SEMITONES
 
@@ -106,16 +106,16 @@
         kLfoSymm init  p33 ; LFO Symm
 
 
-        if kLfoType == 1 then 
-            klfo lfo 1, kLfoFreq, 1 ; TRI 
-        elseif kLfoType == 2 then 
-            klfo lfo 1, kLfoFreq, 2 ; TRI 
-        elseif kLfoType == 3 then 
-            klfo lfo 1, kLfoFreq, 3 ; TRI 
-        elseif kLfoType == 4 then 
-            klfo lfo 1, kLfoFreq, 4 ; TRI 
+        if kLfoType == 1 then
+            klfo lfo 1, kLfoFreq, 1 ; TRI
+        elseif kLfoType == 2 then
+            klfo lfo 1, kLfoFreq, 2 ; TRI
+        elseif kLfoType == 3 then
+            klfo lfo 1, kLfoFreq, 3 ; TRI
+        elseif kLfoType == 4 then
+            klfo lfo 1, kLfoFreq, 4 ; TRI
         else
-            klfo lfo 1, kLfoFreq, 5 ; TRI 
+            klfo lfo 1, kLfoFreq, 5 ; TRI
         endif
 
         klfo = klfo * (1 - 0.5 * (1-kLfoSymm)) + (1-kLfoSymm) * 0.5
@@ -180,15 +180,15 @@
             kAttTimer_02 = 0
         endif
 
-        if kState_01 == 2 then 
+        if kState_01 == 2 then
             kDecTimer_01 = kTime - kDecSnap_01
-        else 
+        else
             kDecTimer_01 = 0
         endif
-        
-        if kState_02 == 2 then 
+
+        if kState_02 == 2 then
             kDecTimer_02 = kTime - kDecSnap_02
-        else 
+        else
             kDecTimer_02 = 0
         endif
 
@@ -197,7 +197,7 @@
         else
             kRelTimer_01 = 0
         endif
-        
+
         if kState_02 == 4  then
             kRelTimer_02 = kTime - kRelSnap_02
         else
@@ -209,7 +209,7 @@
             kAttTimer_01 = 0
             kState_01 = 1
         endif
-        
+
         if kStateTrigger_02 == 1  then
             kAttSnap_02 = kTime
             kAttTimer_02 = 0
@@ -238,7 +238,7 @@
             kRelSnap_01 = kTime
             kState_01 = 4
         endif
-        
+
         if kStateTrigger_02 == 4 then
             kRelSnap_02 = kTime
             kState_02 = 4
@@ -267,7 +267,7 @@
         if kState_01 == 1 then
             kAmpEnv = kAttTimer_01 / kAtt_01
         elseif kState_01 == 2 then
-            kAmpEnv = kSus_01 +  (1 - kSus_01) * (kDec_01 - kDecTimer_01)/kDec_01 
+            kAmpEnv = kSus_01 +  (1 - kSus_01) * (kDec_01 - kDecTimer_01)/kDec_01
         elseif kState_01 == 3 then
             kAmpEnv = kSus_01
         elseif kState_01 == 4 then
@@ -278,7 +278,7 @@
         if kState_02 == 1 then
             kFilterEnv = kAttTimer_02 / kAtt_02
         elseif kState_02 == 2 then
-            kFilterEnv = kSus_02 +  (1 - kSus_02) * (kDec_02 - kDecTimer_02)/kDec_02 
+            kFilterEnv = kSus_02 +  (1 - kSus_02) * (kDec_02 - kDecTimer_02)/kDec_02
         elseif kState_02 == 3 then
             kFilterEnv = kSus_02
         elseif kState_02 == 4 then
@@ -294,17 +294,17 @@
         kPorta portk gkPitch[iChan], .03
         kPorta max 1, kPorta
         kg1resPitch = cpsmidinn(max(1, kPorta + kg1oct*12 + kg1det));
-        
+
         amix = 0
         if kg1Type == 1 then
             asig vco 0.3, kg1resPitch,  1,     0.5
-        elseif kg1Type == 2 then 
+        elseif kg1Type == 2 then
             asig vco 0.3, kg1resPitch,  2,     0.5
-        elseif kg1Type == 3 then 
+        elseif kg1Type == 3 then
             asig vco 0.3, kg1resPitch,  3,     0.5
-        elseif kg1Type == 4 then 
+        elseif kg1Type == 4 then
             asig vco 0.3, kg1resPitch,  4,     0.5
-        elseif kg1Type == 5 then 
+        elseif kg1Type == 5 then
             asig vco 0.3, kg1resPitch,  5,     0.5
         endif
         amix = amix + asig * kg1mix
@@ -312,13 +312,13 @@
         kg2resPitch = cpsmidinn(max(1, kPorta + kg2oct*12 + kg2det));
         if kg2Type == 1 then
             asig vco 0.3, kg2resPitch,  1,     0.5
-        elseif kg2Type == 2 then 
+        elseif kg2Type == 2 then
             asig vco 0.3, kg2resPitch,  2,     0.5
-        elseif kg2Type == 3 then 
+        elseif kg2Type == 3 then
             asig vco 0.3, kg2resPitch,  3,     0.5
-        elseif kg2Type == 4 then 
+        elseif kg2Type == 4 then
             asig vco 0.3, kg2resPitch,  4,     0.5
-        elseif kg2Type == 5 then 
+        elseif kg2Type == 5 then
             asig vco 0.3, kg2resPitch,  5,     0.5
         endif
         amix = amix + asig * kg2mix
@@ -326,13 +326,13 @@
         kg3resPitch = cpsmidinn(max(1, kPorta + kg3oct*12 + kg3det));
         if kg3Type == 1 then
             asig vco 0.3, kg3resPitch,  1,     0.5
-        elseif kg3Type == 2 then 
+        elseif kg3Type == 2 then
             asig vco 0.3, kg3resPitch,  2,     0.5
-        elseif kg3Type == 3 then 
+        elseif kg3Type == 3 then
             asig vco 0.3, kg3resPitch,  3,     0.5
-        elseif kg3Type == 4 then 
+        elseif kg3Type == 4 then
             asig vco 0.3, kg3resPitch,  4,     0.5
-        elseif kg3Type == 5 then 
+        elseif kg3Type == 5 then
             asig vco 0.3, kg3resPitch,  5,     0.5
         endif
 
@@ -364,7 +364,7 @@
     endin
 
 
-    instr 200 
+    instr 200
 
         ain1 init 0.2
         ain2 init 0.2
@@ -383,27 +383,27 @@
     f 2 0 4096 10 1	
     f 0 30000
 
-; instrNo   start  dur.  
+; instrNo   start  dur.
 ;                            instance  src     src    dst     dst
 ;                            no.       no.     out    no      out
    ;i1  ; MIDI-key
-    i777    0.01   7200                1        1      0      101    1 
-    i19     0.01   7200      101     
+    i777    0.01   7200                1        1      0      101    1
+    i19     0.01   7200      101
 
-                                                               
+
 
     ;######### MONOSYNTH ##################################################
-    i21     0.01   7200      1     \                                      ;# 
-                                                                          ;#  
-    ;a d s   r    a d s   r                                               ;#  
-     1 2 0.3 2    1 2 0.3 2        \                                      ;# 
-    ;osc  type        octave       detune         mix                     ;# 
-    ;q    g1 g2 g3    g1  g2  g3   g1  g2  g3     g1   g2   g3            ;#  
-     0.6  1  1  1    -1    0   1   0   0.1 -0.2   1   0.5   0.3   \       ;#   
-    ;_____________________._____________________                          ;#  
-    ;noise.....           |filter               |                         ;#  
-    ;port  mix    type    |dry/wet    detune    |                         ;#          
-     0.1   0.3     0        0.2        1        \                         ;#   
+    i21     0.01   7200      1     \                                      ;#
+                                                                          ;#
+    ;a d s   r    a d s   r                                               ;#
+     1 2 0.3 2    1 2 0.3 2        \                                      ;#
+    ;osc  type        octave       detune         mix                     ;#
+    ;q    g1 g2 g3    g1  g2  g3   g1  g2  g3     g1   g2   g3            ;#
+     0.6  1  1  1    -1    0   1   0   0.1 -0.2   1   0.5   0.3   \       ;#
+    ;_____________________._____________________                          ;#
+    ;noise.....           |filter               |                         ;#
+    ;port  mix    type    |dry/wet    detune    |                         ;#
+     0.1   0.3     0        0.2        1        \                         ;#
     ;LFO
     ; F  T  S
       2  2  1

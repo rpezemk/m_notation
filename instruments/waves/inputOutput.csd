@@ -15,8 +15,8 @@ instr 1199 ;############ UDP LISTENER #############
 
     aIn   inch 2
     kRms rms aIn
-    aout oscil 0.5, 440 + 3444*aIn, 1 
-    fout "output.wav", 16, aIn ; 
+    aout oscil 0.5, 440 + 3444*aIn, 1
+    fout "output.wav", 16, aIn ;
     out aIn*0.3,  aIn*0.3
 endin
 

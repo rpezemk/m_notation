@@ -16,16 +16,16 @@ class DawView(VStack):
             part_widget.staff_widget.update()
             self.layout.addWidget(part_widget)
         self.layout.addStretch()
-        
+
         # ruler_widget = PartWidget(widget_type=RulerWidget)
         # self.layout.addWidget(ruler_widget)
-        
+
         bottom_panel = HStack(
                     children=
                     [
                         Stretch(),
-                        SyncButton("<<", None), 
-                        SyncButton("<", None), 
+                        SyncButton("<<", None),
+                        SyncButton("<", None),
                         StateButton("PLAY", None, color_hex_off="#334477", color_hex_on="#4477FF"),
                         StateButton("REC", None, color_hex_off="#554422", color_hex_on="#FF5522"),
                         SyncButton("STOP", None),
@@ -34,6 +34,6 @@ class DawView(VStack):
                     ],
                     stretch=False)
         self.layout.addWidget(bottom_panel.widget)
-        
+
         self.layout.parentWidget().update()
         self.layout.update()

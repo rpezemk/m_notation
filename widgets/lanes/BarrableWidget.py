@@ -10,14 +10,14 @@ class BarrableWidget(LaneWidget):
         self.bar_right_margin = 5
         self.x_offsets = None
         self.no_of_measures = 4
-        
+
     def get_h_segments(self):
         l_mar = self.bar_left_margin
         r_mar = self.bar_right_margin
         areas = [self.x_offsets[idx:idx+2] for idx in range(0, len(self.x_offsets)-1)]
         areas_2 = [[a[0] + l_mar, a[1] - r_mar] for a in areas]
         return areas_2
-    
+
 
     def get_x_offsets(self) -> list[int]:
         av_space = self.width() - self.clef_margin

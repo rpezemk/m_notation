@@ -1,10 +1,10 @@
 import math
 
 def duration_to_space(time: float):
-    space = math.sqrt(time) 
+    space = math.sqrt(time)
     return space
-    
-    
+
+
 def get_single_ruler(times: list[float]):
     # time_space_list = [(t, duration_to_space(t)) for t in times]
     curr = 0
@@ -12,7 +12,7 @@ def get_single_ruler(times: list[float]):
     for t in times:
         curr+=t
         res.append(curr)
-        
+
     return res
 
 

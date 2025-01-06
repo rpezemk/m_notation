@@ -33,7 +33,7 @@ class DrawableWidget(QWidget):
         if self.redraw_func:
             self.redraw_func(self.width(), self)
         painter.end()
-        
+
     def mousePressEvent(self, event):
         for staff in self.staffs:
                 staff.mouse_press(event)

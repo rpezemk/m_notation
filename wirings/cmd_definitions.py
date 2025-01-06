@@ -40,7 +40,7 @@ S_SPACE = SubCmd("PLAY", [Qt.Key_Space])
 S_RETURN = SubCmd("PLAY", [Qt.Key_Return])
 
 S_ARROW_LEFT = SubCmd("ARROW_LEFT", [K_LEFT])
-S_ARROW_RIGHT = SubCmd("ARROW_RIGHT", [K_RIGHT]) 
+S_ARROW_RIGHT = SubCmd("ARROW_RIGHT", [K_RIGHT])
 S_ARROW_UP = SubCmd("ARROW_UP", [K_UP])
 S_ARROW_DOWN = SubCmd("ARROW_DOWN", [K_DOWN])
 S_SHIFT_ARR_LEFT = SubCmd("sdfsdf", [K_SHIFT, K_LEFT])
