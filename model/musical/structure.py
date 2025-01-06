@@ -2,6 +2,7 @@ import random
 from typing import Any, Callable
 from PyQt5.QtGui import QColor
 from model.ratio import Dotting, Ratio
+from model.pitch import Pitch, NoteName
 
 class TimeHolder():
     def __init__(self, base_duration: Ratio = None, measure: 'Measure' = None, dotting: Ratio = None):
@@ -67,7 +68,7 @@ class MTuple():
         return notes
 
 class Note(TimeHolder):
-    def __init__(self, pitch, base_duration = None, measure: 'Measure' = None, dotting: Dotting = None):
+    def __init__(self, pitch: Pitch, base_duration = None, measure: 'Measure' = None, dotting: Dotting = None):
         super().__init__(base_duration, measure, dotting)
         self.measure = measure
         self.pitch = pitch
