@@ -3,6 +3,7 @@ from typing import Any, Callable
 from PyQt5.QtGui import QColor
 from model.ratio import Dotting, Ratio
 from model.pitch import Pitch, NoteName
+from model.musical.part_info import Clef
 
 class TimeHolder():
     def __init__(self, base_duration: Ratio = None, measure: 'Measure' = None, dotting: Ratio = None):
@@ -95,8 +96,14 @@ class Measure():
         idx = self.time_holders.index(old)
         self.time_holders[idx] = new
 
+    def get_clef(self):
+        res = self.part.clef
+        return res
+    
+    
 class Part():
-    def __init__(self, measures: list[Measure]=None, piece: 'Piece'=None):
+    def __init__(self, clef: Clef, measures: list[Measure]=None, piece: 'Piece'=None):
+        self.clef = clef
         self.piece = piece
         self.measures = [] if measures is None else measures
 

@@ -91,10 +91,10 @@ class VirtualStaff():
         self.res_mtuples: list[list[VisualNote]] = []
         new_mtuple: list[VisualNote] = []
         mtuple_opened = False
-
         for m_no, bar in enumerate(self.measures):
             seg_start = bar_segments[m_no][0]
             seg_end = bar_segments[m_no][1]
+            clef = bar.get_clef()
 
             if seg_end - seg_start < 10:
                 return
@@ -102,7 +102,7 @@ class VirtualStaff():
             for note in bar.time_holders:
                 curr_x = int(note.offset_ratio.to_float() * (seg_end - seg_start) + seg_start)
                 if isinstance(note, Note):
-                    res_y = int( (-note.pitch.res_pitch() * self.line_spacing) / 2) + self.line_spacing * 7
+                    res_y = int(((-note.pitch.vis_height() + clef.vis_pitch) * self.line_spacing) / 2) + self.line_spacing * 7
                 elif isinstance(note, Rest):
                     res_y = int( (0) / 2) + self.line_spacing * 8
 

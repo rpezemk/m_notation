@@ -1,12 +1,13 @@
 from model.musical.structure import ConductorPart, MTuple, Measure, Note, Part, Piece, TempoMark
 from model.ratio import Ratio
 from model.pitch import Pitch, NoteName
+from model.musical.part_info import *
 
 def generate_sample_piece(n_parts: int, n_measures: int):
     piece = Piece(conductor_part=ConductorPart(TempoMark(90, Ratio.QUARTER(), 0, Ratio(t=(0, 4)))))
 
     for part_no in range(0, n_parts):
-        part = Part(piece=piece)
+        part = Part(AllClefs.TREBLE_CLEF, piece=piece)
         for measure_no in range(0, n_measures):
             if (part_no + measure_no) % 2 == 0:
                 notes = [Note(Pitch(NoteName.C), Ratio(t=(1, 4))),
