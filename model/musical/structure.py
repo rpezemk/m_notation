@@ -26,7 +26,6 @@ class TimeHolder():
         return res
 
     def dot(self, n: int = 1):
-        self.dotting = [a for a in range(n)]
         self.dotting = Ratio(t=(1, 2))
         return self
 
