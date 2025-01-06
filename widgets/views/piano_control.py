@@ -16,7 +16,7 @@ class PianoHorizontal(QWidget):
         self.very_light_gray = QColor(160, 160, 160)
         self.light_black = QColor(13, 13, 13)
         self.black = QColor(0, 0, 0)
-        self.setFixedHeight(60)
+        self.setFixedHeight(35)
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)  
         
     def paintEvent(self, event):
@@ -26,32 +26,35 @@ class PianoHorizontal(QWidget):
         painter.setPen(self.very_light_gray)
         painter.setBrush(self.very_light_gray)
         
-        w = 13
-        h = 26
+        w = 10
+        h = 15
         s = 4    
         n = min(self.width() // (w + s) - 2, 7 * 12 + 1)
-        for k in range(n):
-            is_white = self.is_white(k)
-            painter.setBrush(self.very_light_gray if is_white else self.very_dark_gray)
-            x = k * (w + s)
-            if is_white:
-                rect = QRect(x, 0, w, h * 2)
+        
+        oct_width = (w + s) * 12
+        n_octaves = n // 12
+        s_w = int(12/7 * w)
+        for oct_no in range(n_octaves):
+            
+            painter.setBrush(self.very_light_gray)
+            
+            for strange in [12*x/7 for x in range(7)]:
+                pitch = oct_no * 12 + strange
+                x = int(pitch * (w + s))
+                rect = QRect(x, 0, s_w+2, h*2)
                 painter.drawRect(rect)
-            else:
-                rect = QRect(x, 0, w, h)
-                painter.drawRect(rect)
-                painter.setBrush(self.very_light_gray)
-                painter.setPen(QPen(self.very_light_gray, 0))
-                rect = QRect(x - 3, h + 3, w//2+2, h - 3)
-                painter.drawRect(rect)
-                rect = QRect(x + 3 + w//2, h + 3, w//2+1, h - 3)
-                painter.drawRect(rect)
-            pitch = k + 24
-            if pitch == 60:
-                painter.setBrush(self.very_dark_gray)
-                painter.setPen(QPen(self.very_light_gray, 1))
-                rect = QRect(x + 5, h + 5, 15, 15)
-                painter.drawRect(rect)
+                
+            painter.setBrush(self.very_dark_gray)
+            
+            for semi_no in range(12):
+                pitch = oct_no * 12 + semi_no
+                is_white = self.is_white(pitch)
+                x = pitch * (w + s)
+                if not is_white:
+                    rect = QRect(x-5, 0, w+11, h+3)
+                    painter.drawRect(rect)
+                    rect = QRect(x-2, 0, w+5, h)
+                    painter.drawRect(rect)
                 
         painter.end()
         
@@ -59,3 +62,5 @@ class PianoHorizontal(QWidget):
         semi = pitch % 12
         res = semi not in [1, 3, 6, 8, 10]
         return res
+    
+    

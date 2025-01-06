@@ -36,7 +36,7 @@ class ScoreView(View):
         self.part_widgets: list[VirtualStaff] = []
 
         for idx, h_chunk in enumerate(self.chunk.h_chunks):
-            part_widget = VirtualStaff(parent=self, y_offset=idx * 130)
+            part_widget = VirtualStaff(parent=self, y_offset=idx * 120)
             self.part_widgets.append(part_widget)
             # self.layout.addWidget(part_widget)
 
