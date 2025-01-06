@@ -209,7 +209,10 @@ class RulerEvent():
     def __str__(self):
         return f"at: {self.offset_ratio}, d:{self.len_ratio}, i_es:{len(self.inner_events)}"
 
-
+class RulerBar():
+    def __init__(self, events: list[RulerEvent]):
+        self.events = events
+        
 class HorizontalChunk():
     """model for vertical one-measure length, n-parts height section.
     """
