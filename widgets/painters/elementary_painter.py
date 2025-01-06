@@ -4,8 +4,10 @@ from PyQt5.QtCore import Qt, QRect
 from PyQt5.QtGui import QPainter, QColor
 from widgets.painters.painter_definitions import get_dotting_painters, get_painter_definitions
 from widgets.note_widgets.VisualNote import VisualNote
+
 painter_data_list = get_painter_definitions()
 dot_painters = get_dotting_painters()
+
 transp = QColor(0, 0, 0, 0)
 dark_gray = QColor(100, 100, 100)
 light_gray = QColor(140, 140, 140)
@@ -79,6 +81,7 @@ class ElementaryPainter():
         d = v_h + fix
         h = 5
         w = 30
+        q_painter.setPen(light_gray)
         q_painter.drawLine(p1[0], p1[1] + h, p1[0], p1[1] + h + d)
         q_painter.drawLine(p1[0], p1[1] + d + h, p2[0], p2[1] + h + d)
         q_painter.drawLine(p2[0], p2[1] + h, p2[0], p2[1] + h + d)

@@ -29,7 +29,7 @@ class PianoHorizontal(QWidget):
         w = 13
         h = 26
         s = 4    
-        n = min(self.width() // (w + s) - 2, 7 * 12)
+        n = min(self.width() // (w + s) - 2, 7 * 12 + 1)
         for k in range(n):
             is_white = self.is_white(k)
             painter.setBrush(self.very_light_gray if is_white else self.very_dark_gray)
