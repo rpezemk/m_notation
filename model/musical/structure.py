@@ -2,7 +2,7 @@ import random
 from typing import Any, Callable
 from PyQt5.QtGui import QColor
 from model.ratio import Dotting, Ratio
-from model.pitch import Pitch, N
+from model.pitch import Pitch, NoteName
 from model.musical.part_info import Clef
 
 class TimeHolder():
