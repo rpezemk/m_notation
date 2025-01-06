@@ -17,7 +17,6 @@ class PianoHorizontal(QWidget):
         self.light_black = QColor(13, 13, 13)
         self.black = QColor(0, 0, 0)
         self.setFixedHeight(60)
-        # self.setFixedWidth(50)
         self.setSizePolicy(QSizePolicy.Expanding, QSizePolicy.Fixed)  
         
     def paintEvent(self, event):
