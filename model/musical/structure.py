@@ -51,6 +51,13 @@ class TimeHolder():
         self.base_duration = base_duration
         return self
 
+    def r1(self): return self.change_duration(Ratio(t=(1, 1)))
+    def r2(self): return self.change_duration(Ratio(t=(1, 2)))
+    def r4(self): return self.change_duration(Ratio(t=(1, 4)))
+    def r8(self): return self.change_duration(Ratio(t=(1, 8)))
+    def r16(self): return self.change_duration(Ratio(t=(1, 16)))
+    def r32(self): return self.change_duration(Ratio(t=(1, 32)))
+
 class Rest(TimeHolder):
     def __init__(self, base_duration: Ratio = None, measure: 'Measure' = None, dotting: Dotting = None):
         super().__init__(base_duration, measure, dotting)
@@ -93,12 +100,7 @@ class Note(TimeHolder):
     def A(): return Note(Pitch(NoteName.A))
     def B(): return Note(Pitch(NoteName.B))
         
-    def r1(self): return self.change_duration(Ratio(t=(1, 1)))
-    def r2(self): return self.change_duration(Ratio(t=(1, 2)))
-    def r4(self): return self.change_duration(Ratio(t=(1, 4)))
-    def r8(self): return self.change_duration(Ratio(t=(1, 8)))
-    def r16(self): return self.change_duration(Ratio(t=(1, 16)))
-    def r32(self): return self.change_duration(Ratio(t=(1, 32)))
+
     
     
 class Measure():
