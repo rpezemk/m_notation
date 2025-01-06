@@ -26,7 +26,6 @@ class PianoHorizontal(QWidget):
         painter.setPen(self.very_light_gray)
         painter.setBrush(self.very_light_gray)
         
-        max_w = int(self.width()*0.99)
         w = 13
         h = 26
         s = 4    
