@@ -141,7 +141,8 @@ class Measure():
         self.m_no = m_no
         self.part_no = part_no
         self.time_holders = [] if notes is None else notes
-
+        self.calc_offsets()
+        
     def replace_note(self, old: TimeHolder, new: TimeHolder):
         if not old in self.time_holders:
             return
@@ -153,6 +154,11 @@ class Measure():
         res = self.part.clef
         return res
     
+    def calc_offsets(self):
+        curr_pos = Ratio.zero()
+        for th in self.time_holders:
+            th.offset_ratio = curr_pos
+            curr_pos += th.real_duration()
     
 class Part():
     def __init__(self, clef: Clef, measures: list[Measure]=None, piece: 'Piece'=None):
@@ -228,16 +234,11 @@ class VerticalChunk():
 
     def ratio_lanes_to_ruler_bar(self) -> RulerBar:
         lanes = [[th.real_duration() for th in m.time_holders] for m in self.vertical_measures]
-        for v_m in self.vertical_measures:
-            curr_pos = Ratio.zero()
-            for th in v_m.time_holders:
-                th.offset_ratio = curr_pos
-                curr_pos += th.real_duration()
         moving_sum_lanes: list[tuple[list[Ratio], list[Ratio]]] = [(lane, VerticalChunk.to_moving_sum(lane)) for lane in lanes]
         mov_ordered_list =[Ratio.zero(), *sorted(set([r for bar_ratios in moving_sum_lanes for r in bar_ratios[1]]), key=lambda r: r.to_float())]
+        
         ruler_events: list[RulerEvent] = []
-
-
+        
         for idx, offset_ratio in enumerate(mov_ordered_list[:-1]):
             len_ratio = mov_ordered_list[idx+1] - offset_ratio
             evt = RulerEvent(len_ratio, offset_ratio)
