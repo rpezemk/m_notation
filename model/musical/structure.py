@@ -233,10 +233,8 @@ class VerticalChunk():
         self.vertical_measures = one_measure_parts
 
     def ratio_lanes_to_ruler_bar(self) -> RulerBar:
-        lanes = [[th.real_duration() for th in m.time_holders] for m in self.vertical_measures]
-        moving_sum_lanes: list[tuple[list[Ratio], list[Ratio]]] = [(lane, VerticalChunk.to_moving_sum(lane)) for lane in lanes]
-        mov_ordered_list =[Ratio.zero(), *sorted(set([r for bar_ratios in moving_sum_lanes for r in bar_ratios[1]]), key=lambda r: r.to_float())]
-        
+        mov_ordered_list = [*sorted(set([Ratio.zero(), *[th.offset_ratio for m in self.vertical_measures for th in m.time_holders]]), key=lambda r: r.to_float())]
+
         ruler_events: list[RulerEvent] = []
         
         for idx, offset_ratio in enumerate(mov_ordered_list[:-1]):
@@ -244,6 +242,12 @@ class VerticalChunk():
             evt = RulerEvent(len_ratio, offset_ratio)
             ruler_events.append(evt)
 
+        total: Ratio = VerticalChunk.to_sum(th.real_duration() for th in self.vertical_measures[0].time_holders)
+        last_len = total - ruler_events[-1].offset_ratio
+        last_evt = RulerEvent(last_len, mov_ordered_list[-1])
+
+        ruler_events.append(last_evt)
+        
         for evt in ruler_events:
             time_holders = [th for m in self.vertical_measures for th in m.time_holders if th.offset_ratio == evt.offset_ratio]
             evt.inner_events = time_holders
@@ -259,6 +263,12 @@ class VerticalChunk():
             curr = curr + r
             res.append(curr)
         return res
+    
+    def to_sum(ratios: list[Ratio]) -> list[Ratio]:
+        curr = Ratio.zero()
+        for r in ratios:
+            curr = curr + r
+        return curr
 
 class Chunk:
     def __init__(self, v_chunks: list[VerticalChunk]):
