@@ -1,12 +1,14 @@
 from fonts.glyphs import Glyphs
+from model.musical.structure import Note
 from utils.geometry.transform2d import T2D
 from PyQt5.QtCore import Qt, QRect
 from PyQt5.QtGui import QPainter, QColor
-from widgets.painters.painter_definitions import get_dotting_painters, get_painter_definitions
+from widgets.painters.painter_definitions import get_dotting_painters, get_painter_definitions, get_accidental_painters
 from widgets.note_widgets.VisualNote import VisualNote
 
 painter_data_list = get_painter_definitions()
 dot_painters = get_dotting_painters()
+acc_painters = get_accidental_painters()
 
 transp = QColor(0, 0, 0, 0)
 dark_gray = QColor(100, 100, 100)
@@ -23,7 +25,8 @@ class ElementaryPainter():
         self.head_offset: list[T2D] = [T2D(-4, 1), T2D(-4, 1)]
         self.stem_offset: list[T2D] = [T2D(8, 0), T2D(-4, 37)]
         self.flag_offset: list[T2D] = [T2D(8, -37), T2D(-4, 37)]
-
+        self.acc_offset: list[T2D] = [T2D(-2, 2), T2D(-2, 2)]
+        
     def paint_visual_note(self, q_painter: QPainter, v_n: VisualNote):
         inner = v_n.inner
         inner_type = type(inner)
@@ -52,8 +55,15 @@ class ElementaryPainter():
         if p_d.flagged:
             self.paint_text(t2d + self.flag_offset[plc_idx], q_painter, p_d.flag_str, color)
 
-
-
+        if isinstance(v_n.inner, Note):
+            note: Note = v_n.inner
+            maybe = [s for s in acc_painters if s[0] == note.pitch.alter]
+            if not maybe:
+                return
+            s = maybe[0][1]
+            t = (t2d + self.acc_offset[plc_idx]).add_x(-14)
+            self.paint_text(t, q_painter, s, color)
+                
     def paint_text(self, t: T2D, q_painter: QPainter, s: str, color: QColor, sel: bool = False):
         text_rect = QRect(t.x, t.y - self.box_h_half, self.box_w_half*2, self.box_h_half*2)
 
@@ -64,7 +74,7 @@ class ElementaryPainter():
 
         q_painter.setPen(color)
         q_painter.drawText(text_rect, Qt.AlignLeft | Qt.AlignVCenter, s)
-
+    
     def paint_tuple(self, q_painter: QPainter, v_notes: list[VisualNote]):
         p1 = v_notes[:1][0].point
         p2 = v_notes[-1:][0].point

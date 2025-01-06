@@ -24,7 +24,8 @@ class TimeHolder():
         res = (self.base_duration + self.base_duration * self.dotting) * self.scale
         return res
 
-    def dot(self):
+    def dot(self, n: int = 1):
+        self.dotting = [a for a in range(n)]
         self.dotting = Ratio(t=(1, 2))
         return self
 
@@ -57,7 +58,7 @@ class TimeHolder():
     def r8(self): return self.change_duration(Ratio(t=(1, 8)))
     def r16(self): return self.change_duration(Ratio(t=(1, 16)))
     def r32(self): return self.change_duration(Ratio(t=(1, 32)))
-
+    
 class Rest(TimeHolder):
     def __init__(self, base_duration: Ratio = None, measure: 'Measure' = None, dotting: Dotting = None):
         super().__init__(base_duration, measure, dotting)
@@ -92,6 +93,16 @@ class Note(TimeHolder):
     def flip_orientation(self):
         self.orientation_up = not self.orientation_up
 
+    def add_oct(self, octaves: int = 0):
+        self.pitch.oct_no += octaves
+        return self
+
+    def add_alter(self, alter: int = 0):
+        self.pitch.alter += alter
+        return self
+    
+
+
     def C(): return Note(Pitch(NoteName.C))
     def D(): return Note(Pitch(NoteName.D))
     def E(): return Note(Pitch(NoteName.E))
@@ -99,7 +110,20 @@ class Note(TimeHolder):
     def G(): return Note(Pitch(NoteName.G))
     def A(): return Note(Pitch(NoteName.A))
     def B(): return Note(Pitch(NoteName.B))
-        
+    
+    def sharp(self):
+        self.pitch.alter = 1
+        return self
+    
+    def flat(self):
+        self.pitch.alter = -1
+        return self
+    
+    def o_up(self): 
+        return self.add_oct(1)
+    
+    def o_dwn(self): 
+        return self.add_oct(-1)
 
     
     

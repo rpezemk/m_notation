@@ -101,3 +101,12 @@ def get_dotting_painters() -> list[PainterData]:
         (Ratio(t=(3, 4)), Glyphs.AugDot + " " + Glyphs.AugDot),
         ]
     return dotting_painters
+
+def get_accidental_painters() -> list[tuple[int, str]]:
+    acc_painters = [
+        (-2, Glyphs.Accidental_DoubleFlat),
+        (-1, Glyphs.Accidental_Flat),
+        (1, Glyphs.Accidental_Sharp),
+        (2, Glyphs.Accidental_DoubleSharp),
+    ]
+    return acc_painters
