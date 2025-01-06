@@ -10,19 +10,19 @@ def generate_sample_piece(n_parts: int, n_measures: int):
         part = Part(AllClefs.TREBLE_CLEF, piece=piece)
         for measure_no in range(0, n_measures):
             if (part_no + measure_no) % 2 == 0:
-                notes = [Note(Pitch(NoteName.C), Ratio(t=(1, 4))),
-                         Note(Pitch(NoteName.C), Ratio(t=(1, 4))),
+                notes = [Note.C().r4(),
+                         Note.C().r4(),
                          *MTuple.apply(scale = Ratio(t=(2, 3)),
                            notes=[
-                                Note(Pitch(NoteName.D), base_duration=Ratio.EIGHTH()),
-                                Note(Pitch(NoteName.E), base_duration=Ratio.EIGHTH()),
-                                Note(Pitch(NoteName.F), base_duration=Ratio.EIGHTH()),
+                                Note.C().r8(),
+                                Note.C().r8(),
+                                Note.C().r8(),
                                ]),
                          *MTuple.apply(scale = Ratio(t=(2, 3)),
                            notes=[
-                                Note(Pitch(NoteName.G), base_duration=Ratio.EIGHTH()),
-                                Note(Pitch(NoteName.A), base_duration=Ratio.EIGHTH()),
-                                Note(Pitch(NoteName.B), base_duration=Ratio.EIGHTH()),
+                                Note.C().r8(),
+                                Note.C().r8(),
+                                Note.C().r8(),
                                ]),
                          ]
 
@@ -32,23 +32,23 @@ def generate_sample_piece(n_parts: int, n_measures: int):
             else:
                 # notes = [Note(Pitch(NoteName.C), 0), Note(Pitch(NoteName.C), 7), Note(Pitch(NoteName.C), 0), Note(Pitch(NoteName.C), 7)]
                 notes = [
-                    Note(Pitch(NoteName.C), base_duration=Ratio.QUARTER()),
+                    Note.C().r4(), 
                     *MTuple.apply(scale = Ratio(t=(2, 3)),
                            notes=[
-                                Note(Pitch(NoteName.C), base_duration=Ratio.EIGHTH()),
-                                Note(Pitch(NoteName.D), base_duration=Ratio.EIGHTH()),
-                                Note(Pitch(NoteName.E), base_duration=Ratio.EIGHTH()),
+                                Note.C().r8(),
+                                Note.C().r8(),
+                                Note.C().r8(),
                                ]),
-                    Note(Pitch(NoteName.C), base_duration=Ratio.SIXTEENTH()),
-                    Note(Pitch(NoteName.C), base_duration=Ratio.SIXTEENTH()),
-                    Note(Pitch(NoteName.C), base_duration=Ratio.SIXTEENTH()),
-                    Note(Pitch(NoteName.C), base_duration=Ratio.SIXTEENTH()),
-                    Note(Pitch(NoteName.C), base_duration=Ratio.THIRTY_SECOND()),
-                    Note(Pitch(NoteName.C), base_duration=Ratio.THIRTY_SECOND()),
-                    Note(Pitch(NoteName.C), base_duration=Ratio.THIRTY_SECOND()),
-                    Note(Pitch(NoteName.C), base_duration=Ratio.THIRTY_SECOND()),
-                    Note(Pitch(NoteName.C), base_duration=Ratio.SIXTEENTH()),
-                    Note(Pitch(NoteName.C), base_duration=Ratio.SIXTEENTH()),
+                    Note.C().r16(),
+                    Note.C().r16(),
+                    Note.C().r16(),
+                    Note.C().r16(),
+                    Note.C().r32(),
+                    Note.C().r32(),
+                    Note.C().r32(),
+                    Note.C().r32(),
+                    Note.C().r16(),
+                    Note.C().r16(),
                     ]
                 measure = Measure(part_no=part_no, m_no=measure_no, parent=part, notes=notes)
                 for note in notes:

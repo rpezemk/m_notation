@@ -46,6 +46,10 @@ class TimeHolder():
     def set_selected(self):
         self.is_selected = True
         return self
+    
+    def change_duration(self, base_duration: Ratio):
+        self.base_duration = base_duration
+        return self
 
 class Rest(TimeHolder):
     def __init__(self, base_duration: Ratio = None, measure: 'Measure' = None, dotting: Dotting = None):
@@ -81,7 +85,22 @@ class Note(TimeHolder):
     def flip_orientation(self):
         self.orientation_up = not self.orientation_up
 
-
+    def C(): return Note(Pitch(NoteName.C))
+    def D(): return Note(Pitch(NoteName.D))
+    def E(): return Note(Pitch(NoteName.E))
+    def F(): return Note(Pitch(NoteName.F))
+    def G(): return Note(Pitch(NoteName.G))
+    def A(): return Note(Pitch(NoteName.A))
+    def B(): return Note(Pitch(NoteName.B))
+        
+    def r1(self): return self.change_duration(Ratio(t=(1, 1)))
+    def r2(self): return self.change_duration(Ratio(t=(1, 2)))
+    def r4(self): return self.change_duration(Ratio(t=(1, 4)))
+    def r8(self): return self.change_duration(Ratio(t=(1, 8)))
+    def r16(self): return self.change_duration(Ratio(t=(1, 16)))
+    def r32(self): return self.change_duration(Ratio(t=(1, 32)))
+    
+    
 class Measure():
     def __init__(self, part_no: int, m_no: int, notes: list[TimeHolder]=None, parent: 'Part'=None):
         self.part = parent
