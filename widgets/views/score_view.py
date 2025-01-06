@@ -14,6 +14,7 @@ from widgets.compound.stack_panels import HStack, VStack
 from widgets.lanes.PartWidget import PartWidget
 from widgets.lanes.RulerWidget import RulerWidget
 from widgets.note_widgets.VisualNote import VisualNote
+from widgets.views.piano_control import PianoHorizontal
 from widgets.views.score_view_modes import ScoreViewModeEnum
 from widgets.views.view import View
 
@@ -45,7 +46,7 @@ class ScoreView(View):
         self.refresh_parts()
         self.layout.addStretch()
 
-
+        self.piano_control = PianoHorizontal()
         self.play_button = StateButton(
                             "PLAY",
                             state_on_func=self.ruler_widget.start,
@@ -57,7 +58,7 @@ class ScoreView(View):
         bottom_panel = HStack(
                     children=
                     [
-                        Stretch(),
+                        self.piano_control,
                         SyncButton("<<", lambda: self.move_by(-self.max_n_measures)),
                         SyncButton("<", lambda: self.move_by(-1)),
                         self.play_button,
@@ -76,6 +77,7 @@ class ScoreView(View):
 
     def paintEvent(self, event):
         # self.drawable.update()
+        self.piano_control.update()
         ...
 
     def paint_content(self, width: int, widget):
