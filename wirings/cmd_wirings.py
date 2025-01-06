@@ -18,7 +18,10 @@ score_view_bindings = CommandContainer         \
         
         (CMD_CTRL_NEXT, lambda view: view.select_next_note_in_next_measure()),
         (CMD_CTRL_PREV, lambda view: view.select_prev_note_in_prev_measure()),
-        (CMD_ROTATE, lambda view: view.rotate_note()),
+        (CMD_ROTATE, lambda view: view.rotate_selected_notes()),
+        (CMD_ESC, lambda view: view.deselect_notes_but([])),
+        (C_SEL_VERTICAL_MEASURE, lambda view: view.select_vertical()),
+        (C_SEL_HORIZONTAL_MEASURES, lambda view: view.select_horizontal()),
      ])
 
 root_kbd_resolver = KbdResolver([score_view_bindings])

@@ -8,11 +8,14 @@ from utils.commands.kbd_resolver import KbdResolver
 K_CTRL = Qt.Key_Control
 K_A = Qt.Key_A
 K_T = Qt.Key_T
+K_V = Qt.Key_V
+K_H = Qt.Key_H
 K_X = Qt.Key_X
 K_Q = Qt.Key_Q
 K_R = Qt.Key_R
 K_SP = Qt.Key_Space
 K_DEL = Qt.Key_Delete
+K_ESC = Qt.Key_Escape
 
 K_LEFT = Qt.Key_Left
 K_RIGHT = Qt.Key_Right
@@ -23,9 +26,11 @@ K_DOWN = Qt.Key_Down
 
 ######## PART COMMANDS ##########
 
-A = SubCmd("A", [Qt.Key_A])
+A = SubCmd("A", [K_A])
 S_CTRL_A = SubCmd("CTRL_A", [K_CTRL, K_A])
 S_CTRL_T = SubCmd("CTRL_T", [K_CTRL, K_T])
+S_CTRL_V = SubCmd("CTRL_T", [K_CTRL, K_V])
+S_CTRL_H = SubCmd("CTRL_T", [K_CTRL, K_H])
 S_CTRL_X = SubCmd("CTRL_X", [K_CTRL, K_X])
 S_CTRL_Q = SubCmd("CTRL_Q", [K_CTRL, K_Q])
 S_CTRL_R = SubCmd("CTRL_R", [K_CTRL, K_R])
@@ -46,14 +51,13 @@ CTRL_ARROW_UP = SubCmd("sdf", [K_CTRL, K_UP])
 CTRL_ARROW_DOWN = SubCmd("sdf", [K_CTRL, K_DOWN])
 
 S_DEL = SubCmd("sdf", [K_DEL])
+S_ESC = SubCmd("sdf", [K_ESC])
 
 
 
 ######### COMMANDS ##########
 
 C_SELECT_ALL = CompoundCommand("SELECT_ALL", [S_CTRL_A]),
-C_RENAME = CompoundCommand("RENAME", [S_CTRL_R, S_CTRL_R]),
-C_DELETE = CompoundCommand("DELETE", [S_CTRL_T, S_CTRL_X]),
 C_PLAY = CompoundCommand("PLAY", [S_SPACE]),
 C_PLAY_SPECIAL = CompoundCommand("PLAY_SPECIAL", [S_RETURN]),
 
@@ -70,4 +74,9 @@ CMD_CTRL_DOWN = CompoundCommand("ARROW_DOWN", [CTRL_ARROW_DOWN])
 
 CMD_DEL = CompoundCommand("DEL", [S_DEL])
 CMD_ROTATE = CompoundCommand("ROTATE", [S_R])
+CMD_ESC = CompoundCommand("ESC", [S_ESC])
 
+######## MEASURE COMMANDS #########
+
+C_SEL_VERTICAL_MEASURE = CompoundCommand("SEL_VERT_MEASURE", [S_CTRL_T, S_CTRL_V])
+C_SEL_HORIZONTAL_MEASURES = CompoundCommand("SEL_VERT_MEASURE", [S_CTRL_T, S_CTRL_H])

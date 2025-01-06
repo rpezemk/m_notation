@@ -1,53 +1,69 @@
 from fonts.glyphs import Glyphs
-from utils.geometry.transform2d import Transform2D
+from utils.geometry.transform2d import T2D
 from PyQt5.QtCore import Qt, QRect
 from PyQt5.QtGui import QPainter, QColor
-
+from widgets.painters.painter_definitions import get_dotting_painters, get_painter_definitions
 from widgets.note_widgets.VisualNote import VisualNote
+painter_data_list = get_painter_definitions()
+dot_painters = get_dotting_painters()
+transp = QColor(0, 0, 0, 0)
+dark_gray = QColor(100, 100, 100)
+light_gray = QColor(140, 140, 140)
+very_dark_gray = QColor(50, 50, 50)
+very_light_gray = QColor(160, 160, 160)
+red = QColor(200, 44, 44)
 
 class ElementaryPainter():    
     def __init__(self):
-        self.size = 120 
-        self.offset = Transform2D()
+        self.box_w_half = 15
+        self.box_h_half = 50 
+        self.offset = T2D()
+        self.head_offset: list[T2D] = [T2D(-4, 1), T2D(-4, 1)]
+        self.stem_offset: list[T2D] = [T2D(8, 0), T2D(-4, 37)]
+        self.flag_offset: list[T2D] = [T2D(8, -37), T2D(-4, 37)]
         
-    def paint(self, t: Transform2D, q_painter: QPainter, s: str):
-        t2 = self.self_transform(t)
-        text_rect = QRect(t2.x - self.size, t2.y - self.size, self.size * 2, self.size * 2)
+    def paint_visual_note(self, q_painter: QPainter, v_n: VisualNote):
+        inner = v_n.inner
+        inner_type = type(inner)
+        is_up = v_n.inner.orientation_up
+        maybe = [p for p in painter_data_list if p.t == inner_type and p.d == inner.base_duration and p.orientation_up == is_up]
+        
+        dot = v_n.inner.dotting
+        dot_str = ""
+        dptr = [dptr2 for dptr2 in dot_painters if dptr2[0] == dot]
+        if dptr:
+            dot_str = dptr[0][1]
+            
+        if not maybe:
+            return
+        
+        p_d = maybe[0]
+        
+        t2d = T2D(v_n.point[0], v_n.point[1])
+                    
+        color = red if inner.is_selected else very_light_gray
+        
+        plc_idx = 0 if is_up else 1
+        self.paint_text(t2d + self.head_offset[plc_idx], q_painter, p_d.head_str + " " + dot_str, color)
+        if p_d.stemed:
+            self.paint_text(t2d + self.stem_offset[plc_idx], q_painter, p_d.stem_str, color)
+        if p_d.flagged:
+            self.paint_text(t2d + self.flag_offset[plc_idx], q_painter, p_d.flag_str, color)
+        
+        
+        
+    def paint_text(self, t: T2D, q_painter: QPainter, s: str, color: QColor, sel: bool = False):
+        text_rect = QRect(t.x, t.y - self.box_h_half, self.box_w_half*2, self.box_h_half*2)
+        
+        if sel:
+            q_painter.setBrush(transp)
+            q_painter.setPen(very_dark_gray)
+            q_painter.drawRect(text_rect)
+        
+        q_painter.setPen(color)
         q_painter.drawText(text_rect, Qt.AlignLeft | Qt.AlignVCenter, s) 
         
-    def self_transform(self, t: Transform2D):
-        res = self.offset + t
-        return res
-    
-class HeadPainter(ElementaryPainter):
-    def __init__(self):
-        super().__init__()
-        self.offset = Transform2D()
-        
-    def paint(self, t: Transform2D, q_painter: QPainter, s: str):
-        super().paint(t, q_painter, s)
-        
-        
-class StemPainter(ElementaryPainter):
-    def __init__(self):
-        super().__init__()
-        self.offset = Transform2D(12)
-        
-    def paint(self, t, q_painter, s: str):
-        super().paint(t, q_painter, s)
-
-
-class FlagPainter(ElementaryPainter):
-    def __init__(self):
-        super().__init__()
-        self.offset = Transform2D(11, -38)
-        
-    def paint(self, t, q_painter, s: str):
-        super().paint(t, q_painter, s)
-        
-        
-class MTuplePainter():
-    def paint(self, q_painter: QPainter, v_notes: list[VisualNote]):
+    def paint_tuple(self, q_painter: QPainter, v_notes: list[VisualNote]):
         p1 = v_notes[:1][0].point
         p2 = v_notes[-1:][0].point
         

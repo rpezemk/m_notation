@@ -33,6 +33,18 @@ class TimeHolder():
     def __str__(self):
         return f"d: {self.base_duration}"
     
+    def clone_as_rest(self):
+        rest = Rest(base_duration=self.base_duration, measure=self.measure, dotting=self.dotting)
+        rest.scale = self.scale
+        rest.tuple_start = self.tuple_start
+        rest.tuple_end = self.tuple_end
+        rest.offset_ratio = self.offset_ratio
+        return rest
+    
+    def set_selected(self):
+        self.is_selected = True
+        return self
+        
 class Rest(TimeHolder):
     def __init__(self, base_duration: Ratio = None, measure: 'Measure' = None, dotting: Dotting = None):
         super().__init__(base_duration, measure, dotting)
@@ -75,7 +87,12 @@ class Measure():
         self.part_no = part_no
         self.time_holders = [] if notes is None else notes
 
-
+    def replace_note(self, old: TimeHolder, new: TimeHolder):
+        if not old in self.time_holders:
+            return
+          
+        idx = self.time_holders.index(old)
+        self.time_holders[idx] = new
         
 class Part():
     def __init__(self, measures: list[Measure]=None, piece: 'Piece'=None):

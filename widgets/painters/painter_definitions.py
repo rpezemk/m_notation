@@ -8,7 +8,7 @@ def get_default_if_none(maybe_filled, default_value):
     return filled
 
 class PainterData():
-    def __init__(self, t: type, d: Ratio):
+    def __init__(self, t: type, d: Ratio, orientation_up: bool = True):
         self.t = t
         self.d = d
         self.stemed = False
@@ -16,10 +16,11 @@ class PainterData():
         self.flag_str = None
         self.head_str = None
         self.stem_str = None
-    
+        self.orientation_up = orientation_up
+        
     @staticmethod    
-    def emit(t: type, d: Ratio):
-        return PainterData(t, d)    
+    def emit(t: type, d: Ratio, orientation_up: bool = True):
+        return PainterData(t, d, orientation_up)
     
     
     def head(self, h_str = None):
@@ -45,23 +46,37 @@ def get_painter_definitions() -> list[PainterData]:
     flagged = all_durations[5:]
     
     heads = [Glyphs.LongaNote, Glyphs.BreveNote, Glyphs.WholeNote, Glyphs.Notehead_Half, Glyphs.Notehead_Black]
-    flags = [Glyphs.Flag_EighthUp, Glyphs.Flag_SixteenthUp, Glyphs.Flag_ThirtySecondUp, Glyphs.Flag_SixtyFourthUp]
+    flags_up = [Glyphs.Flag_EighthUp, Glyphs.Flag_SixteenthUp, Glyphs.Flag_ThirtySecondUp, Glyphs.Flag_SixtyFourthUp]
+    flags_down = [Glyphs.Flag_EighthDown, Glyphs.Flag_SixteenthDown, Glyphs.Flag_ThirtySecondDown, Glyphs.Flag_SixtyFourthDown]
     
     simple_painters = [PainterData.emit(Note, d).head(heads[i]) for i, d in enumerate(simple_durations)]
-    stem_only_painters = [PainterData
+    stem_only_painters_up = [PainterData
                             .emit(Note, d)
                             .head(Glyphs.Notehead_Black)
                             .beam(Glyphs.StemUp) 
                         for d in only_stemed_durations]
     
-    flagged_painters = [PainterData
+    stem_only_painters_down = [PainterData
+                            .emit(Note, d, False)
+                            .head(Glyphs.Notehead_Black)
+                            .beam(Glyphs.StemUp) 
+                        for d in only_stemed_durations]
+    
+    flagged_painters_up = [PainterData
                             .emit(Note, d)
                             .head(Glyphs.Notehead_Black)
                             .beam(Glyphs.StemUp)
-                            .flag(flags[i]) 
+                            .flag(flags_up[i]) 
                         for i, d in enumerate(flagged)]
     
-    note_painters = [*simple_painters, *stem_only_painters, *flagged_painters]
+    flagged_painters_down = [PainterData
+                            .emit(Note, d, False)
+                            .head(Glyphs.Notehead_Black)
+                            .beam(Glyphs.StemUp)
+                            .flag(flags_down[i]) 
+                        for i, d in enumerate(flagged)]
+    
+    note_painters = [*simple_painters, *stem_only_painters_up, *stem_only_painters_down, *flagged_painters_up, *flagged_painters_down]
     
     all_rest_glyphs = [
         Glyphs.Rest_Longa,
