@@ -100,7 +100,7 @@ class VirtualStaff():
                 return
 
             for note in bar.time_holders:
-                curr_x = int(note.offset_ratio.to_float() * (seg_end - seg_start) + seg_start)
+                curr_x = int(note.ruler_event.offset_ratio.to_float() * (seg_end - seg_start) + seg_start)
                 if isinstance(note, Note):
                     res_y = int(((-note.pitch.vis_height() + clef.vis_pitch) * self.line_spacing) / 2) + self.line_spacing * 7
                 elif isinstance(note, Rest):

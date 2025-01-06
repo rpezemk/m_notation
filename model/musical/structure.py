@@ -16,7 +16,8 @@ class TimeHolder():
         self.tuple_start = False
         self.tuple_end = False
         self.orientation_up = True
-
+        self.ruler_event: RulerEvent = None
+        
     def flip_orientation(self):
         ...
 
@@ -243,6 +244,8 @@ class VerticalChunk():
         for evt in ruler_events:
             time_holders = [th for m in self.vertical_measures for th in m.time_holders if th.offset_ratio == evt.offset_ratio]
             evt.inner_events = time_holders
+            for th in time_holders:
+                th.ruler_event = evt
 
         return ruler_events
 
