@@ -22,7 +22,7 @@ def generate_sample_piece(n_parts: int, n_measures: int):
                            notes=[
                                 Note.D().r8(),
                                 Note.E().r8(),
-                                Note.F().sharp().r8(),
+                                Note.F().double_sharp().r8(),
                                ]),
                          ]
 
@@ -39,10 +39,10 @@ def generate_sample_piece(n_parts: int, n_measures: int):
                                 Note.C().r8(),
                                 Note.C().o_up().r8(),
                                ]),
-                    Note.C().r16(),
+                    Note.C().double_flat().r16(),
                     Note.D().r16(),
                     Note.E().r16(),
-                    Note.F().sharp().r16(),
+                    Note.F().double_flat().r16(),
                     Note.G().r32(),
                     Note.A().r32(),
                     Note.B().r32(),

@@ -25,7 +25,7 @@ class ElementaryPainter():
         self.head_offset: list[T2D] = [T2D(-4, 1), T2D(-4, 1)]
         self.stem_offset: list[T2D] = [T2D(8, 0), T2D(-4, 37)]
         self.flag_offset: list[T2D] = [T2D(8, -37), T2D(-4, 37)]
-        self.acc_offset: list[T2D] = [T2D(-2, 2), T2D(-2, 2)]
+        # self.acc_offset: list[T2D] = [T2D(-2, 2), T2D(-2, 2)]
         
     def paint_visual_note(self, q_painter: QPainter, v_n: VisualNote):
         inner = v_n.inner
@@ -60,8 +60,9 @@ class ElementaryPainter():
             maybe = [s for s in acc_painters if s[0] == note.pitch.alter]
             if not maybe:
                 return
-            s = maybe[0][1]
-            t = (t2d + self.acc_offset[plc_idx]).add_x(-14)
+            ptr = maybe[0]
+            s = ptr[1]
+            t = (t2d + ptr[plc_idx + 2]).add_x(-14)
             self.paint_text(t, q_painter, s, color)
                 
     def paint_text(self, t: T2D, q_painter: QPainter, s: str, color: QColor, sel: bool = False):

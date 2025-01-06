@@ -115,8 +115,16 @@ class Note(TimeHolder):
         self.pitch.alter = 1
         return self
     
+    def double_sharp(self):
+        self.pitch.alter = 2
+        return self
+    
     def flat(self):
         self.pitch.alter = -1
+        return self
+    
+    def double_flat(self):
+        self.pitch.alter = -2
         return self
     
     def o_up(self): 

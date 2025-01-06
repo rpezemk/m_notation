@@ -1,4 +1,5 @@
 from model.ratio import Ratio
+from utils.geometry.transform2d import T2D
 from widgets.note_widgets.VisualNote import VisualNote
 from model.musical.structure import Note, Rest, TimeHolder
 from fonts.glyphs import Glyphs
@@ -102,11 +103,11 @@ def get_dotting_painters() -> list[PainterData]:
         ]
     return dotting_painters
 
-def get_accidental_painters() -> list[tuple[int, str]]:
+def get_accidental_painters() -> list[tuple[int, str, T2D, T2D]]:
     acc_painters = [
-        (-2, Glyphs.Accidental_DoubleFlat),
-        (-1, Glyphs.Accidental_Flat),
-        (1, Glyphs.Accidental_Sharp),
-        (2, Glyphs.Accidental_DoubleSharp),
+        (-2, Glyphs.Accidental_DoubleFlat, T2D(-8, 2), T2D(-2, 2)),
+        (-1, Glyphs.Accidental_Flat, T2D(-2, 2), T2D(-2, 2)),
+        (1, Glyphs.Accidental_Sharp, T2D(-2, 2), T2D(-2, 2)),
+        (2, Glyphs.Accidental_DoubleSharp, T2D(-8, 2), T2D(-8, 2)),
     ]
     return acc_painters
