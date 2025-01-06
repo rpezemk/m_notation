@@ -226,7 +226,7 @@ class VerticalChunk():
     def __init__(self, one_measure_parts: list[Measure]):
         self.vertical_measures = one_measure_parts
 
-    def ratio_lanes_to_ruler(self) -> list[RulerEvent]:
+    def ratio_lanes_to_ruler_bar(self) -> RulerBar:
         lanes = [[th.real_duration() for th in m.time_holders] for m in self.vertical_measures]
         for v_m in self.vertical_measures:
             curr_pos = Ratio.zero()
@@ -248,8 +248,8 @@ class VerticalChunk():
             evt.inner_events = time_holders
             for th in time_holders:
                 th.ruler_event = evt
-
-        return ruler_events
+        ruler_bar = RulerBar(ruler_events)
+        return ruler_bar
 
     def to_moving_sum(lane: list[Ratio]) -> list[Ratio]:
         curr = Ratio.zero()
@@ -269,8 +269,8 @@ class Chunk:
             for part_no, m in enumerate(v_ch.vertical_measures):
                 self.h_chunks[part_no].measures.append(m)
 
-    def to_ruler_bars(self) -> list[list[RulerEvent]]:
-        lanes_data2 = [v_ch.ratio_lanes_to_ruler() for v_ch in self.v_chunks]
+    def to_ruler_bars(self) -> list[RulerBar]:
+        lanes_data2 = [v_ch.ratio_lanes_to_ruler_bar() for v_ch in self.v_chunks]
         return lanes_data2
 
     def all_time_holders(self):
