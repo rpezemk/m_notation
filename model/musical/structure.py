@@ -234,15 +234,13 @@ class VerticalChunk():
 
     def ratio_lanes_to_ruler_bar(self) -> RulerBar:
         total: Ratio = VerticalChunk.to_sum(th.real_duration() for th in self.vertical_measures[0].time_holders)
-        mov = [
-            *sorted(
-                set(
+        mov = sorted(set(
                     [
                         Ratio.zero(), 
                         *[th.offset_ratio for m in self.vertical_measures for th in m.time_holders],
                         total
                     ]) 
-                , key=lambda r: r.to_float())]
+                , key=lambda r: r.to_float())
 
         ruler_events: list[RulerEvent] = [RulerEvent(mov[i+1] - mov[i], mov[i]) for i in range(len(mov) - 1)]
                 
@@ -251,6 +249,7 @@ class VerticalChunk():
             evt.inner_events = time_holders
             for th in time_holders:
                 th.ruler_event = evt
+                
         ruler_bar = RulerBar(ruler_events)
         return ruler_bar
 
