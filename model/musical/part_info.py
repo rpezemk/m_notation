@@ -4,7 +4,7 @@ class Clef():
     def __init__(self, base_line_pitch, line_no, default_glyph):
         self.base_line_pitch = base_line_pitch
         self.line_no = line_no
-        self.vis_pitch = Pitch.from_midi_pitch(base_line_pitch).vis_height()
+        self.vis_pitch = Pitch.from_midi_pitch(base_line_pitch).vis_height() + line_no
         ...
 
 class AllClefs():
