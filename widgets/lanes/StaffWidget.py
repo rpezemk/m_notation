@@ -32,6 +32,7 @@ class VirtualStaff():
         self.notes = []
         self.note_size = 120
         self.line_spacing = 10
+        self.v_note_spacing = self.line_spacing/2
         self.bar_left_margin = 25
         self.bar_right_margin = 5
         self.x_offsets = None
@@ -104,7 +105,7 @@ class VirtualStaff():
             for note in bar.time_holders:
                 curr_x = int((note.ruler_event.offset_ratio + note.ruler_event.add_offset).to_float() * (seg_end - seg_start)/width_in_beats + seg_start)
                 if isinstance(note, Note):
-                    res_y = int(((-note.pitch.vis_height() + clef.vis_pitch) * self.line_spacing) / 2) + self.line_spacing * 7
+                    res_y = int((-note.pitch.vis_height() + clef.vis_pitch) * self.v_note_spacing + self.v_note_spacing * 14)
                 elif isinstance(note, Rest):
                     res_y = int( (0) / 2) + self.line_spacing * 8
 
