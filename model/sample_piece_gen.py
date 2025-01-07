@@ -1,7 +1,6 @@
-from model.musical.structure import ConductorPart, MTuple, Measure, Note, Part, Piece, TempoMark
+from model.musical.structure import ConductorPart, MTuple, Measure, Note, Part, Piece, TempoMark, AllClefs
 from model.ratio import Ratio
 from model.pitch import Pitch, NoteName
-from model.musical.part_info import *
 
 def generate_sample_piece(n_parts: int, n_measures: int):
     piece = Piece(conductor_part=ConductorPart(TempoMark(90, Ratio.QUARTER(), 0, Ratio(t=(0, 4)))))

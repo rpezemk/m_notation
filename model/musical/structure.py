@@ -3,7 +3,6 @@ from typing import Any, Callable
 from PyQt5.QtGui import QColor
 from model.ratio import Dotting, Ratio
 from model.pitch import Pitch, NoteName
-from model.musical.part_info import Clef
 
 def to_moving_sum_with_zero(len_ratios: list[Ratio]) -> list[Ratio]:
     curr = Ratio.zero()
@@ -179,7 +178,7 @@ class Measure():
             curr_pos += th.real_duration()
     
 class Part():
-    def __init__(self, clef: Clef, measures: list[Measure]=None, piece: 'Piece'=None):
+    def __init__(self, clef: 'Clef', measures: list[Measure]=None, piece: 'Piece'=None):
         self.clef = clef
         self.piece = piece
         self.measures = [] if measures is None else measures
@@ -377,3 +376,22 @@ class FadeOutDynamics(FadeDynamics):
 class Legato(LongHObject):
     def __init__(self, start_note, start_offset, end_note, end_offset):
         super().__init__(start_note, start_offset, end_note, end_offset)
+        
+        
+        
+class Clef():
+    def __init__(self, base_line_pitch: Pitch, n_of_lines: int = 5):
+        self.base_line_pitch = base_line_pitch
+        self.n_of_lines = n_of_lines
+        self.vis_pitch = base_line_pitch.vis_pitch()
+        ...
+
+class AllClefs():
+    TREBLE_CLEF = Clef(Note.E().pitch)
+
+class SampleFamily():
+    ...
+
+class InstrInfo():
+    def __init__(self, name: str, clef: Clef, sample_family: SampleFamily, lowest, highest):
+        ...

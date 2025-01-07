@@ -25,7 +25,7 @@ class Pitch():
         self.note_name = note_name
         self.alter = alter
         
-    def vis_height(self) -> int:
+    def vis_pitch(self) -> int:
         res = max(self.oct_no * 7 + self.note_name.value[1], 0)
         return res
     
