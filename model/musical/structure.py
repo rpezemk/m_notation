@@ -58,6 +58,7 @@ class TimeHolder():
         rest.tuple_start = self.tuple_start
         rest.tuple_end = self.tuple_end
         rest.offset_ratio = self.offset_ratio
+        rest.ruler_event = self.ruler_event
         return rest
 
     def set_selected(self):

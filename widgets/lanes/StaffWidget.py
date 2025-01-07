@@ -182,7 +182,7 @@ class VirtualStaff():
         rest = v_n.inner.clone_as_rest().set_selected()
         v_n.inner.measure.replace_note(v_n.inner, rest)
         v_n.inner = rest
-
+        
     def get_staff_line_offsets(self):
         offsets = []
         for i in range(0, 5):
