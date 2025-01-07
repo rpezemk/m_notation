@@ -122,6 +122,9 @@ class ScoreView(View):
         self.chunk: Chunk = self.piece.to_chunk(self.curr_range[0], self.curr_range[1])
 
         print(self.curr_range)
+        self.refresh_all()
+
+    def refresh_all(self):
         self.ruler_widget.set_content(self.chunk)
         self.refresh_parts()
 

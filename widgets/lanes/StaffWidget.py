@@ -166,8 +166,9 @@ class VirtualStaff():
         selected = [v_n for v_n in self.visual_notes if v_n.inner.is_selected]
         if not selected:
             return
-        self.remove_note(selected[0])
-
+        for sel in selected:
+            self.remove_note(sel)
+        self.parent.refresh_all()
 
     def deselect_notes_but(self, v_notes: list[VisualNote]):
         deselected = [d for d in self.visual_notes if d not in v_notes]
@@ -182,7 +183,7 @@ class VirtualStaff():
         rest = v_n.inner.clone_as_rest().set_selected()
         v_n.inner.measure.replace_note(v_n.inner, rest)
         v_n.inner = rest
-        
+
     def get_staff_line_offsets(self):
         offsets = []
         for i in range(0, 5):
