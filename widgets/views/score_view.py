@@ -24,7 +24,7 @@ class ScoreView(View):
         self.back = QWidget(self.widget)
         self.widget.setFocusPolicy(Qt.NoFocus)
         self.piece = generate_sample_piece(8, 11)
-        self.max_n_measures = 4
+        self.max_n_measures = 3
         self.curr_range: tuple[int, int] = (0, self.max_n_measures)
         self.chunk: Chunk = self.piece.to_chunk(self.curr_range[0], self.curr_range[1])
         self.mode = ScoreViewModeEnum.UNDEFINED
@@ -103,22 +103,12 @@ class ScoreView(View):
         next_start_idx = self.curr_range[0] + k_msrs
         next_end_idx = next_start_idx + self.max_n_measures - 1
 
-        max_idx = self.piece.n_measures() - 1
+        max_end_idx = self.piece.n_measures() - 1
+        max_start_idx = max_end_idx - self.max_n_measures + 1
 
-        if next_start_idx > max_idx or next_end_idx < 0:
-            return
-
-        if k_msrs > 0 and self.curr_range[0] + self.curr_range[1] - 1 >= max_idx:
-            return
-
-        if k_msrs < 0 and self.curr_range[0] <= 0:
-            return
-
-        next_start_idx = max(0, next_start_idx)
-        next_end_idx = min(next_end_idx, max_idx)
-        next_len = next_end_idx - next_start_idx + 1
-        self.curr_range = (next_start_idx, next_len)
-
+        next_start_idx = max(0, min(max_start_idx, next_start_idx))
+ 
+        self.curr_range = (next_start_idx, self.max_n_measures)
         self.chunk: Chunk = self.piece.to_chunk(self.curr_range[0], self.curr_range[1])
 
         print(self.curr_range)
