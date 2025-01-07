@@ -4,10 +4,6 @@
 * stop to play already played file
 
 ## GUI GENERAL
-* playback etc buttons
+* defined views of piece (in part-wise way)
+* slurs, ligatures, etc.
 
-#### DAW PAGE
-
-#### SCORE PAGE
-* show selection
-* add playback routine/metronome/sth
