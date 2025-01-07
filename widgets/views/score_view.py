@@ -24,7 +24,7 @@ class ScoreView(View):
         self.back = QWidget(self.widget)
         self.widget.setFocusPolicy(Qt.NoFocus)
         self.piece = generate_sample_piece(8, 11)
-        self.max_n_measures = 3
+        self.max_n_measures = 5
         self.curr_range: tuple[int, int] = (0, self.max_n_measures)
         self.chunk: Chunk = self.piece.to_chunk(self.curr_range[0], self.curr_range[1])
         self.mode = ScoreViewModeEnum.UNDEFINED

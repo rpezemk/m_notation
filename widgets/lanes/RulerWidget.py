@@ -38,7 +38,7 @@ class RulerPlayer(QThread):
                            [
                                (b_idx, gr_idx, gr) for b_idx, bar
                                in enumerate(self.ruler_bars)
-                               for gr_idx, gr in enumerate(bar)
+                               for gr_idx, gr in enumerate(bar.events)
                             ])
                     ][self.curr_e_no:]
 
@@ -158,10 +158,17 @@ class RulerWidget(BarrableWidget):
         painter.drawRect(rect)
 
     def draw_marked(self, painter: QPainter):
-        e = self.ruler_bars[self.m_no].events[self.e_no]
+        ruler_bar = self.ruler_bars[self.m_no]
+        e = ruler_bar.events[self.e_no]
         seg = self.get_h_segments()[self.m_no]
         seg_start = seg[0]
+        width_in_beats = ruler_bar.total_len_ratio.to_float()
         seg_end = seg[1]
-        curr_x = (e.offset_ratio + e.add_offset).to_float() * (seg_end - seg_start) + seg_start
-        self.draw_bar_frame(painter, int(curr_x)-5, int(curr_x) + 5)
+        curr_x = int((e.offset_ratio + e.add_offset).to_float() * (seg_end - seg_start)/width_in_beats + seg_start)
+        self.draw_mark(painter, int(curr_x)-5, int(curr_x) + 5)
 
+    def draw_mark(self, painter: QPainter, x0, x1):
+        w = self.width()
+        h = self.height() - 5
+        rect = QRect(x0, 2, x1 - x0, 20)
+        painter.drawRect(rect)
