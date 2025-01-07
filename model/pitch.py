@@ -24,20 +24,12 @@ class Pitch():
         self.oct_no = oct_no
         self.note_name = note_name
         self.alter = alter
-    
-    def res_pitch(self):
-        """
-        Returns:
-            int: resulting MIDI pitch
-        """
-        res = max(self.oct_no * 12 + self.note_name.value[0] + self.alter, 0)
-        return res
-    
-    def vis_height(self):
+        
+    def vis_height(self) -> int:
         res = max(self.oct_no * 7 + self.note_name.value[1], 0)
         return res
     
-    def from_midi_pitch(midi_pitch: int):
+    def from_midi_pitch(midi_pitch: int) -> 'Pitch':
         oct_no = midi_pitch // 12
         semi = midi_pitch % 12
         note_name = NoteName.find_pitch(semi) if semi in [0, 2, 4, 5, 7, 9, 11] else NoteName.find_pitch(semi - 1)
