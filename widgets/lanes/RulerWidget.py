@@ -132,8 +132,9 @@ class RulerWidget(BarrableWidget):
             if seg_end - seg_start < 10:
                 continue
             curr_x = 0
+            width_in_beats = ruler_bar.total_len_ratio.to_float()
             for r_e in ruler_bar.events:
-                curr_x = r_e.offset_ratio.to_float() * (seg_end - seg_start) + seg_start
+                curr_x = (r_e.offset_ratio + r_e.add_offset).to_float() * (seg_end - seg_start)/width_in_beats + seg_start
                 self.draw_bar_frame(painter, int(curr_x), int(curr_x) + 1)
 
         pen.setWidth(3)
@@ -161,6 +162,6 @@ class RulerWidget(BarrableWidget):
         seg = self.get_h_segments()[self.m_no]
         seg_start = seg[0]
         seg_end = seg[1]
-        curr_x = e.offset_ratio.to_float() * (seg_end - seg_start) + seg_start
+        curr_x = (e.offset_ratio + e.add_offset).to_float() * (seg_end - seg_start) + seg_start
         self.draw_bar_frame(painter, int(curr_x)-5, int(curr_x) + 5)
 

@@ -5,6 +5,22 @@ from model.ratio import Dotting, Ratio
 from model.pitch import Pitch, NoteName
 from model.musical.part_info import Clef
 
+def to_moving_sum_with_zero(len_ratios: list[Ratio]) -> list[Ratio]:
+    curr = Ratio.zero()
+    offset_ratios = []
+    for l_r in len_ratios:
+        offset_ratios.append(curr)
+        curr = curr + l_r
+    return offset_ratios
+
+def to_moving_sum(len_ratios: list[Ratio]) -> list[Ratio]:
+    curr = Ratio.zero()
+    offset_ratios = []
+    for l_r in len_ratios:
+        curr = curr + l_r
+        offset_ratios.append(curr)
+    return offset_ratios
+
 class TimeHolder():
     def __init__(self, base_duration: Ratio = None, measure: 'Measure' = None, dotting: Ratio = None):
         self.base_duration = base_duration if base_duration is not None else Ratio.QUARTER
@@ -210,7 +226,9 @@ class Piece():
 class RulerEvent():
     def __init__(self, len_ratio: Ratio, offset_ratio: Ratio):
         self.len_ratio = len_ratio
+        self.add_len = Ratio.zero()
         self.offset_ratio = offset_ratio
+        self.add_offset = Ratio.zero()
         self.inner_events:list[TimeHolder] = []
 
     def __str__(self):
@@ -219,13 +237,31 @@ class RulerEvent():
 class RulerBar():
     def __init__(self, events: list[RulerEvent]):
         self.events = events
+    
+        self.calculate_super_lengths()
         
         curr = Ratio(t=(0, 1))
         for e in self.events:
-            curr += e.len_ratio
-            
+            curr += e.len_ratio + e.add_len
+        
         self.total_len_ratio = curr
         
+    def calculate_super_lengths(self):
+        for e in self.events:
+            add = Ratio(t=(0, 1))
+            for th in e.inner_events:
+                if isinstance(th, Note):
+                    n: Note = th
+                    additional_place = Ratio(t=(abs(n.pitch.alter), 64))
+                    if additional_place > add:
+                        add = additional_place
+            e.add_len = add        
+                    
+        add_offsets = to_moving_sum([a.add_len for a in self.events])
+        
+        for i, e in enumerate(self.events):
+            e.add_offset = add_offsets[i]
+            
 class HorizontalChunk():
     """model for vertical one-measure length, n-parts height section.
     """
