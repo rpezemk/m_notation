@@ -78,7 +78,7 @@ class VirtualStaff():
         painter.setPen(self.light_gray)
         painter.setBrush(self.light_gray)
         for v_n in self.visual_notes:
-            m_paint_visual(painter, v_n)
+            m_paint_visual(painter, v_n, self.line_spacing)
 
         for mt in self.res_mtuples:
             m_paint_tuple(painter, mt)

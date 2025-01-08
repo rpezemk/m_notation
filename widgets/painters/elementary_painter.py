@@ -27,7 +27,7 @@ class ElementaryPainter():
         self.flag_offset: list[T2D] = [T2D(8, -37), T2D(-4, 37)]
         # self.acc_offset: list[T2D] = [T2D(-2, 2), T2D(-2, 2)]
         
-    def paint_visual_note(self, q_painter: QPainter, v_n: VisualNote):
+    def paint_visual_note(self, q_painter: QPainter, v_n: VisualNote, line_spacing: int):
         inner = v_n.inner
         inner_type = type(inner)
         is_up = v_n.inner.orientation_up
@@ -48,6 +48,13 @@ class ElementaryPainter():
 
         color = red if inner.is_selected else very_light_gray
 
+        clef = v_n.inner.measure.get_clef()
+
+        if isinstance(inner, Note):
+            clef_vis_pitch = clef.vis_pitch
+            clef_n_lines = clef.n_of_lines
+            inner.pitch.vis_pitch()
+        
         plc_idx = 0 if is_up else 1
         self.paint_text(t2d + self.head_offset[plc_idx], q_painter, p_d.head_str + " " + dot_str, color)
         if p_d.stemed:
