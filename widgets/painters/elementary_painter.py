@@ -52,7 +52,6 @@ class ElementaryPainter():
 
         if isinstance(inner, Note):
             clef_vis_pitch = clef.vis_pitch
-            clef_max_line = clef.n_of_lines - 1
             n_higher_than_base = inner.pitch.vis_pitch() - clef_vis_pitch
             n_below = max(-n_higher_than_base, 0) // 2
             
@@ -69,8 +68,8 @@ class ElementaryPainter():
             
             
             for n in range(n_above):
-                self.paint_text(high_base.add_x(-9).add_y(-n*2*v_note_spacing), q_painter, Glyphs.LedgerLine, color)
-                self.paint_text(high_base.add_x(-3).add_y(-n*2*v_note_spacing), q_painter, Glyphs.LedgerLine, color)
+                self.paint_text(high_base.add_x(-8).add_y(-n*2*v_note_spacing), q_painter, Glyphs.LedgerLine, color)
+                self.paint_text(high_base.add_x(-4).add_y(-n*2*v_note_spacing), q_painter, Glyphs.LedgerLine, color)
             
             
             ...
