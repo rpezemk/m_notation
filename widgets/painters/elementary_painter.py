@@ -27,7 +27,7 @@ class ElementaryPainter():
         self.flag_offset: list[T2D] = [T2D(8, -37), T2D(-4, 37)]
         # self.acc_offset: list[T2D] = [T2D(-2, 2), T2D(-2, 2)]
         
-    def paint_visual_note(self, q_painter: QPainter, v_n: VisualNote, v_note_spacing: int):
+    def paint_visual_note(self, q_painter: QPainter, v_n: VisualNote, v_note_spacing: int, base_y_offset: int):
         inner = v_n.inner
         inner_type = type(inner)
         is_up = v_n.inner.orientation_up
@@ -53,20 +53,24 @@ class ElementaryPainter():
         if isinstance(inner, Note):
             clef_vis_pitch = clef.vis_pitch
             clef_max_line = clef.n_of_lines - 1
-            
-            n_below = max((clef_vis_pitch - inner.pitch.vis_pitch()) // 2, 0)
+            n_higher_than_base = inner.pitch.vis_pitch() - clef_vis_pitch
+            n_below = max(-n_higher_than_base, 0) // 2
             
             for n in range(n_below):
-                k = n 
-                self.paint_text(t2d.add_y( - v_note_spacing * k * 2 + 1).add_x(-8), q_painter, Glyphs.LedgerLine, color)
-                self.paint_text(t2d.add_y( - v_note_spacing * k * 2 + 1).add_x(-4), q_painter, Glyphs.LedgerLine, color)
+                n = n 
+                self.paint_text(t2d.add_y( - v_note_spacing * n * 2 + 1).add_x(-8), q_painter, Glyphs.LedgerLine, color)
+                self.paint_text(t2d.add_y( - v_note_spacing * n * 2 + 1).add_x(-4), q_painter, Glyphs.LedgerLine, color)
             
             # n_above = max((inner.pitch.vis_pitch() - clef_vis_pitch - clef_max_line*2) // 2, 0)
+            higher_than_highest = max((n_higher_than_base - (clef.n_of_lines - 1) * 2), 0)
+            n_above = higher_than_highest // 2
             
-            # for n in range(n_above):
-            #     k = n 
-            #     self.paint_text(t2d.add_y(v_note_spacing * k * 2 + 1).add_x(-8), q_painter, Glyphs.LedgerLine, color)
-            #     self.paint_text(t2d.add_y(v_note_spacing * k * 2 + 1).add_x(-4), q_painter, Glyphs.LedgerLine, color)
+            high_base = T2D(t2d.x, base_y_offset - (clef.n_of_lines) * v_note_spacing * 2 + 1)
+            
+            
+            for n in range(n_above):
+                self.paint_text(high_base.add_x(-9).add_y(-n*2*v_note_spacing), q_painter, Glyphs.LedgerLine, color)
+                self.paint_text(high_base.add_x(-3).add_y(-n*2*v_note_spacing), q_painter, Glyphs.LedgerLine, color)
             
             
             ...

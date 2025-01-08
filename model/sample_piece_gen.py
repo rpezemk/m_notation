@@ -13,9 +13,9 @@ def generate_sample_piece(n_parts: int, n_measures: int):
                          Note.C().r4(),
                          *MTuple.apply(scale = Ratio(t=(2, 3)),
                            notes=[
-                                Note.C().r8(),
-                                Note.C().o_up().r8(),
-                                Note.C().sharp().r8(),
+                                Note.A().o_up().r8(),
+                                Note.B().o_up().r8(),
+                                Note.C().o_up().o_up().r8(),
                                ]),
                          *MTuple.apply(scale = Ratio(t=(2, 3)),
                            notes=[
@@ -42,10 +42,8 @@ def generate_sample_piece(n_parts: int, n_measures: int):
                     Note.D().r16(),
                     Note.E().o_up().r16(),
                     Note.F().o_up().double_flat().r16(),
-                    Note.G().o_up().r32(),
-                    Note.A().o_up().r32(),
-                    Note.B().o_up().r32(),
-                    Note.C().o_up().r32(),
+                    Note.G().o_up().r16(),
+                    Note.A().o_up().r16(),
                     Note.D().o_up().r16(),
                     Note.E().o_up().r16(),
                     ]

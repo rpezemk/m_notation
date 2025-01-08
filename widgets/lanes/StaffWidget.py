@@ -22,7 +22,7 @@ class VirtualStaff():
         self.res_mtuples: list[list[VisualNote]] = []
         
         # y-placement of base staff line
-        self.staff_y_offset = 70
+        self.base_y_offset = 70
         
         res, self.bravura_font = fonts.loader.try_get_music_font()
         self.very_dark_gray = QColor(40, 40, 40)
@@ -81,7 +81,7 @@ class VirtualStaff():
         painter.setPen(self.light_gray)
         painter.setBrush(self.light_gray)
         for v_n in self.visual_notes:
-            m_paint_visual(painter, v_n, self.v_note_spacing)
+            m_paint_visual(painter, v_n, self.v_note_spacing, self.base_y_offset)
 
         for mt in self.res_mtuples:
             m_paint_tuple(painter, mt)
@@ -134,9 +134,9 @@ class VirtualStaff():
 
     def draw_bar_lines(self, painter: QPainter):
         b_h = 4*self.line_spacing
-        painter.drawRect(QRect(0, self.staff_y_offset - b_h, 1, b_h))
+        painter.drawRect(QRect(0, self.base_y_offset - b_h, 1, b_h))
         for x in self.x_offsets[1:]:
-            painter.drawRect(QRect(x, self.staff_y_offset - b_h, 1, b_h))
+            painter.drawRect(QRect(x, self.base_y_offset - b_h, 1, b_h))
 
     def mouse_press(self, event):
         if event.button() == Qt.LeftButton:
@@ -191,7 +191,7 @@ class VirtualStaff():
     def get_staff_line_offsets(self):
         offsets = []
         for i in range(0, 5):
-            offsets.append(self.staff_y_offset - i*self.line_spacing)
+            offsets.append(self.base_y_offset - i*self.line_spacing)
         return offsets
 
     def get_last_selected_note(self):
