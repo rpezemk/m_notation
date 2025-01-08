@@ -11,8 +11,7 @@ from model.musical.structure import HorizontalChunk, MTuple, Note, Rest, TimeHol
 from utils.musical_layout.space import get_single_ruler, map_to
 from widgets.lanes.BarrableWidget import BarrableWidget
 from widgets.note_widgets.VisualNote import VisualNote
-from widgets.painters.paint_manager import m_paint_visual, m_paint_tuple
-
+from widgets.painters.elementary_painter import paint_time_holder, paint_tuple
 
 
 class VirtualStaff():
@@ -80,11 +79,12 @@ class VirtualStaff():
         self.draw_bar_lines(painter)
         painter.setPen(self.light_gray)
         painter.setBrush(self.light_gray)
+        
         for v_n in self.visual_notes:
-            m_paint_visual(painter, v_n, self.v_note_spacing, self.base_y_offset)
+            paint_time_holder(painter, v_n, self.v_note_spacing, self.base_y_offset)
 
         for mt in self.res_mtuples:
-            m_paint_tuple(painter, mt)
+            paint_tuple(painter, mt)
 
     def draw_clef(self, painter: QPainter):
         painter.drawText(QRect(0, -23, 40, 200), Qt.AlignTop, Glyphs.G_Clef)

@@ -40,7 +40,7 @@ class PainterData():
 
 
 
-def get_painter_definitions() -> list[PainterData]:
+def get_note_painters() -> list[PainterData]:
     all_durations = Ratio.get_all_durations()
     simple_durations = [Ratio.LONGA(), Ratio.BREVE(), Ratio.WHOLE()]
     only_stemed_durations = [Ratio.HALF(), Ratio.QUARTER()]
@@ -77,8 +77,11 @@ def get_painter_definitions() -> list[PainterData]:
                             .flag(flags_down[i])
                         for i, d in enumerate(flagged)]
 
-    note_painters = [*simple_painters, *stem_only_painters_up, *stem_only_painters_down, *flagged_painters_up, *flagged_painters_down]
+    return [*simple_painters, *stem_only_painters_up, *stem_only_painters_down, *flagged_painters_up, *flagged_painters_down]
 
+
+def get_rest_painters() -> list[PainterData]:
+    all_durations = Ratio.get_all_durations()
     all_rest_glyphs = [
         Glyphs.Rest_Longa,
         Glyphs.Rest_Maxima,
@@ -90,11 +93,7 @@ def get_painter_definitions() -> list[PainterData]:
         Glyphs.Rest_ThirtyTwo,
         Glyphs.Rest_SixtyFour,]
 
-
-    rest_painters = [PainterData.emit(Rest, d).head(all_rest_glyphs[i]) for i, d in enumerate(all_durations)]
-
-    painters = [*note_painters, *rest_painters]
-    return painters
+    return [PainterData.emit(Rest, d).head(all_rest_glyphs[i]) for i, d in enumerate(all_durations)]
 
 def get_dotting_painters() -> list[PainterData]:
     dotting_painters = [

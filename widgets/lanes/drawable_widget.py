@@ -4,7 +4,6 @@ from model.musical.structure import HorizontalChunk, Note, Rest
 from widgets.lanes.BarrableWidget import BarrableWidget
 from widgets.lanes.StaffWidget import VirtualStaff
 from widgets.note_widgets.VisualNote import VisualNote
-from widgets.painters.paint_manager import m_paint_tuple, m_paint_visual
 from PyQt5.QtWidgets import QWidget
 
 from PyQt5.QtCore import QRect, Qt
