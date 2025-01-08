@@ -31,8 +31,8 @@ class VirtualStaff():
         self.visual_notes: list[VisualNote] = []
         self.notes = []
         self.note_size = 120
-        self.line_spacing = 10
-        self.v_note_spacing = self.line_spacing/2
+        self.v_note_spacing = 5
+        self.line_spacing = self.v_note_spacing * 2
         self.bar_left_margin = 25
         self.bar_right_margin = 5
         self.x_offsets = None
@@ -78,7 +78,7 @@ class VirtualStaff():
         painter.setPen(self.light_gray)
         painter.setBrush(self.light_gray)
         for v_n in self.visual_notes:
-            m_paint_visual(painter, v_n, self.line_spacing)
+            m_paint_visual(painter, v_n, self.v_note_spacing)
 
         for mt in self.res_mtuples:
             m_paint_tuple(painter, mt)

@@ -31,20 +31,20 @@ def generate_sample_piece(n_parts: int, n_measures: int):
             else:
                 # notes = [Note(Pitch(NoteName.C), 0), Note(Pitch(NoteName.C), 7), Note(Pitch(NoteName.C), 0), Note(Pitch(NoteName.C), 7)]
                 notes = [
-                    Note.C().r4(), 
+                    Note.A().o_dwn().r4(), 
                     *MTuple.apply(scale = Ratio(t=(2, 3)),
                            notes=[
-                                Note.C().r8(),
+                                Note.B().o_dwn().r8(),
                                 Note.C().r8(),
                                 Note.C().o_up().r8(),
                                ]),
                     Note.C().double_flat().r16(),
                     Note.D().r16(),
-                    Note.E().r16(),
-                    Note.F().double_flat().r16(),
-                    Note.G().r32(),
-                    Note.A().r32(),
-                    Note.B().r32(),
+                    Note.E().o_up().r16(),
+                    Note.F().o_up().double_flat().r16(),
+                    Note.G().o_up().r32(),
+                    Note.A().o_up().r32(),
+                    Note.B().o_up().r32(),
                     Note.C().o_up().r32(),
                     Note.D().o_up().r16(),
                     Note.E().o_up().r16(),

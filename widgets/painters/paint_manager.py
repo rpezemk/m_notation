@@ -17,8 +17,8 @@ light_gray = QColor(140, 140, 140)
 very_light_gray = QColor(160, 160, 160)
 red = QColor(200, 44, 44)
 
-def m_paint_visual(q_painter: QPainter, v_n: VisualNote, line_spacing: int):
-    el_painter.paint_visual_note(q_painter, v_n, line_spacing)
+def m_paint_visual(q_painter: QPainter, v_n: VisualNote, v_note_spacing: int):
+    el_painter.paint_visual_note(q_painter, v_n, v_note_spacing)
 
 
 

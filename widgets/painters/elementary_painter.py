@@ -27,7 +27,7 @@ class ElementaryPainter():
         self.flag_offset: list[T2D] = [T2D(8, -37), T2D(-4, 37)]
         # self.acc_offset: list[T2D] = [T2D(-2, 2), T2D(-2, 2)]
         
-    def paint_visual_note(self, q_painter: QPainter, v_n: VisualNote, line_spacing: int):
+    def paint_visual_note(self, q_painter: QPainter, v_n: VisualNote, v_note_spacing: int):
         inner = v_n.inner
         inner_type = type(inner)
         is_up = v_n.inner.orientation_up
@@ -52,9 +52,25 @@ class ElementaryPainter():
 
         if isinstance(inner, Note):
             clef_vis_pitch = clef.vis_pitch
-            clef_n_lines = clef.n_of_lines
-            inner.pitch.vis_pitch()
-        
+            clef_max_line = clef.n_of_lines - 1
+            
+            n_below = max((clef_vis_pitch - inner.pitch.vis_pitch()) // 2, 0)
+            
+            for n in range(n_below):
+                k = n 
+                self.paint_text(t2d.add_y( - v_note_spacing * k * 2 + 1).add_x(-8), q_painter, Glyphs.LedgerLine, color)
+                self.paint_text(t2d.add_y( - v_note_spacing * k * 2 + 1).add_x(-4), q_painter, Glyphs.LedgerLine, color)
+            
+            # n_above = max((inner.pitch.vis_pitch() - clef_vis_pitch - clef_max_line*2) // 2, 0)
+            
+            # for n in range(n_above):
+            #     k = n 
+            #     self.paint_text(t2d.add_y(v_note_spacing * k * 2 + 1).add_x(-8), q_painter, Glyphs.LedgerLine, color)
+            #     self.paint_text(t2d.add_y(v_note_spacing * k * 2 + 1).add_x(-4), q_painter, Glyphs.LedgerLine, color)
+            
+            
+            ...
+            
         plc_idx = 0 if is_up else 1
         self.paint_text(t2d + self.head_offset[plc_idx], q_painter, p_d.head_str + " " + dot_str, color)
         if p_d.stemed:

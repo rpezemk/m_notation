@@ -159,3 +159,5 @@ class Glyphs:
 
     AugDot = "\uE1E7"
     DoubleAugDot = "\uE1E8"
+    
+    LedgerLine = "\uE022"
