@@ -31,7 +31,7 @@ def generate_sample_piece(n_treble_parts: int, n_bass_parts, n_measures: int):
         part.parent=piece
         piece.parts.append(part)
 
-    return piece
+    return piece.validate()
 
 def get_some_notes_01():
     notes = [Note.A().o_dwn().r1().tie()]

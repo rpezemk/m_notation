@@ -240,12 +240,35 @@ class Measure():
             th.offset_ratio = curr_pos
             curr_pos += th.real_duration()
     
+    def validate(self):
+        for th in self.time_holders:
+            if not isinstance(th, Note):
+                continue
+            n: Note = th
+            if not n.tied:
+                continue
+            
+            if not n.next_exists():
+                continue
+            if not n.next_is_note():
+                continue
+            
+            nxt: Note = n.get_next()
+            
+            # validate tie -- allow only same midi pitch ties
+            if n.tied and n.pitch.midi_pitch() != nxt.pitch.midi_pitch():
+                n.tied = False
+    
 class Part():
     def __init__(self, clef: 'Clef', measures: list[Measure]=None, piece: 'Piece'=None):
         self.clef = clef
         self.piece = piece
         self.measures = [] if measures is None else measures
 
+    def validate(self):
+        for m in self.measures:
+            m.validate()        
+        return self
     
 class TempoMark():
     def __init__(self, bpm: float, bpm_base: Ratio, bar_no: int, bar_offset: Ratio):
@@ -284,7 +307,11 @@ class Piece():
 
         return len(self.parts[0].measures)
 
-
+    def validate(self):
+        for p in self.parts:
+            p.validate()
+        
+        return self
 
 class RulerEvent():
     def __init__(self, len_ratio: Ratio, offset_ratio: Ratio):

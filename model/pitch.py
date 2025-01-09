@@ -36,3 +36,7 @@ class Pitch():
         alter = semi - note_name.value[0]
         res = Pitch(note_name, alter, oct_no)
         return res
+    
+    def midi_pitch(self):
+        res = self.oct_no * 12 + self.note_name.value[0] + self.alter
+        return res
