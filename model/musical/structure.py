@@ -492,11 +492,13 @@ class InstrInfo():
         
         
 class VisualNote():
-    def __init__(self, note: TimeHolder, point: tuple[float, float]):
+    def __init__(self, note: TimeHolder, point: tuple[float, float], seg_start: int, seg_end: int):
         self.inner = note
         self.inner.visual_note = self
         self.point = point
         self.is_selected = False
+        self.seg_start = seg_start
+        self.seg_end = seg_end
 
 class VisualTuple():
     def __init__(self, v_notes: list[VisualNote]):

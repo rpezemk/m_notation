@@ -113,7 +113,7 @@ class VirtualStaff():
                 elif isinstance(note, Rest):
                     res_y = int( (0) / 2) + self.line_spacing * 8
 
-                vis_note = VisualNote(note, (curr_x, res_y))
+                vis_note = VisualNote(note, (curr_x, res_y), seg_start, seg_end)
                 self.visual_notes.append(vis_note)
                 measure.append(vis_note)
 

@@ -4,7 +4,7 @@ from utils.geometry.transform2d import T2D
 from PyQt5.QtCore import Qt, QRect
 from PyQt5.QtGui import QPainter, QColor, QPainterPath, QPen
 from widgets.painters.painter_definitions import get_dotting_painters, get_note_painters, get_accidental_painters, get_rest_painters
-
+import math
 note_painters = get_note_painters()
 rest_painters = get_rest_painters()
 dot_painters = get_dotting_painters()
@@ -70,7 +70,8 @@ def paint_time_holders(q_painter: QPainter, visual_notes_by_measure: list[list[V
         nxt = n.get_next()
         if nxt.visual_note in visual_notes:
             draw_tie(q_painter, v_n, nxt.visual_note)
-        
+        else:
+            draw_half_tie(q_painter, v_n)
         
 def paint_time_holder(q_painter: QPainter, v_n: VisualNote, v_note_spacing: int, base_y_offset: int):
     color = red if v_n.inner.is_selected else very_light_gray
@@ -192,9 +193,41 @@ def draw_tie(q_painter: QPainter, v_n1: VisualNote, v_n2: VisualNote):
     mul = -1 if is_up else 1
     x0, y0, x1, y1 = v_n1.point[0], v_n1.point[1], v_n2.point[0], v_n2.point[1]
     
+    x_diff = x1 - x0
+    
     dx = 5
     dy = mul * 7
-    dyc = mul * 15
+    dyc = int(mul * 5 * (1 + math.sqrt(x_diff/10)))
+    
+    q_painter.setBrush(transp)
+    control1_x, control1_y = x0 + 1/4*(x1-x0), y0 + dyc
+    control2_x, control2_y = x0 + 3/4*(x1-x0), y0 + dyc
+
+    path = QPainterPath()
+    path.moveTo(x0 + dx, y0 + dy)
+    path.cubicTo(control1_x, control1_y, control2_x, control2_y, x1 - dx, y1 + dy)
+
+    q_painter.drawPath(path)
+    
+def draw_half_tie(q_painter: QPainter, v_n1: VisualNote):
+    clef = v_n1.inner.measure.get_clef()
+    n1: Note = v_n1.inner
+    diff = n1.pitch.vis_pitch() - clef.vis_pitch
+    is_up = (diff) - clef.n_of_lines > 0
+    
+    if is_up:
+        ...
+    else:
+        ...
+    
+    mul = -1 if is_up else 1
+    x0, y0, x1, y1 = v_n1.point[0], v_n1.point[1], v_n1.seg_end, v_n1.point[1]
+    
+    x_diff = x1 - x0
+    
+    dx = 5
+    dy = mul * 7
+    dyc = int(mul * 5 * (1 + math.sqrt(x_diff/10)))
     
     q_painter.setBrush(transp)
     control1_x, control1_y = x0 + 1/4*(x1-x0), y0 + dyc
