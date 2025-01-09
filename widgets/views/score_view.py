@@ -34,9 +34,9 @@ class ScoreView(View):
         self.layout.addWidget(self.ruler_widget)
 
         self.part_widgets: list[VirtualStaff] = []
-
+        self.y_offset_start = 50
         for idx, h_chunk in enumerate(self.chunk.h_chunks):
-            part_widget = VirtualStaff(parent=self, y_offset=idx * 120)
+            part_widget = VirtualStaff(parent=self, y_offset=idx * 120 + self.y_offset_start)
             self.part_widgets.append(part_widget)
             # self.layout.addWidget(part_widget)
 
