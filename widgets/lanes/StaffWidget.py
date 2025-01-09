@@ -87,7 +87,8 @@ class VirtualStaff():
             paint_tuple(painter, mt)
 
     def draw_clef(self, painter: QPainter):
-        painter.drawText(QRect(0, -23, 40, 200), Qt.AlignTop, Glyphs.G_Clef)
+        clef = self.measures[0].part.clef
+        painter.drawText(QRect(0, -23 - clef.clef_y_offset, 40, 200), Qt.AlignTop, clef.clef_str)
 
     def calculate_vis_notes(self):
         bar_segments = self.get_h_segments()

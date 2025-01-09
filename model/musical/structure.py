@@ -1,6 +1,7 @@
 import random
 from typing import Any, Callable
 from PyQt5.QtGui import QColor
+from fonts.glyphs import Glyphs
 from model.ratio import Dotting, Ratio
 from model.pitch import Pitch, NoteName
 
@@ -380,14 +381,17 @@ class Legato(LongHObject):
         
         
 class Clef():
-    def __init__(self, base_line_pitch: Pitch, n_of_lines: int = 5):
+    def __init__(self, base_line_pitch: Pitch, n_of_lines: int = 5, clef_str: str = Glyphs.G_Clef, clef_y_offset: int = 0):
         self.base_line_pitch = base_line_pitch
         self.n_of_lines = n_of_lines
         self.vis_pitch = base_line_pitch.vis_pitch()
+        self.clef_str = clef_str
+        self.clef_y_offset = clef_y_offset
         ...
 
 class AllClefs():
-    TREBLE_CLEF = Clef(Note.E().pitch)
+    TREBLE_CLEF = Clef(Note.E().pitch, clef_str=Glyphs.G_Clef)
+    BASS_CLEF = Clef(Note.E().pitch, clef_str=Glyphs.F_Clef, clef_y_offset=21)
 
 class SampleFamily():
     ...
