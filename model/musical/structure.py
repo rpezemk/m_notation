@@ -103,7 +103,8 @@ class Note(TimeHolder):
         self.measure = measure
         self.pitch = pitch
         self.orientation_up = True
-
+        self.tied = False
+        
     def __str__(self):
         return f"d: {self.base_duration}"
 
@@ -150,7 +151,9 @@ class Note(TimeHolder):
     def o_dwn(self): 
         return self.add_oct(-1)
 
-    
+    def tie(self):
+        self.tied = True
+        return self
     
 class Measure():
     def __init__(self, part_no: int, m_no: int, notes: list[TimeHolder]=None, parent: 'Part'=None):
