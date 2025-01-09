@@ -1,9 +1,11 @@
 # TODO LIST
 
 ## CSOUND
-* stop to play already played file
+* tied notes as one event....
+
+## score layout
+* slurs
 
 ## GUI GENERAL
 * defined views of piece (in part-wise way)
-* slurs, ligatures, etc.
 
