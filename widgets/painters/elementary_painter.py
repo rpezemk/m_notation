@@ -95,7 +95,7 @@ def paint_visual_note(q_painter: QPainter, v_n: VisualNote, v_note_spacing: int,
     plc_idx = 0 if is_up else 1
     paint_text(t2d + head_offset[plc_idx], q_painter, p_d[1] + " " + dot_str, color)
     if p_d[2][0]:
-        paint_text(t2d + stem_offset[plc_idx], q_painter, p_d[2][1][plc_idx], color)
+        paint_text(t2d + stem_offset[plc_idx], q_painter, p_d[2][1][0], color)
     if p_d[3][0]:
         paint_text(t2d + flag_offset[plc_idx], q_painter, p_d[3][1][plc_idx], color)
 
