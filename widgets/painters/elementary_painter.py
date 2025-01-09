@@ -32,7 +32,7 @@ def paint_time_holders(q_painter: QPainter, visual_notes_by_measure: list[list[V
     mtuple_opened = False
     
     # th draw
-    visual_notes = []
+    visual_notes:list[VisualNote] = []
     for group in visual_notes_by_measure:
         for v_n in group:
             visual_notes.append(v_n)
