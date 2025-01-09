@@ -27,6 +27,32 @@ flag_offset: list[T2D] = [T2D(8, -37), T2D(-4, 37)]
 
 #### METHODS FOR EXTERNAL USE #### 
 
+def paint_time_holders(q_painter: QPainter, visual_notes: list[VisualNote], v_note_spacing: int, base_y_offset: int):
+    res_mtuples: list[list[VisualNote]] = []
+    new_mtuple: list[VisualNote] = []
+    mtuple_opened = False
+    
+    # th draw
+    for v_n in visual_notes:
+        paint_time_holder(q_painter, v_n, v_note_spacing, base_y_offset)
+
+    # build tuple groups
+    for v_n in visual_notes:
+        if v_n.inner.tuple_start:
+            mtuple_opened = True
+        if mtuple_opened:
+            new_mtuple.append(v_n)
+        if v_n.inner.tuple_end:
+            res_mtuples.append(new_mtuple)
+            new_mtuple = []
+            mtuple_opened = False
+
+    # draw bracket for each group
+    for tuple_v_notes in res_mtuples:
+            paint_tuple_bracket(q_painter, tuple_v_notes)
+
+
+
 def paint_time_holder(q_painter: QPainter, v_n: VisualNote, v_note_spacing: int, base_y_offset: int):
     color = red if v_n.inner.is_selected else very_light_gray
     if isinstance(v_n.inner, Note):
@@ -34,34 +60,7 @@ def paint_time_holder(q_painter: QPainter, v_n: VisualNote, v_note_spacing: int,
     else:
         paint_visual_rest(q_painter, v_n, v_note_spacing, base_y_offset, color)
         
-        
-def paint_tuple(q_painter: QPainter, v_notes: list[VisualNote]):
-    p1 = v_notes[:1][0].point
-    p2 = v_notes[-1:][0].point
-
-
-    a = (p2[1] - p1[1])/(p2[0] - p1[0])
-    inbetween = v_notes[1:][:-1]
-    if inbetween:
-        min_val, max_val = get_min_max_diff(a, p1[0], p1[1], v_notes[1:][:-1])
-    else:
-        min_val, max_val = (0, 0)
-    fix = max(int(max_val), 0)
-    v_h = 7
-    d = v_h + fix
-    h = 5
-    w = 30
-    q_painter.setPen(light_gray)
-    q_painter.drawLine(p1[0], p1[1] + h, p1[0], p1[1] + h + d)
-    q_painter.drawLine(p1[0], p1[1] + d + h, p2[0], p2[1] + h + d)
-    q_painter.drawLine(p2[0], p2[1] + h, p2[0], p2[1] + h + d)
-    x_m = int((p1[0] + p2[0])/2)
-    y_m = int((p1[1] + p2[1])/2)
-    text_rect = QRect(int(x_m - w/2), y_m + 10 + fix, w, w)
-    q_painter.drawText(text_rect, Qt.AlignCenter | Qt.AlignVCenter, Glyphs.Tuplet_3)
-    
-    
-           
+               
 
 #### INTERNAL USAGE METHODS ####
         
@@ -166,6 +165,32 @@ def paint_text(t: T2D, q_painter: QPainter, s: str, color: QColor, sel: bool = F
     q_painter.setPen(color)
     q_painter.drawText(text_rect, Qt.AlignLeft | Qt.AlignVCenter, s)
 
+
+def paint_tuple_bracket(q_painter: QPainter, v_notes: list[VisualNote]):
+    p1 = v_notes[:1][0].point
+    p2 = v_notes[-1:][0].point
+
+    a = (p2[1] - p1[1])/(p2[0] - p1[0])
+    inbetween = v_notes[1:][:-1]
+    if inbetween:
+        min_val, max_val = get_min_max_diff(a, p1[0], p1[1], v_notes[1:][:-1])
+    else:
+        min_val, max_val = (0, 0)
+    fix = max(int(max_val), 0)
+    v_h = 7
+    d = v_h + fix
+    h = 5
+    w = 30
+    q_painter.setPen(light_gray)
+    q_painter.drawLine(p1[0], p1[1] + h, p1[0], p1[1] + h + d)
+    q_painter.drawLine(p1[0], p1[1] + d + h, p2[0], p2[1] + h + d)
+    q_painter.drawLine(p2[0], p2[1] + h, p2[0], p2[1] + h + d)
+    x_m = int((p1[0] + p2[0])/2)
+    y_m = int((p1[1] + p2[1])/2)
+    text_rect = QRect(int(x_m - w/2), y_m + 10 + fix, w, w)
+    q_painter.drawText(text_rect, Qt.AlignCenter | Qt.AlignVCenter, Glyphs.Tuplet_3)
+
+    
 def get_min_max_diff(a: float, x_0: float, y_0, inbetween_notes: list[VisualNote]):
     diffs = get_diffs(a, x_0, y_0, inbetween_notes)
     min_val = min(diffs)
@@ -175,4 +200,4 @@ def get_min_max_diff(a: float, x_0: float, y_0, inbetween_notes: list[VisualNote
 def get_diffs(a, x_0, y_0, inbetween_notes: list[VisualNote]):
     res = [(n.point[1] - a*(n.point[0] - x_0)) - y_0  for n in inbetween_notes]
     return res
-
+    

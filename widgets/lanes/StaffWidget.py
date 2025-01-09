@@ -11,7 +11,7 @@ from model.musical.structure import HorizontalChunk, MTuple, Note, Rest, TimeHol
 from utils.musical_layout.space import get_single_ruler, map_to
 from widgets.lanes.BarrableWidget import BarrableWidget
 from widgets.note_widgets.VisualNote import VisualNote
-from widgets.painters.elementary_painter import paint_time_holder, paint_tuple
+from widgets.painters.elementary_painter import paint_time_holder, paint_time_holders, paint_tuple_bracket
 
 
 class VirtualStaff():
@@ -31,6 +31,7 @@ class VirtualStaff():
         self.light_black = QColor(13, 13, 13)
         self.clef_margin = 30
         self.visual_notes: list[VisualNote] = []
+        self.visual_notes_by_measure: list[list[VisualNote]] = []
         self.notes = []
         self.note_size = 120
         self.v_note_spacing = 5
@@ -39,7 +40,8 @@ class VirtualStaff():
         self.bar_right_margin = 5
         self.x_offsets = None
         self.y_offset = y_offset if y_offset else 0
-
+        self.measures: list[Measure] = []
+        
     def set_content(self, h_chunk: HorizontalChunk):
         self.measures = h_chunk.measures
 
@@ -80,11 +82,10 @@ class VirtualStaff():
         painter.setPen(self.light_gray)
         painter.setBrush(self.light_gray)
         
-        for v_n in self.visual_notes:
-            paint_time_holder(painter, v_n, self.v_note_spacing, self.base_y_offset)
+        for m in self.visual_notes_by_measure:
+            paint_time_holders(painter, m, self.v_note_spacing, self.base_y_offset)
 
-        for mt in self.res_mtuples:
-            paint_tuple(painter, mt)
+
 
     def draw_clef(self, painter: QPainter):
         clef = self.measures[0].part.clef
@@ -93,13 +94,17 @@ class VirtualStaff():
     def calculate_vis_notes(self):
         bar_segments = self.get_h_segments()
         self.visual_notes = []
+        self.visual_notes_by_measure = []
         self.res_mtuples: list[list[VisualNote]] = []
         new_mtuple: list[VisualNote] = []
         mtuple_opened = False
+        
+        
         for m_no, bar in enumerate(self.measures):
             seg_start = bar_segments[m_no][0]
             seg_end = bar_segments[m_no][1]
             clef = bar.get_clef()
+            measure = []
 
             if seg_end - seg_start < 10:
                 return
@@ -115,19 +120,9 @@ class VirtualStaff():
 
                 vis_note = VisualNote(note, (curr_x, res_y))
                 self.visual_notes.append(vis_note)
+                measure.append(vis_note)
 
-
-                if note.tuple_start:
-                    mtuple_opened = True
-
-                if mtuple_opened:
-                    new_mtuple.append(vis_note)
-
-                if note.tuple_end:
-                    self.res_mtuples.append(new_mtuple)
-                    new_mtuple = []
-                    mtuple_opened = False
-
+            self.visual_notes_by_measure.append(measure)
 
     def draw_staff_lines(self, painter: QPainter, width: int):
         for y_offset in self.get_staff_line_offsets():
