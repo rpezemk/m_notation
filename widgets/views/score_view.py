@@ -3,7 +3,7 @@ from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtWidgets import QFrame, QWidget
 from PyQt5.QtGui import QPainter
 
-from model.musical.structure import Chunk
+from model.musical.structure import Chunk, VisualNote
 from model.sample_piece_gen import generate_sample_piece
 from widgets.basics.my_button import StateButton, SyncButton
 from widgets.compound.stretch import Stretch
@@ -13,7 +13,6 @@ from widgets.lanes.StaffWidget import VirtualStaff
 from widgets.compound.stack_panels import HStack, VStack
 from widgets.lanes.PartWidget import PartWidget
 from widgets.lanes.RulerWidget import RulerWidget
-from widgets.note_widgets.VisualNote import VisualNote
 from widgets.views.piano_control import PianoHorizontal
 from widgets.views.score_view_modes import ScoreViewModeEnum
 from widgets.views.view import View

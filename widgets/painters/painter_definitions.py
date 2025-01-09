@@ -1,6 +1,5 @@
 from model.ratio import Ratio
 from utils.geometry.transform2d import T2D
-from widgets.note_widgets.VisualNote import VisualNote
 from model.musical.structure import Note, Rest, TimeHolder
 from fonts.glyphs import Glyphs
 

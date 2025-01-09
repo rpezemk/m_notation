@@ -1,9 +1,8 @@
 from typing import Callable
 from fonts.glyphs import Glyphs
-from model.musical.structure import HorizontalChunk, Note, Rest
+from model.musical.structure import HorizontalChunk, Note, Rest, VisualNote
 from widgets.lanes.BarrableWidget import BarrableWidget
 from widgets.lanes.StaffWidget import VirtualStaff
-from widgets.note_widgets.VisualNote import VisualNote
 from PyQt5.QtWidgets import QWidget
 
 from PyQt5.QtCore import QRect, Qt

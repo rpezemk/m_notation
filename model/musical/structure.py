@@ -33,6 +33,7 @@ class TimeHolder():
         self.tuple_end = False
         self.orientation_up = True
         self.ruler_event: RulerEvent = None
+        self.visual_note: VisualNote = None
         
     def flip_orientation(self):
         ...
@@ -157,6 +158,27 @@ class Note(TimeHolder):
         res = isinstance(next_m.time_holders[0], Note)
         return res
         
+    
+    def get_next(self):
+        m = self.measure
+        idx = m.time_holders.index(self)
+        max_idx = len(m.time_holders) - 1
+        if idx < max_idx:
+            return m.time_holders[idx+1]
+            
+        p = m.part
+        idx = p.measures.index(m)
+        max_idx = len(p.measures) - 1
+        if idx == max_idx:
+            return None
+        
+        next_m = p.measures[idx + 1]
+        if not next_m.time_holders:
+            return None
+        
+        res = next_m.time_holders[0]
+        return res
+    
         
     def C(): return Note(Pitch(NoteName.C))
     def D(): return Note(Pitch(NoteName.D))
@@ -224,7 +246,7 @@ class Part():
         self.piece = piece
         self.measures = [] if measures is None else measures
 
-
+    
 class TempoMark():
     def __init__(self, bpm: float, bpm_base: Ratio, bar_no: int, bar_offset: Ratio):
         self.bar_no = 0
@@ -439,3 +461,16 @@ class SampleFamily():
 class InstrInfo():
     def __init__(self, name: str, clef: Clef, sample_family: SampleFamily, lowest, highest):
         ...
+        
+        
+        
+class VisualNote():
+    def __init__(self, note: TimeHolder, point: tuple[float, float]):
+        self.inner = note
+        self.inner.visual_note = self
+        self.point = point
+        self.is_selected = False
+
+class VisualTuple():
+    def __init__(self, v_notes: list[VisualNote]):
+        self.notes = v_notes

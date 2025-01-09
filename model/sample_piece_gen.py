@@ -34,7 +34,7 @@ def generate_sample_piece(n_treble_parts: int, n_bass_parts, n_measures: int):
     return piece
 
 def get_some_notes_01():
-    notes = [Note.A().o_dwn().r1()]
+    notes = [Note.A().o_dwn().r1().tie()]
     return notes
 
 
@@ -87,7 +87,7 @@ def get_some_notes_04():
 
 
 def get_some_bass_notes_01():
-    notes = [Note.A().o_dwn().o_dwn().r1()]
+    notes = [Note.A().o_dwn().o_dwn().r1().tie()]
     return notes
 
 

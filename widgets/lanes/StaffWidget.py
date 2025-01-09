@@ -7,10 +7,9 @@ from PyQt5.QtGui import QColor
 import fonts.loader
 from fonts.glyphs import Glyphs
 from model.sample_piece_gen import Measure
-from model.musical.structure import HorizontalChunk, MTuple, Note, Rest, TimeHolder
+from model.musical.structure import HorizontalChunk, MTuple, Note, Rest, TimeHolder, VisualNote
 from utils.musical_layout.space import get_single_ruler, map_to
 from widgets.lanes.BarrableWidget import BarrableWidget
-from widgets.note_widgets.VisualNote import VisualNote
 from widgets.painters.elementary_painter import paint_time_holder, paint_time_holders, paint_tuple_bracket
 
 
@@ -82,8 +81,7 @@ class VirtualStaff():
         painter.setPen(self.light_gray)
         painter.setBrush(self.light_gray)
         
-        for m in self.visual_notes_by_measure:
-            paint_time_holders(painter, m, self.v_note_spacing, self.base_y_offset)
+        paint_time_holders(painter, self.visual_notes_by_measure, self.v_note_spacing, self.base_y_offset)
 
 
 

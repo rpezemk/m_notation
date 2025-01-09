@@ -1,10 +1,9 @@
 from fonts.glyphs import Glyphs
-from model.musical.structure import Note
+from model.musical.structure import Note, VisualNote, VisualTuple
 from utils.geometry.transform2d import T2D
 from PyQt5.QtCore import Qt, QRect
-from PyQt5.QtGui import QPainter, QColor
+from PyQt5.QtGui import QPainter, QColor, QPainterPath
 from widgets.painters.painter_definitions import get_dotting_painters, get_note_painters, get_accidental_painters, get_rest_painters
-from widgets.note_widgets.VisualNote import VisualNote
 
 note_painters = get_note_painters()
 rest_painters = get_rest_painters()
@@ -27,12 +26,17 @@ flag_offset: list[T2D] = [T2D(8, -37), T2D(-4, 37)]
 
 #### METHODS FOR EXTERNAL USE #### 
 
-def paint_time_holders(q_painter: QPainter, visual_notes: list[VisualNote], v_note_spacing: int, base_y_offset: int):
+def paint_time_holders(q_painter: QPainter, visual_notes_by_measure: list[list[VisualNote]], v_note_spacing: int, base_y_offset: int):
     res_mtuples: list[list[VisualNote]] = []
     new_mtuple: list[VisualNote] = []
     mtuple_opened = False
     
     # th draw
+    visual_notes = []
+    for group in visual_notes_by_measure:
+        for v_n in group:
+            visual_notes.append(v_n)
+    
     for v_n in visual_notes:
         paint_time_holder(q_painter, v_n, v_note_spacing, base_y_offset)
 
@@ -51,8 +55,23 @@ def paint_time_holders(q_painter: QPainter, visual_notes: list[VisualNote], v_no
     for tuple_v_notes in res_mtuples:
             paint_tuple_bracket(q_painter, tuple_v_notes)
 
-
-
+    for v_n in visual_notes:
+        if not isinstance(v_n.inner, Note):
+            continue
+        n: Note = v_n.inner
+        if not n.tied:
+            continue
+        
+        if not n.next_exists():
+            continue
+        if not n.next_is_note():
+            continue
+        
+        nxt = n.get_next()
+        if nxt.visual_note in visual_notes:
+            draw_tie(q_painter, v_n, nxt.visual_note)
+        
+        
 def paint_time_holder(q_painter: QPainter, v_n: VisualNote, v_note_spacing: int, base_y_offset: int):
     color = red if v_n.inner.is_selected else very_light_gray
     if isinstance(v_n.inner, Note):
@@ -153,7 +172,24 @@ def draw_ledger_lines(q_painter, v_note_spacing, base_y_offset, inner, t2d, colo
         paint_text(high_base.add_x(-8).add_y(-n*2*v_note_spacing), q_painter, Glyphs.LedgerLine, color)
         paint_text(high_base.add_x(-4).add_y(-n*2*v_note_spacing), q_painter, Glyphs.LedgerLine, color)
         
-            
+
+def draw_tie(q_painter: QPainter, v_n1: VisualNote, v_n2: VisualNote):
+    path = QPainterPath()
+    
+    y_offset = 10
+    x_offset = 5
+    x0, y0, x1, y1 = v_n1.point[0] + x_offset, v_n1.point[1] + y_offset, v_n2.point[0] - x_offset, v_n2.point[1] + y_offset
+    
+    q_painter.setBrush(transp)
+    control1_x, control1_y = x0 + 1/4*(x1-x0), y0 + 15
+    control2_x, control2_y = x0 + 3/4*(x1-x0), y0 + 15
+
+    path.moveTo(x0, y0)
+    path.cubicTo(control1_x, control1_y, control2_x, control2_y, x1, y1)
+
+    q_painter.drawPath(path)
+
+    
 def paint_text(t: T2D, q_painter: QPainter, s: str, color: QColor, sel: bool = False):
     text_rect = QRect(t.x, t.y - box_h_half, box_w_half*2, box_h_half*2)
 
