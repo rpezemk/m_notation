@@ -6,13 +6,6 @@ class Glyphs:
     Percussion_Clef_2 = "\uE06A"
 
 
-
-    Accidental_Natural = "\uE260"
-    Accidental_Flat = "\uE261"
-    Accidental_Sharp = "\uE262"
-    Accidental_DoubleFlat = "\uE264"
-    Accidental_DoubleSharp = "\uE263"
-
     TimeSig_4_4 = "\uE08A"
     TimeSig_3_4 = "\uE086"
     TimeSig_2_4 = "\uE082"
@@ -58,15 +51,7 @@ class Glyphs:
     BreathMark_Tick = "\uE4CF"
     # +E247
 
-    Flag_EighthUp = "\uE240"
-    Flag_EighthDown = "\uE241"
-    Flag_SixteenthUp = "\uE242"
-    Flag_SixteenthDown = "\uE243"
-    Flag_ThirtySecondUp = "\uE244"  # Thirty-second note flag (upward)
-    Flag_ThirtySecondDown = "\uE245" # Thirty-second note flag (downward)
-    Flag_SixtyFourthUp = "\uE246"   # Sixty-fourth note flag (upward)
-    Flag_SixtyFourthDown = "\uE247" # Sixty-fourth note flag (downward)
-
+    
     RepeatEnding1 = "\uE00D"
     RepeatEnding2 = "\uE00E"
 
@@ -169,3 +154,23 @@ class Glyphs:
         Sixteenth = "\uE4E7"
         ThirtyTwo = "\uE4E8"
         SixtyFour = "\uE4E9"
+        
+    class Accidentals():
+        Natural = "\uE260"
+        Flat = "\uE261"
+        Sharp = "\uE262"
+        DoubleFlat = "\uE264"
+        DoubleSharp = "\uE263"
+        
+    class Flags():
+        class Up:
+            Eighth = "\uE240"
+            Sixteenth = "\uE242"
+            ThirtySecond = "\uE244"  # Thirty-second note flag (upward)
+            SixtyFourth = "\uE246"   # Sixty-fourth note flag (upward)
+            ...
+        class Down:
+            Eighth = "\uE241"
+            Sixteenth = "\uE243"
+            ThirtySecond = "\uE245" # Thirty-second note flag (downward)
+            SixtyFourth = "\uE247" # Sixty-fourth note flag (downward)
