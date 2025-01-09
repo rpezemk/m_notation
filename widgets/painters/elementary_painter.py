@@ -157,11 +157,13 @@ def draw_ledger_lines(q_painter, v_note_spacing, base_y_offset, inner, t2d, colo
     clef_vis_pitch = clef.vis_pitch
     n_higher_than_base = inner.pitch.vis_pitch() - clef_vis_pitch
     n_below = max(-n_higher_than_base, 0) // 2
+    
+    low_base = T2D(t2d.x, base_y_offset)
         
     for n in range(n_below):
-        n = n 
-        paint_text(t2d.add_y( - v_note_spacing * n * 2 + 1).add_x(-8), q_painter, Glyphs.LedgerLine, color)
-        paint_text(t2d.add_y( - v_note_spacing * n * 2 + 1).add_x(-4), q_painter, Glyphs.LedgerLine, color)
+        paint_text(low_base.add_y(v_note_spacing * (n+1) * 2 + 1).add_x(-8), q_painter, Glyphs.LedgerLine, color)
+        paint_text(low_base.add_y(v_note_spacing * (n+1) * 2 + 1).add_x(-4), q_painter, Glyphs.LedgerLine, color)
+        
         
     higher_than_highest = max((n_higher_than_base - (clef.n_of_lines - 1) * 2), 0)
     n_above = higher_than_highest // 2
