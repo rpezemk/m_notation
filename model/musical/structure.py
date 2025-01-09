@@ -119,8 +119,45 @@ class Note(TimeHolder):
         self.pitch.alter += alter
         return self
     
-
-
+    def next_exists(self) -> bool:
+        m = self.measure
+        idx = m.time_holders.index(self)
+        max_idx = len(m.time_holders) - 1
+        if idx < max_idx:
+            return True
+            
+        p = m.part
+        idx = p.measures.index(m)
+        max_idx = len(p.measures) - 1
+        if idx == max_idx:
+            return False
+        
+        next_m = p.measures[idx + 1]
+        res = len(next_m.time_holders) > 0
+        return res
+        
+    def next_is_note(self) -> bool:
+        m = self.measure
+        idx = m.time_holders.index(self)
+        max_idx = len(m.time_holders) - 1
+        if idx < max_idx:
+            res = isinstance(m.time_holders[idx+1], Note)
+            return res
+            
+        p = m.part
+        idx = p.measures.index(m)
+        max_idx = len(p.measures) - 1
+        if idx == max_idx:
+            return False
+        
+        next_m = p.measures[idx + 1]
+        if not next_m.time_holders:
+            return False
+        
+        res = isinstance(next_m.time_holders[0], Note)
+        return res
+        
+        
     def C(): return Note(Pitch(NoteName.C))
     def D(): return Note(Pitch(NoteName.D))
     def E(): return Note(Pitch(NoteName.E))

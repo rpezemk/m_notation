@@ -40,8 +40,8 @@ def get_some_notes_01():
 
 def get_some_notes_02():
     notes = [
+        Note.G().o_dwn().r2().tie(),
         Note.G().o_dwn().r2(),
-        Note.G().r2(),
         ]
     return notes
 
@@ -50,8 +50,8 @@ def get_some_notes_03():
                          Note.C().r4(),
                          *MTuple.apply(scale = Ratio(t=(2, 3)),
                            notes=[
+                                Note.A().o_up().r8().tie(),
                                 Note.A().o_up().r8(),
-                                Note.B().o_up().r8(),
                                 Note.C().o_up().o_up().r8(),
                                ]),
                          *MTuple.apply(scale = Ratio(t=(2, 3)),
