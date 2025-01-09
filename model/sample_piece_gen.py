@@ -58,27 +58,3 @@ def generate_sample_piece(n_parts: int, n_measures: int):
 
     return piece
 
-
-def generate_sample_piece2(n_parts: int, n_measures: int):
-    piece = Piece(conductor_part=ConductorPart(TempoMark(90, Ratio.QUARTER(), 0, Ratio(t=(0, 4)))))
-
-    for part_no in range(0, n_parts):
-        part = Part(AllClefs.TREBLE_CLEF, piece=piece)
-        for measure_no in range(0, n_measures):
-            
-            notes = [
-                Note.C().r4(),
-                Note.C().double_flat().r4(),
-                Note.C().r4(),
-                Note.C().r4(),
-            ]
-
-            measure = Measure(part_no=part_no, m_no=measure_no, parent=part, notes=notes)
-            for note in notes:
-                note.measure = measure
-
-            part.measures.append(measure)
-        part.parent=piece
-        piece.parts.append(part)
-
-    return piece
