@@ -2,14 +2,27 @@ from model.musical.structure import ConductorPart, MTuple, Measure, Note, Part, 
 from model.ratio import Ratio
 from model.pitch import Pitch, NoteName
 
-def generate_sample_piece(n_parts: int, n_measures: int):
+def generate_sample_piece(n_treble_parts: int, n_bass_parts, n_measures: int):
     piece = Piece(conductor_part=ConductorPart(TempoMark(90, Ratio.QUARTER(), 0, Ratio(t=(0, 4)))))
-    no_of_funcs = len(all_generators)
-    for part_no in range(0, n_parts):
+    no_of_funcs = len(g_clef_generators)
+    for part_no in range(0, n_treble_parts):
         part = Part(AllClefs.TREBLE_CLEF, piece=piece)
         for measure_no in range(0, n_measures):
-            func_idx = (part_no + measure_no) % (no_of_funcs - (part_no % 3))
-            notes = all_generators[func_idx]()
+            func_idx = (part_no + measure_no) % (no_of_funcs - (part_no % (no_of_funcs-1)))
+            notes = g_clef_generators[func_idx]()
+            measure = Measure(part_no=part_no, m_no=measure_no, parent=part, notes=notes)
+            for note in notes:
+                note.measure = measure
+        
+            part.measures.append(measure)
+        part.parent=piece
+        piece.parts.append(part)
+        
+    no_of_funcs = len(f_clef_generators)
+    for part_no in range(0, n_bass_parts):
+        part = Part(AllClefs.BASS_CLEF, piece=piece)
+        for measure_no in range(0, n_measures):
+            notes = f_clef_generators[0]()
             measure = Measure(part_no=part_no, m_no=measure_no, parent=part, notes=notes)
             for note in notes:
                 note.measure = measure
@@ -72,9 +85,21 @@ def get_some_notes_04():
     return notes
 
 
-all_generators = [
+
+def get_some_bass_notes_01():
+    notes = [Note.A().o_dwn().o_dwn().r1()]
+    return notes
+
+
+
+g_clef_generators = [
     get_some_notes_01,
     get_some_notes_02,
     get_some_notes_03,
     get_some_notes_04,
 ]
+
+f_clef_generators = [
+    get_some_bass_notes_01,
+]
+

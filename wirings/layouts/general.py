@@ -1,19 +1,8 @@
 
-from PyQt5.QtWidgets import QComboBox, QLabel
-from PyQt5.QtCore import Qt
+from PyQt5.QtWidgets import QLabel
 
-from model.sample_piece_gen import generate_sample_piece
-from widgets.lanes.AudioWidget import AudioWidget
-from widgets.lanes.RulerWidget import RulerWidget
-from widgets.lanes.StaffWidget import VirtualStaff
 from wirings.test_methods import quit_csound, save_file, start_CSOUND, play_ding, static_play_file
-from utils.logger import MLogger
-from widgets.compound.stack_panels import HStack, VStack
-from widgets.compound.stretch import Stretch
-from widgets.basics.my_button import AsyncButton, SyncButton
-from widgets.lanes.PartWidget import PartWidget
-from widgets.basics.text_box import TextBox
-import utils.widget_utils as w_utils
+from widgets.basics.my_button import AsyncButton
 from widgets.basics.comboBox import ComboBox
 from utils.audio.audio_utils import list_audio_devices
 

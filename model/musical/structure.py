@@ -391,7 +391,7 @@ class Clef():
 
 class AllClefs():
     TREBLE_CLEF = Clef(Note.E().pitch, clef_str=Glyphs.G_Clef)
-    BASS_CLEF = Clef(Note.E().pitch, clef_str=Glyphs.F_Clef, clef_y_offset=21)
+    BASS_CLEF = Clef(Note.G().o_dwn().o_dwn().pitch, clef_str=Glyphs.F_Clef, clef_y_offset=21)
 
 class SampleFamily():
     ...
