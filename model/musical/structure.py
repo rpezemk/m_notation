@@ -358,11 +358,22 @@ class Ligature():
     def __init__(self, start_note: Note, end_note: Note):
         ...
 
-class LongHObject():
+
+class WideThConstrainedObject():
+    def __init__(self, note0: TimeHolder, note1: TimeHolder):
+        self.note0 = note0
+        self.note1 = note1
+
+class Slur(WideThConstrainedObject):
+    def __init__(self, start_note, end_note):
+        super().__init__(start_note, end_note)
+        
+        
+class LongFreeHObject():
     def __init__(self, start_note: Note, start_offset: Ratio, end_note: Note, end_offset: Ratio):
         ...
 
-class FadeDynamics(LongHObject):
+class FadeDynamics(LongFreeHObject):
     def __init__(self, start_note, start_offset, end_note, end_offset):
         super().__init__(start_note, start_offset, end_note, end_offset)
 
@@ -373,12 +384,6 @@ class FadeInDynamics(FadeDynamics):
 class FadeOutDynamics(FadeDynamics):
     def __init__(self, start_note, start_offset, end_note, end_offset):
         super().__init__(start_note, start_offset, end_note, end_offset)
-
-class Legato(LongHObject):
-    def __init__(self, start_note, start_offset, end_note, end_offset):
-        super().__init__(start_note, start_offset, end_note, end_offset)
-        
-        
         
 class Clef():
     def __init__(self, base_line_pitch: Pitch, n_of_lines: int = 5, clef_str: str = Glyphs.G_Clef, clef_y_offset: int = 0):
