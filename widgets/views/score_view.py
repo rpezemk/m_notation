@@ -4,7 +4,7 @@ from PyQt5.QtWidgets import QFrame, QWidget
 from PyQt5.QtGui import QPainter
 
 from model.musical.structure import Chunk
-from model.sample_piece_gen import generate_sample_piece, generate_sample_piece2
+from model.sample_piece_gen import generate_sample_piece
 from widgets.basics.my_button import StateButton, SyncButton
 from widgets.compound.stretch import Stretch
 from widgets.lanes.drawable_widget import DrawableWidget
