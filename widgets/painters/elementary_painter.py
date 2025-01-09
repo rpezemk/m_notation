@@ -2,7 +2,7 @@ from fonts.glyphs import Glyphs
 from model.musical.structure import Note, VisualNote, VisualTuple
 from utils.geometry.transform2d import T2D
 from PyQt5.QtCore import Qt, QRect
-from PyQt5.QtGui import QPainter, QColor, QPainterPath
+from PyQt5.QtGui import QPainter, QColor, QPainterPath, QPen
 from widgets.painters.painter_definitions import get_dotting_painters, get_note_painters, get_accidental_painters, get_rest_painters
 
 note_painters = get_note_painters()
@@ -176,18 +176,33 @@ def draw_ledger_lines(q_painter, v_note_spacing, base_y_offset, inner, t2d, colo
         
 
 def draw_tie(q_painter: QPainter, v_n1: VisualNote, v_n2: VisualNote):
-    path = QPainterPath()
+    if not isinstance(v_n1.inner, Note) or not isinstance(v_n2.inner, Note):
+        return
     
-    y_offset = 10
-    x_offset = 5
-    x0, y0, x1, y1 = v_n1.point[0] + x_offset, v_n1.point[1] + y_offset, v_n2.point[0] - x_offset, v_n2.point[1] + y_offset
+    clef = v_n1.inner.measure.get_clef()
+    n1: Note = v_n1.inner
+    diff = n1.pitch.vis_pitch() - clef.vis_pitch
+    is_up = (diff) - clef.n_of_lines > 0
+    
+    if is_up:
+        ...
+    else:
+        ...
+    
+    mul = -1 if is_up else 1
+    x0, y0, x1, y1 = v_n1.point[0], v_n1.point[1], v_n2.point[0], v_n2.point[1]
+    
+    dx = 5
+    dy = mul * 7
+    dyc = mul * 15
     
     q_painter.setBrush(transp)
-    control1_x, control1_y = x0 + 1/4*(x1-x0), y0 + 15
-    control2_x, control2_y = x0 + 3/4*(x1-x0), y0 + 15
+    control1_x, control1_y = x0 + 1/4*(x1-x0), y0 + dyc
+    control2_x, control2_y = x0 + 3/4*(x1-x0), y0 + dyc
 
-    path.moveTo(x0, y0)
-    path.cubicTo(control1_x, control1_y, control2_x, control2_y, x1, y1)
+    path = QPainterPath()
+    path.moveTo(x0 + dx, y0 + dy)
+    path.cubicTo(control1_x, control1_y, control2_x, control2_y, x1 - dx, y1 + dy)
 
     q_painter.drawPath(path)
 

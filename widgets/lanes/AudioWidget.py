@@ -40,7 +40,6 @@ class AudioWidget(LaneWidget):
 
     @override
     def paintEvent(self, event):
-        pen = QPen(self.very_light_gray)  # Set the pen color to black
         self.draw_lane()
         self.draw_all_data()
 
