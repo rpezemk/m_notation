@@ -4,12 +4,36 @@ from model.pitch import Pitch, NoteName
 
 def generate_sample_piece(n_parts: int, n_measures: int):
     piece = Piece(conductor_part=ConductorPart(TempoMark(90, Ratio.QUARTER(), 0, Ratio(t=(0, 4)))))
-
+    no_of_funcs = len(all_generators)
     for part_no in range(0, n_parts):
         part = Part(AllClefs.TREBLE_CLEF, piece=piece)
         for measure_no in range(0, n_measures):
-            if (part_no + measure_no) % 2 == 0:
-                notes = [Note.C().r4(),
+            func_idx = (part_no + measure_no) % (no_of_funcs - (part_no % 3))
+            notes = all_generators[func_idx]()
+            measure = Measure(part_no=part_no, m_no=measure_no, parent=part, notes=notes)
+            for note in notes:
+                note.measure = measure
+        
+            part.measures.append(measure)
+        part.parent=piece
+        piece.parts.append(part)
+
+    return piece
+
+def get_some_notes_01():
+    notes = [Note.A().o_dwn().r1()]
+    return notes
+
+
+def get_some_notes_02():
+    notes = [
+        Note.G().o_dwn().r2(),
+        Note.G().r2(),
+        ]
+    return notes
+
+def get_some_notes_03():
+    notes = [Note.C().r4(),
                          Note.C().r4(),
                          *MTuple.apply(scale = Ratio(t=(2, 3)),
                            notes=[
@@ -24,37 +48,33 @@ def generate_sample_piece(n_parts: int, n_measures: int):
                                 Note.F().double_sharp().r8(),
                                ]),
                          ]
+    return notes
 
-                measure = Measure(part_no=part_no, m_no=measure_no, parent=part, notes=notes)
-                for note in notes:
-                    note.measure = measure
-            else:
-                # notes = [Note(Pitch(NoteName.C), 0), Note(Pitch(NoteName.C), 7), Note(Pitch(NoteName.C), 0), Note(Pitch(NoteName.C), 7)]
-                notes = [
-                    Note.A().o_dwn().r1(), 
-                    # Note.A().o_dwn().r4(), 
-                    # *MTuple.apply(scale = Ratio(t=(2, 3)),
-                    #        notes=[
-                    #             Note.B().o_dwn().r8(),
-                    #             Note.C().r8(),
-                    #             Note.C().o_up().r8(),
-                    #            ]),
-                    # Note.C().double_flat().r16(),
-                    # Note.D().r16(),
-                    # Note.E().o_up().r16(),
-                    # Note.F().o_up().double_flat().r16(),
-                    # Note.G().o_up().r16(),
-                    # Note.A().o_up().r16(),
-                    # Note.D().o_up().r16(),
-                    # Note.E().o_up().r16(),
+
+def get_some_notes_04():
+    notes = [
+                    Note.A().o_dwn().r4(), 
+                    *MTuple.apply(scale = Ratio(t=(2, 3)),
+                           notes=[
+                                Note.B().o_dwn().r8(),
+                                Note.C().r8(),
+                                Note.C().o_up().r8(),
+                               ]),
+                    Note.C().double_flat().r16(),
+                    Note.D().r16(),
+                    Note.E().o_up().r16(),
+                    Note.F().o_up().double_flat().r16(),
+                    Note.G().o_up().r16(),
+                    Note.A().o_up().r16(),
+                    Note.D().o_up().r16(),
+                    Note.E().o_up().r16(),
                     ]
-                measure = Measure(part_no=part_no, m_no=measure_no, parent=part, notes=notes)
-                for note in notes:
-                    note.measure = measure
+    return notes
 
-            part.measures.append(measure)
-        part.parent=piece
-        piece.parts.append(part)
 
-    return piece
-
+all_generators = [
+    get_some_notes_01,
+    get_some_notes_02,
+    get_some_notes_03,
+    get_some_notes_04,
+]
