@@ -354,11 +354,6 @@ class Dynamics():
     def __init__(self, note: Note, offset: Ratio):
         ...
 
-class Ligature():
-    def __init__(self, start_note: Note, end_note: Note):
-        ...
-
-
 class WideThConstrainedObject():
     def __init__(self, note0: TimeHolder, note1: TimeHolder):
         self.note0 = note0
