@@ -94,10 +94,10 @@ def paint_visual_note(q_painter: QPainter, v_n: VisualNote, v_note_spacing: int,
                     
     plc_idx = 0 if is_up else 1
     paint_text(t2d + head_offset[plc_idx], q_painter, p_d[1] + " " + dot_str, color)
-    if p_d[2]:
-        paint_text(t2d + stem_offset[plc_idx], q_painter, p_d[4][plc_idx], color)
-    if p_d[3]:
-        paint_text(t2d + flag_offset[plc_idx], q_painter, p_d[5][plc_idx], color)
+    if p_d[2][0]:
+        paint_text(t2d + stem_offset[plc_idx], q_painter, p_d[2][1][plc_idx], color)
+    if p_d[3][0]:
+        paint_text(t2d + flag_offset[plc_idx], q_painter, p_d[3][1][plc_idx], color)
 
     if isinstance(inner, Note):
         return draw_accidentals(q_painter, v_n, t2d, color, plc_idx)
