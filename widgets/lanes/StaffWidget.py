@@ -94,10 +94,7 @@ class VirtualStaff():
         self.visual_notes = []
         self.visual_notes_by_measure = []
         self.res_mtuples: list[list[VisualNote]] = []
-        new_mtuple: list[VisualNote] = []
-        mtuple_opened = False
-        
-        
+
         for m_no, bar in enumerate(self.measures):
             seg_start = bar_segments[m_no][0]
             seg_end = bar_segments[m_no][1]
