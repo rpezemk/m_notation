@@ -69,7 +69,7 @@ def paint_visual_note(q_painter: QPainter, v_n: VisualNote, v_note_spacing: int,
     inner = v_n.inner
     is_up = v_n.inner.orientation_up
     
-    maybe = [p for p in note_painters if p.d == inner.base_duration and p.orientation_up == is_up]
+    maybe = [p for p in note_painters if p[0] == inner.base_duration]
 
     dot = inner.dotting
     dot_str = ""
@@ -93,11 +93,11 @@ def paint_visual_note(q_painter: QPainter, v_n: VisualNote, v_note_spacing: int,
         
                     
     plc_idx = 0 if is_up else 1
-    paint_text(t2d + head_offset[plc_idx], q_painter, p_d.head_str + " " + dot_str, color)
-    if p_d.stemed:
-        paint_text(t2d + stem_offset[plc_idx], q_painter, p_d.stem_str, color)
-    if p_d.flagged:
-        paint_text(t2d + flag_offset[plc_idx], q_painter, p_d.flag_str, color)
+    paint_text(t2d + head_offset[plc_idx], q_painter, p_d[1] + " " + dot_str, color)
+    if p_d[2]:
+        paint_text(t2d + stem_offset[plc_idx], q_painter, p_d[4][plc_idx], color)
+    if p_d[3]:
+        paint_text(t2d + flag_offset[plc_idx], q_painter, p_d[5][plc_idx], color)
 
     if isinstance(inner, Note):
         return draw_accidentals(q_painter, v_n, t2d, color, plc_idx)
@@ -106,7 +106,7 @@ def paint_visual_note(q_painter: QPainter, v_n: VisualNote, v_note_spacing: int,
 def paint_visual_rest(q_painter: QPainter, v_n: VisualNote, v_note_spacing: int, base_y_offset: int, color: QColor):
     inner = v_n.inner
 
-    maybe = [p for p in rest_painters if p.d == inner.base_duration]
+    maybe = [p for p in rest_painters if p[0] == inner.base_duration]
 
     dot = v_n.inner.dotting
     dot_str = ""
@@ -121,7 +121,7 @@ def paint_visual_rest(q_painter: QPainter, v_n: VisualNote, v_note_spacing: int,
 
     t2d = T2D(v_n.point[0], v_n.point[1])
 
-    paint_text(t2d + head_offset[0], q_painter, p_d.head_str + " " + dot_str, color)
+    paint_text(t2d + head_offset[0], q_painter, p_d[1] + " " + dot_str, color)
     
 
 def draw_accidentals(q_painter, v_n, t2d, color, plc_idx):

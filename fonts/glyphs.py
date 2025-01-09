@@ -5,22 +5,7 @@ class Glyphs:
     Percussion_Clef_1 = "\uE069"
     Percussion_Clef_2 = "\uE06A"
 
-    Notehead_Black = "\uE0A4"
-    Notehead_Half = "\uE0A3"
-    Notehead_Whole = "\uE0A2"
-    Notehead_DoubleWhole = "\uE0A0"
-    Notehead_X = "\uE0A7"
 
-    Rest_Maxima = "\uE4E0"
-    Rest_Longa = "\uE4E1"
-    Rest_DoubleWhole = "\uE4E2"
-    Rest_Whole = "\uE4E3"
-    Rest_Half = "\uE4E4"
-    Rest_Quarter = "\uE4E5"
-    Rest_Eighth = "\uE4E6"
-    Rest_Sixteenth = "\uE4E7"
-    Rest_ThirtyTwo = "\uE4E8"
-    Rest_SixtyFour = "\uE4E9"
 
     Accidental_Natural = "\uE260"
     Accidental_Flat = "\uE261"
@@ -147,17 +132,40 @@ class Glyphs:
     Fortissimo = "\uE52A"
     Pianissimo = "\uE52B"
 
-    LongaNote = "\uE1D0"
-    BreveNote = "\uE1D1"
-    WholeNote = "\uE1D2"
-    HalfNote = "\uE1D3"
-    QuarterNote = "\uE1D5"
-    EighthNote = "\uE1D7"
-    SixteenthNote = "\uE1D9"
-    ThirtySecondNote = "\uE1DB"
-    SixtyFourthNote = "\uE1DD"
+
 
     AugDot = "\uE1E7"
     DoubleAugDot = "\uE1E8"
     
     LedgerLine = "\uE022"
+
+    class Heads:
+        Black = "\uE0A4"
+        Half = "\uE0A3"
+        Whole = "\uE0A2"
+        DoubleWhole = "\uE0A0"
+        X = "\uE0A7"
+
+    class Notes():
+        Maxima = "\uE95C"
+        Longa = "\uE1D0"
+        Breve = "\uE1D1"
+        Whole = "\uE1D2"
+        Half = "\uE1D3"
+        Quarter = "\uE1D5"
+        Eighth = "\uE1D7"
+        Sixteenth = "\uE1D9"
+        ThirtyTwo = "\uE1DB"
+        SixtyFour = "\uE1DD"
+    
+    class Rests():
+        Maxima = "\uE4E0"
+        Longa = "\uE4E1"
+        Breve = "\uE4E2"
+        Whole = "\uE4E3"
+        Half = "\uE4E4"
+        Quarter = "\uE4E5"
+        Eighth = "\uE4E6"
+        Sixteenth = "\uE4E7"
+        ThirtyTwo = "\uE4E8"
+        SixtyFour = "\uE4E9"
