@@ -229,13 +229,15 @@ def draw_half_tie(q_painter: QPainter, v_n1: VisualNote):
     dy = mul * 7
     dyc = int(mul * 5 * (1 + math.sqrt(x_diff/10)))
     
+    y_end = mul * 25
+    
     q_painter.setBrush(transp)
     control1_x, control1_y = x0 + 1/4*(x1-x0), y0 + dyc
-    control2_x, control2_y = x0 + 3/4*(x1-x0), y0 + dyc
+    control2_x, control2_y = x0 + 3/4*(x1-x0), y0 + + dy + y_end
 
     path = QPainterPath()
     path.moveTo(x0 + dx, y0 + dy)
-    path.cubicTo(control1_x, control1_y, control2_x, control2_y, x1 - dx, y1 + dy)
+    path.cubicTo(control1_x, control1_y, control2_x, control2_y, x1 - dx, y1 + dy + y_end)
 
     q_painter.drawPath(path)
 
