@@ -77,7 +77,7 @@ CMD_CTRL_DOWN = CompoundCommand("ARROW_DOWN", [CTRL_ARROW_DOWN])
 CMD_DEL = CompoundCommand("DEL", [S_DEL])
 CMD_ROTATE = CompoundCommand("ROTATE", [S_R])
 CMD_ESC = CompoundCommand("ESC", [S_ESC])
-
+CMD_TIE = CompoundCommand("TIE", [S_CTRL_T, S_CTRL_T])
 ######## MEASURE COMMANDS #########
 
 C_SEL_VERTICAL_MEASURE = CompoundCommand("SEL_VERT_MEASURE", [S_CTRL_T, S_CTRL_V])

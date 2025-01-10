@@ -31,47 +31,53 @@ def paint_time_holders(q_painter: QPainter, visual_notes_by_measure: list[list[V
     new_mtuple: list[VisualNote] = []
     mtuple_opened = False
     
-    # th draw
-    visual_notes:list[VisualNote] = []
-    for group in visual_notes_by_measure:
-        for v_n in group:
-            visual_notes.append(v_n)
+    all_shown_notes = [vn.inner for m in visual_notes_by_measure for vn in m]
+
+    for visual_notes in visual_notes_by_measure:
     
-    for v_n in visual_notes:
-        paint_time_holder(q_painter, v_n, v_note_spacing, base_y_offset)
+        for v_n in visual_notes:
+            paint_time_holder(q_painter, v_n, v_note_spacing, base_y_offset)
 
-    # build tuple groups
-    for v_n in visual_notes:
-        if v_n.inner.tuple_start:
-            mtuple_opened = True
-        if mtuple_opened:
-            new_mtuple.append(v_n)
-        if v_n.inner.tuple_end:
-            res_mtuples.append(new_mtuple)
-            new_mtuple = []
-            mtuple_opened = False
+        # build tuple groups
+        for v_n in visual_notes:
+            if v_n.inner.tuple_start:
+                mtuple_opened = True
+            if mtuple_opened:
+                new_mtuple.append(v_n)
+            if v_n.inner.tuple_end:
+                res_mtuples.append(new_mtuple)
+                new_mtuple = []
+                mtuple_opened = False
 
-    # draw bracket for each group
-    for tuple_v_notes in res_mtuples:
-            paint_tuple_bracket(q_painter, tuple_v_notes)
+        # draw bracket for each group
+        for tuple_v_notes in res_mtuples:
+                paint_tuple_bracket(q_painter, tuple_v_notes)
 
-    for v_n in visual_notes:
-        if not isinstance(v_n.inner, Note):
-            continue
-        n: Note = v_n.inner
-        if not n.tied:
-            continue
-        
-        if not n.next_exists():
-            continue
-        if not n.next_is_note():
-            continue
-        
-        nxt = n.get_next()
-        if nxt.visual_note in visual_notes:
-            draw_tie(q_painter, v_n, nxt.visual_note)
-        else:
-            draw_half_tie(q_painter, v_n)
+        for v_n in visual_notes:
+            if not isinstance(v_n.inner, Note):
+                continue
+            
+            n: Note = v_n.inner
+            
+            if n.tied: 
+                ok, nxt = n.try_get_next_note()   
+                if not ok:
+                    continue
+                
+                if nxt in all_shown_notes:
+                    draw_tie(q_painter, v_n, nxt.visual_note)
+                else:
+                    draw_right_passing_tie(q_painter, v_n)
+            
+            ok, prev = n.try_get_prev_note()
+            if not ok: 
+                continue
+            
+            if prev in all_shown_notes:
+                continue
+            if prev.tied:
+                draw_left_passing_tie(q_painter, v_n)
+            
         
 def paint_time_holder(q_painter: QPainter, v_n: VisualNote, v_note_spacing: int, base_y_offset: int):
     color = red if v_n.inner.is_selected else very_light_gray
@@ -209,7 +215,40 @@ def draw_tie(q_painter: QPainter, v_n1: VisualNote, v_n2: VisualNote):
 
     q_painter.drawPath(path)
     
-def draw_half_tie(q_painter: QPainter, v_n1: VisualNote):
+def draw_left_passing_tie(q_painter: QPainter, v_n1: VisualNote):
+    clef = v_n1.inner.measure.get_clef()
+    n1: Note = v_n1.inner
+    diff = n1.pitch.vis_pitch() - clef.vis_pitch
+    is_up = (diff) - clef.n_of_lines > 0
+    
+    if is_up:
+        ...
+    else:
+        ...
+    
+    mul = -1 if is_up else 1
+    x0, y0, x1, y1 = v_n1.seg_start-30, v_n1.point[1], v_n1.point[0], v_n1.point[1]
+    
+    x_diff = x1 - x0
+    
+    dx = 5
+    dy = mul * 7
+    dyc = int(mul * 5 * (1 + math.sqrt(x_diff/10)))
+    
+    y_end = mul * 15
+    
+    q_painter.setBrush(transp)
+    control1_x, control1_y = x0 + 1/4*(x1-x0), y0 + dy + y_end
+    control2_x, control2_y = x0 + 3/4*(x1-x0), y0 + dyc
+
+    path = QPainterPath()
+    path.moveTo(x0 + dx, y0 + dy + y_end)
+    path.cubicTo(control1_x, control1_y, control2_x, control2_y, x1 - dx, y1 + dy)
+
+    q_painter.drawPath(path)
+    
+    
+def draw_right_passing_tie(q_painter: QPainter, v_n1: VisualNote):
     clef = v_n1.inner.measure.get_clef()
     n1: Note = v_n1.inner
     diff = n1.pitch.vis_pitch() - clef.vis_pitch
@@ -233,7 +272,7 @@ def draw_half_tie(q_painter: QPainter, v_n1: VisualNote):
     
     q_painter.setBrush(transp)
     control1_x, control1_y = x0 + 1/4*(x1-x0), y0 + dyc
-    control2_x, control2_y = x0 + 3/4*(x1-x0), y0 + + dy + y_end
+    control2_x, control2_y = x0 + 3/4*(x1-x0), y0 + dy + y_end
 
     path = QPainterPath()
     path.moveTo(x0 + dx, y0 + dy)

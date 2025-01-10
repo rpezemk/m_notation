@@ -24,6 +24,7 @@ score_view_bindings = CommandContainer         \
         (C_SEL_HORIZONTAL_MEASURES, lambda view: view.select_horizontal()),
         (C_ADD_PREV_TO_SEL, lambda view: view.add_prev_to_sel()),
         (C_ADD_NEXT_TO_SEL, lambda view: view.add_next_to_sel()),
+        (CMD_TIE, lambda view: view.flip_tie()),
      ])
 
 root_kbd_resolver = KbdResolver([score_view_bindings])

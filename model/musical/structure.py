@@ -34,9 +34,57 @@ class TimeHolder():
         self.orientation_up = True
         self.ruler_event: RulerEvent = None
         self.visual_note: VisualNote = None
+    
+    def try_get_prev_note(self):
+        m = self.measure
+        idx = m.time_holders.index(self)
+        if idx > 0:
+            prev = m.time_holders[idx-1]
+            return isinstance(prev, Note), prev
+            
+        p = m.part
+        idx = p.measures.index(m)
+        if idx == 0:
+            return False, None
         
+        prev_m = p.measures[idx - 1]
+        if not prev_m.time_holders:
+            return False, None
+        
+        prev = prev_m.time_holders[-1:][0]
+        return isinstance(prev, Note), prev
+        
+    def try_get_next_note(self):
+        m = self.measure
+        idx = m.time_holders.index(self)
+        max_idx = len(m.time_holders) - 1
+        if idx < max_idx:
+            nxt = m.time_holders[idx+1]
+            return isinstance(nxt, Note), nxt
+            
+        p = m.part
+        idx = p.measures.index(m)
+        max_idx = len(p.measures) - 1
+        if idx == max_idx:
+            return False, None
+        
+        next_m = p.measures[idx + 1]
+        if not next_m.time_holders:
+            return False, None
+        
+        nxt = next_m.time_holders[0]
+        return isinstance(nxt, Note), nxt
+    
+    
     def flip_orientation(self):
         ...
+
+    def is_first_in_measure(self):
+        if not self.measure.time_holders:
+            return False
+        
+        res = self.measure.time_holders[0] == self
+        return res
 
     def real_duration(self):
         res = (self.base_duration + self.base_duration * self.dotting) * self.scale
@@ -119,66 +167,7 @@ class Note(TimeHolder):
     def add_alter(self, alter: int = 0):
         self.pitch.alter += alter
         return self
-    
-    def next_exists(self) -> bool:
-        m = self.measure
-        idx = m.time_holders.index(self)
-        max_idx = len(m.time_holders) - 1
-        if idx < max_idx:
-            return True
-            
-        p = m.part
-        idx = p.measures.index(m)
-        max_idx = len(p.measures) - 1
-        if idx == max_idx:
-            return False
         
-        next_m = p.measures[idx + 1]
-        res = len(next_m.time_holders) > 0
-        return res
-        
-    def next_is_note(self) -> bool:
-        m = self.measure
-        idx = m.time_holders.index(self)
-        max_idx = len(m.time_holders) - 1
-        if idx < max_idx:
-            res = isinstance(m.time_holders[idx+1], Note)
-            return res
-            
-        p = m.part
-        idx = p.measures.index(m)
-        max_idx = len(p.measures) - 1
-        if idx == max_idx:
-            return False
-        
-        next_m = p.measures[idx + 1]
-        if not next_m.time_holders:
-            return False
-        
-        res = isinstance(next_m.time_holders[0], Note)
-        return res
-        
-    
-    def get_next(self):
-        m = self.measure
-        idx = m.time_holders.index(self)
-        max_idx = len(m.time_holders) - 1
-        if idx < max_idx:
-            return m.time_holders[idx+1]
-            
-        p = m.part
-        idx = p.measures.index(m)
-        max_idx = len(p.measures) - 1
-        if idx == max_idx:
-            return None
-        
-        next_m = p.measures[idx + 1]
-        if not next_m.time_holders:
-            return None
-        
-        res = next_m.time_holders[0]
-        return res
-    
         
     def C(): return Note(Pitch(NoteName.C))
     def D(): return Note(Pitch(NoteName.D))
@@ -248,12 +237,11 @@ class Measure():
             if not n.tied:
                 continue
             
-            if not n.next_exists():
-                continue
-            if not n.next_is_note():
-                continue
+            nxt_is_note, nxt = n.try_get_next_note()
             
-            nxt: Note = n.get_next()
+            if not nxt_is_note:
+                n.tied = False
+                continue
             
             # validate tie -- allow only same midi pitch ties
             if n.tied and n.pitch.midi_pitch() != nxt.pitch.midi_pitch():

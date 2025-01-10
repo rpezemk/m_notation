@@ -3,7 +3,7 @@ from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtWidgets import QFrame, QWidget
 from PyQt5.QtGui import QPainter
 
-from model.musical.structure import Chunk, VisualNote
+from model.musical.structure import Chunk, Note, VisualNote
 from model.sample_piece_gen import generate_sample_piece
 from widgets.basics.my_button import StateButton, SyncButton
 from widgets.compound.stretch import Stretch
@@ -126,6 +126,19 @@ class ScoreView(View):
     """COMMANDS' methods
     """
 
+    def flip_tie(self):
+        for pt in self.part_widgets:
+            last_sel = pt.get_last_selected_note()
+            if not last_sel:
+                continue
+            sel = last_sel[0].inner
+            if isinstance(sel, Note):
+                n: Note = sel
+                n.tied = not n.tied
+                n.measure.validate()
+                
+        self.update()
+        
     def add_next_to_sel(self):
         for pt in self.part_widgets:
             last_sel = pt.get_last_selected_note()
