@@ -134,7 +134,7 @@ class VirtualStaff():
             click_pos = event.pos()
             x0 = click_pos.x()
             y0 = click_pos.y() - self.y_offset
-            maybe = [v_n for v_n in self.visual_notes if abs(v_n.point[0] - x0) < 7 and abs(v_n.point[1] - y0) < 7]
+            maybe = [v_n for v_n in self.visual_notes if abs(v_n.point[0] - x0) < 10 and abs(v_n.point[1] - y0) < 10]
             if not maybe:
                 return
 
