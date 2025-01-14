@@ -9,7 +9,7 @@ from math import gcd
 
 
 class Ratio():
-    def MAXIMA(): return Ratio(t=(4,1))               # 4 times a whole note
+    def MAXIMA(): return Ratio(t=(8,1))               # 4 times a whole note
     def LONGA(): return Ratio(t=(4,1))               # 4 times a whole note
     def BREVE(): return Ratio(t=(2,1))               # 2 times a whole note
     def WHOLE(): return Ratio(t=(1,1))               # 1 whole note
@@ -19,6 +19,17 @@ class Ratio():
     def SIXTEENTH(): return Ratio(t=(1,16))          # 1/16 of a whole note
     def THIRTY_SECOND(): return Ratio(t=(1,32))      # 1/32 of a whole note
     def SIXTY_FOURTH(): return Ratio(t=(1,64))
+    
+    def R8_1(): return Ratio(t=(8,1))               # 4 times a whole note
+    def R4_1(): return Ratio(t=(4,1))               # 4 times a whole note
+    def R2_1(): return Ratio(t=(2,1))               # 2 times a whole note
+    def R1_1(): return Ratio(t=(1,1))               # 1 whole note
+    def R1_2(): return Ratio(t=(1,2))                # 1/2 of a whole note
+    def R1_4(): return Ratio(t=(1,4))             # 1/4 of a whole note
+    def R1_8(): return Ratio(t=(1,8))              # 1/8 of a whole note
+    def R1_16(): return Ratio(t=(1,16))          # 1/16 of a whole note
+    def R1_33(): return Ratio(t=(1,32))      # 1/32 of a whole note
+    def R1_64(): return Ratio(t=(1,64))
 
     def get_all_durations():
         all_durations = [

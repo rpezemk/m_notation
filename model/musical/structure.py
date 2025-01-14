@@ -35,6 +35,12 @@ class TimeHolder():
         self.ruler_event: RulerEvent = None
         self.visual_note: VisualNote = None
     
+    def set_base_duration(self, base_duration: Ratio):
+        self.base_duration = base_duration
+    
+    def set_dotting(self, dotting: Ratio):
+        self.dotting = dotting
+    
     def try_get_prev_note(self):
         m = self.measure
         idx = m.time_holders.index(self)
