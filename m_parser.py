@@ -11,6 +11,7 @@ note_tokens = [
     ("g", Note.G),
     ("a", Note.A),
     ("b", Note.B),
+    ("!", Rest),
 ]
 
 acc_tokens: list[tuple[str, Callable[[Note], Note]]] = [
@@ -71,21 +72,17 @@ all_tokens = [
     ]
 
 samples = [
-#     """r16 d e f g r8 a  ^d  c#   v a  e  g | f# d ^ r4 c.    r16 b a r8 b  g |
-# e  g  bb  d  c#  a  v a  ^g   | r4 f   e    r16 d c# d e f# g# a b |"""
-# ,
-# """r4 t3(c d e) t3(c d r16 e f) d c d e """,
-"""r16 cx dbb t32(r8 c# db ebb)""",
+    """r16 d e f g r8 a  ^d  c#   v a  e  g | f# d ^ r4 c.    r16 b a r8 b  g |
+e  g  bb  d  c#  a  v a  ^g   | r4 f   e    r16 d c# d e f# g# a b |"""
+
+, """r4 t3(c d e) t3(c d r16 e f) d c d e """
+, """r16 cx dbb t32(r8 c# db ebb) e. f.. !.. """
 ]
-
-
-def tokenize_tuple_start(tuple_start_str: str):
-    ...
-
 
 
 note_symbols = [n[0] for n in note_tokens]
 acc_symbols =  [n[0] for n in acc_tokens]
+punctuation_symbols =  [n[0] for n in punctuation_tokens]
 
 def parse(input_str: str, curr_idx = 0):
     max_idx = len(input_str) - 1
@@ -131,6 +128,7 @@ def parse(input_str: str, curr_idx = 0):
             if ch == "(":
                 curr_idx, sub_res = parse_list(input_str, curr_idx+1)
                 res.append([*sub_res])
+                break
             elif ch.isnumeric():
                 curr_idx, sub_res = parse_number(input_str, curr_idx)
                 res.append(sub_res)
@@ -143,7 +141,7 @@ def parse(input_str: str, curr_idx = 0):
         res = ""
         while curr_idx < max_idx:
             ch = input_str[curr_idx]
-            if ch not in [*acc_symbols]:
+            if ch not in acc_symbols and ch not in punctuation_symbols:
                 curr_idx -=1
                 break
             else:
@@ -154,9 +152,7 @@ def parse(input_str: str, curr_idx = 0):
             
     max_idx = len(input_str) - 1
     
-    
-    curr_sub = ""
-    
+        
     while curr_idx <= max_idx:
         ch = input_str[curr_idx]
         if ch == "(":
@@ -188,8 +184,40 @@ def crawl_structure(tokens: list, indent = 0):
             crawl_structure(token, indent + 4)
 
 
+
+
+def create_note(tokens: list) -> TimeHolder:
+    ...
+
+def eval(tokens: list) -> list[TimeHolder]:
+    time_holders = []
+    first = tokens[0]
+    if first == "n":
+        for sub in tokens[1:]:
+            ths = eval(sub)
+            for th in ths:
+                time_holders.append(th)
+        ...
+    elif first == "t":
+        ths = eval(tokens[2])
+        for th in ths:
+            time_holders.append(th)
+        ...
+        
+    elif first == "r":
+        num = tokens[1]
+        Ratio(t=(1, int(num)))
+        ...
+    
+    elif first in note_symbols:
+        # n = Note()
+        ...
+
+    return time_holders
+
 for sample in samples:      
     tokens = parse(sample)
     crawl_structure(tokens)
+    eval(tokens)
     print(tokens)
     
