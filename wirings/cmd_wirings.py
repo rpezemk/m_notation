@@ -22,9 +22,15 @@ score_view_bindings = CommandContainer         \
         (CMD_ESC, lambda view: view.deselect_notes_but([])),
         (C_SEL_VERTICAL_MEASURE, lambda view: view.select_vertical()),
         (C_SEL_HORIZONTAL_MEASURES, lambda view: view.select_horizontal()),
+        (C_SEL_SINGLE_MEASURE, lambda view: view.select_single_measure()),
         (C_ADD_PREV_TO_SEL, lambda view: view.add_prev_to_sel()),
         (C_ADD_NEXT_TO_SEL, lambda view: view.add_next_to_sel()),
         (CMD_TIE, lambda view: view.flip_tie()),
+        
+        (C_OCT_DOWN, lambda view: view.oct_down()),
+        (C_OCT_UP, lambda view: view.oct_up()),
+        (C_NAME_DOWN, lambda view: view.name_down()),
+        (C_NAME_UP, lambda view: view.name_up()),
      ])
 
 root_kbd_resolver = KbdResolver([score_view_bindings])

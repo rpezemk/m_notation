@@ -9,15 +9,30 @@ class NoteName(Enum):
     A = (9, 5, "a")
     B = (11, 6,"b")
     
+    all_names = list([C, D, E, F, G, A, B])
+    
     def all_pitches():
-        res = [NoteName.C, NoteName.D, NoteName.E, NoteName.F, NoteName.G, NoteName.A, NoteName.B]
-        return res
+        return [NoteName.C, NoteName.D, NoteName.E, NoteName.F, NoteName.G, NoteName.A, NoteName.B]
     
     def find_pitch(semi: int):
         pitches = [p for p in NoteName.all_pitches() if p.value[0] == semi]
         
         return pitches[0] if pitches else None
-        
+    
+    
+    def down(self):
+        l = list([*NoteName.all_names.value])
+        t_name = type(l)
+        idx = l.index(self.value)
+        res = NoteName.all_pitches()[(idx - 1) % 7]
+        return res
+    
+    def up(self):
+        l = list([*NoteName.all_names.value])
+        t_name = type(l)
+        idx = l.index(self.value)
+        res = NoteName.all_pitches()[(idx + 1) % 7]
+        return res
     
 class Pitch():
     accs = ["bb", "b", "", "#", "x"]
@@ -42,6 +57,18 @@ class Pitch():
         res = self.oct_no * 12 + self.note_name.value[0] + self.alter
         return res
     
+    def name_down(self):
+        self.note_name = self.note_name.down()
+        if self.note_name == NoteName.B:
+            self.oct_no -= 1
+        ...
+    
+    def name_up(self):
+        self.note_name = self.note_name.up()
+        if self.note_name == NoteName.C:
+            self.oct_no += 1
+        ...
+        
     def __str__(self):
         alt = Pitch.accs[self.alter + 2]
         res = f"{self.note_name.value[2]}{alt}{self.oct_no}"

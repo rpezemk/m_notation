@@ -178,6 +178,60 @@ class ScoreView(View):
                     th.is_selected = True
 
         self.update()
+        
+    def select_single_measure(self):
+        for v_c in self.chunk.v_chunks:
+            sel = [th for m in v_c.vertical_measures for th in m.time_holders if th.is_selected]
+            measures = set([m.measure for m in sel])
+            for m in measures:
+                for th in m.time_holders:
+                    th.is_selected = True
+        
+        self.update()
+        
+    def oct_down(self):
+        for v_c in self.chunk.v_chunks:
+            sel = [th for m in v_c.vertical_measures for th in m.time_holders if th.is_selected]
+
+            for th in sel:
+                if isinstance(th, Note):
+                    n: Note = th
+                    n.pitch.oct_no -= 1
+        
+        self.update()
+        
+    def oct_up(self):
+        for v_c in self.chunk.v_chunks:
+            sel = [th for m in v_c.vertical_measures for th in m.time_holders if th.is_selected]
+
+            for th in sel:
+                if isinstance(th, Note):
+                    n: Note = th
+                    n.pitch.oct_no += 1
+        
+        self.update()
+
+    def name_down(self):
+        for v_c in self.chunk.v_chunks:
+            sel = [th for m in v_c.vertical_measures for th in m.time_holders if th.is_selected]
+
+            for th in sel:
+                if isinstance(th, Note):
+                    n: Note = th
+                    n.pitch.name_down()
+        
+        self.update()
+        
+    def name_up(self):
+        for v_c in self.chunk.v_chunks:
+            sel = [th for m in v_c.vertical_measures for th in m.time_holders if th.is_selected]
+
+            for th in sel:
+                if isinstance(th, Note):
+                    n: Note = th
+                    n.pitch.name_up()
+        
+        self.update()
 
     def select_horizontal(self):
         for h_c in self.chunk.h_chunks:
