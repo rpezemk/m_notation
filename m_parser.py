@@ -82,7 +82,8 @@ e  g  bb  d  c#  a  v a  ^g   | r4 f   e    r16 d c# d e f# g# a b |"""
 
 """r4 t3(c d e) t3(c d r16 e f) d c d e """,
 """r4 cx v dbb t3(c# db ebb) e._ f.. !.. """,
-"r4 ebb.._ ebb.."
+"r16 ebb.._ ebb.."
+"r16 e"
 ]
 
 
@@ -94,7 +95,7 @@ tie_symbols = [n[0] for n in tie_tokens]
 def parse_list(input_str: str, curr_idx = 0):
     max_idx = len(input_str) - 1
     res = []
-    while curr_idx < max_idx:
+    while curr_idx <= max_idx:
         ch = input_str[curr_idx]
         if ch == "(":
             curr_idx, sub_res = parse_list(input_str, curr_idx+1)
@@ -133,7 +134,7 @@ def parse_number(input_str: str, curr_idx = 0):
 def parse_whole_tuple(input_str: str, curr_idx = 0):
     res = []
     max_idx = len(input_str) - 1
-    while curr_idx < max_idx:
+    while curr_idx <= max_idx:
         ch = input_str[curr_idx]
         if ch == "(":
             curr_idx, sub_res = parse_list(input_str, curr_idx+1)
@@ -208,11 +209,11 @@ def eval(tokens: list) -> list[TimeHolder]:
     elif first in note_symbols:
         func = [nt for nt in note_tokens if nt[0]==first][0][1]
         n = func()
+        n.base_duration = curr_ratio
         acc = "".join([x for x in tokens[1:] if x in acc_symbols])
         alter = [x for x in acc_tokens if x[0] == acc][:1]
         if alter:
             n = alter[0][1](n)
-            n.base_duration = curr_ratio
         dot = "".join([x for x in tokens[1:] if x in punctuation_symbols])
         dotting = [x for x in punctuation_tokens if x[0] == dot][:1]
         if dotting:
@@ -239,4 +240,6 @@ for sample in samples:
     print("-------------")
     for th in ths:
         print(th)
+        
+    # print(tokens[1])
     
