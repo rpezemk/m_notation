@@ -74,9 +74,10 @@ all_tokens = [
 samples = [
     """r16 d e f g r8 a  ^d  c#   v a  e  g | f# d ^ r4 c.    r16 b a r8 b  g |
 e  g  bb  d  c#  a  v a  ^g   | r4 f   e    r16 d c# d e f# g# a b |"""
+,
 
-, """r4 t3(c d e) t3(c d r16 e f) d c d e """
-, """r16 cx dbb t32(r8 c# r16 db ebb) e. f.. !.. """
+"""r4 t3(c d e) t3(c d r16 e f) d c d e """,
+"""r16 cx v dbb t32(r8 c# r16 db ebb) e. f.. !.. """
 ]
 
 
@@ -84,97 +85,76 @@ note_symbols = [n[0] for n in note_tokens]
 acc_symbols =  [n[0] for n in acc_tokens]
 punctuation_symbols =  [n[0] for n in punctuation_tokens]
 
-def parse(input_str: str, curr_idx = 0):
+def parse_list(input_str: str, curr_idx = 0):
     max_idx = len(input_str) - 1
     res = []
-    
-    def parse_list(input_str: str, curr_idx = 0):
-        res = []
-        while curr_idx < max_idx:
-            ch = input_str[curr_idx]
-            if ch == "(":
-                curr_idx, sub_res = parse_list(input_str, curr_idx+1)
-                res.append([ch, *sub_res])
-            if ch in note_symbols:
-                curr_idx, sub_res = parse_note(input_str, curr_idx+1)
-                res.append([ch, *sub_res])
-            elif ch == "r":
-                curr_idx, sub_res = parse_number(input_str, curr_idx+1)
-                res.append([ch, sub_res])
-            if ch == ")":
-                break
-            curr_idx += 1
-        
-        return curr_idx, ["n", *res]
-    
-    
-    def parse_number(input_str: str, curr_idx = 0):
-        res = ""
-        while curr_idx < max_idx:
-            ch = input_str[curr_idx]
-            if ch.isnumeric():
-                res += ch
-            else:
-                curr_idx -= 1
-                break
-            curr_idx += 1
-        
-        return curr_idx, res
-    
-    def parse_whole_tuple(input_str: str, curr_idx = 0):
-        res = []
-        while curr_idx < max_idx:
-            ch = input_str[curr_idx]
-            if ch == "(":
-                curr_idx, sub_res = parse_list(input_str, curr_idx+1)
-                res.append([*sub_res])
-                break
-            elif ch.isnumeric():
-                curr_idx, sub_res = parse_number(input_str, curr_idx)
-                res.append(sub_res)
-            
-            curr_idx += 1
-        
-        return curr_idx, res
-    
-    def parse_note(input_str: str, curr_idx = 0):
-        res = ""
-        while curr_idx < max_idx:
-            ch = input_str[curr_idx]
-            if ch not in acc_symbols and ch not in punctuation_symbols:
-                curr_idx -=1
-                break
-            else:
-                res += ch
-            curr_idx += 1
-            
-        return curr_idx, res
-            
-    max_idx = len(input_str) - 1
-    
-        
-    while curr_idx <= max_idx:
+    while curr_idx < max_idx:
         ch = input_str[curr_idx]
         if ch == "(":
             curr_idx, sub_res = parse_list(input_str, curr_idx+1)
-            res.append([ch, *sub_res])
-        elif ch == "t":
-            curr_idx, sub_res = parse_whole_tuple(input_str, curr_idx+1)
+            res.append([*sub_res])
+        if ch in note_symbols:
+            curr_idx, sub_res = parse_note(input_str, curr_idx+1)
             res.append([ch, *sub_res])
         elif ch == "r":
             curr_idx, sub_res = parse_number(input_str, curr_idx+1)
             res.append([ch, sub_res])
-        elif ch in note_symbols:
-            curr_idx, sub_res = parse_note(input_str, curr_idx+1)
+        elif ch in ["v", "^"]:
+            res.append([ch])
+        elif ch == "t":
+            curr_idx, sub_res = parse_whole_tuple(input_str, curr_idx+1)
             res.append([ch, *sub_res])
-            
-            
+        elif ch == ")":
+            break
+        curr_idx += 1
+    
+    return curr_idx, ["n", *res]
+    
+def parse_number(input_str: str, curr_idx = 0):
+    max_idx = len(input_str) - 1
+    res = ""
+    while curr_idx < max_idx:
+        ch = input_str[curr_idx]
+        if ch.isnumeric():
+            res += ch
+        else:
+            curr_idx -= 1
+            break
+        curr_idx += 1
+    
+    return curr_idx, res
+
+def parse_whole_tuple(input_str: str, curr_idx = 0):
+    res = []
+    max_idx = len(input_str) - 1
+    while curr_idx < max_idx:
+        ch = input_str[curr_idx]
+        if ch == "(":
+            curr_idx, sub_res = parse_list(input_str, curr_idx+1)
+            res.append([*sub_res])
+            break
+        elif ch.isnumeric():
+            curr_idx, sub_res = parse_number(input_str, curr_idx)
+            res.append(sub_res)
         
         curr_idx += 1
+    
+    return curr_idx, res
+
+def parse_note(input_str: str, curr_idx = 0):
+    res = ""
+    max_idx = len(input_str) - 1
+    while curr_idx < max_idx:
+        ch = input_str[curr_idx]
+        if ch not in acc_symbols and ch not in punctuation_symbols:
+            curr_idx -=1
+            break
+        else:
+            res += ch
+        curr_idx += 1
         
-    return ["n", *res]
-
-
+    return curr_idx, res
+        
 
 def crawl_structure(tokens: list, indent = 0):
     for token in tokens:
@@ -183,11 +163,6 @@ def crawl_structure(tokens: list, indent = 0):
         else:
             crawl_structure(token, indent + 4)
 
-
-
-
-def create_note(tokens: list) -> TimeHolder:
-    ...
 
 def eval(tokens: list) -> list[TimeHolder]:
     time_holders = []
@@ -216,8 +191,8 @@ def eval(tokens: list) -> list[TimeHolder]:
     return time_holders
 
 for sample in samples:      
-    tokens = parse(sample)
-    crawl_structure(tokens)
-    eval(tokens)
-    print(tokens)
+    tokens = parse_list(sample, -1)
+    crawl_structure(tokens[1])
+    eval(tokens[1])
+    print(tokens[1])
     
