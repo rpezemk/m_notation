@@ -48,6 +48,9 @@ S_CTRL_U = SubCmd("CTRL_U", [K_CTRL, K_U])
 S_CTRL_I = SubCmd("CTRL_L", [K_CTRL, K_I])
 S_CTRL_K = SubCmd("CTRL_U", [K_CTRL, K_K])
 
+S_SHIFT_I = SubCmd("CTRL_L", [K_SHIFT, K_I])
+S_SHIFT_K = SubCmd("CTRL_U", [K_SHIFT, K_K])
+
 
 
 S_SPACE = SubCmd("PLAY", [Qt.Key_Space])
@@ -107,4 +110,7 @@ C_OCT_UP = CompoundCommand("", [S_CTRL_U])
 
 C_NAME_UP = CompoundCommand("", [S_CTRL_I])
 C_NAME_DOWN = CompoundCommand("", [S_CTRL_K])
+
+C_ALTER_UP = CompoundCommand("", [S_SHIFT_I])
+C_ALTER_DOWN = CompoundCommand("", [S_SHIFT_K])
 

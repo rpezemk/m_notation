@@ -232,6 +232,29 @@ class ScoreView(View):
                     n.pitch.name_up()
         
         self.update()
+        
+        
+    def alter_down(self):
+        for v_c in self.chunk.v_chunks:
+            sel = [th for m in v_c.vertical_measures for th in m.time_holders if th.is_selected]
+
+            for th in sel:
+                if isinstance(th, Note):
+                    n: Note = th
+                    n.pitch.alter_down()
+        
+        self.update()
+        
+    def alter_up(self):
+        for v_c in self.chunk.v_chunks:
+            sel = [th for m in v_c.vertical_measures for th in m.time_holders if th.is_selected]
+
+            for th in sel:
+                if isinstance(th, Note):
+                    n: Note = th
+                    n.pitch.alter_up()
+        
+        self.update()
 
     def select_horizontal(self):
         for h_c in self.chunk.h_chunks:

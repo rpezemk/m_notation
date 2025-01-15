@@ -69,6 +69,15 @@ class Pitch():
             self.oct_no += 1
         ...
         
+    def alter_down(self):
+        if self.alter > -2:
+            self.alter -= 1
+        
+    def alter_up(self):
+        if self.alter < 2:
+            self.alter += 1
+        
+        
     def __str__(self):
         alt = Pitch.accs[self.alter + 2]
         res = f"{self.note_name.value[2]}{alt}{self.oct_no}"

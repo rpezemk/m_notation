@@ -156,8 +156,8 @@ class Glyphs:
         SixtyFour = "\uE4E9"
         
     class Accidentals():
-        Natural = "\uE260"
-        Flat = "\uE261"
+        Natural = "\uE261"
+        Flat = "\uE260"
         Sharp = "\uE262"
         DoubleFlat = "\uE264"
         DoubleSharp = "\uE263"
