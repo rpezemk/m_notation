@@ -23,7 +23,7 @@ def to_moving_sum(len_ratios: list[Ratio]) -> list[Ratio]:
 
 class TimeHolder():
     def __init__(self, base_duration: Ratio = None, measure: 'Measure' = None, dotting: Ratio = None):
-        self.base_duration = base_duration if base_duration is not None else Ratio.QUARTER
+        self.base_duration = base_duration if base_duration is not None else Ratio.QUARTER()
         self.dotting = dotting if dotting is not None else Ratio.zero()
         self.measure = measure
         self.offset_ratio = Ratio.zero()
@@ -105,7 +105,9 @@ class TimeHolder():
         return self
 
     def __str__(self):
-        return f"d: {self.base_duration}"
+        t_start = "<" if self.tuple_start else ""
+        t_end = ">" if self.tuple_end else ""
+        return f"{self.real_duration()}{t_start}{t_end}"
 
     def clone_as_rest(self):
         rest = Rest(base_duration=self.base_duration, measure=self.measure, dotting=self.dotting)
@@ -135,9 +137,11 @@ class Rest(TimeHolder):
     def __init__(self, base_duration: Ratio = None, measure: 'Measure' = None, dotting: Dotting = None):
         super().__init__(base_duration, measure, dotting)
         self.measure = measure
-
+    
     def __str__(self):
-        return f"d: {self.base_duration}"
+        t_start = "<" if self.tuple_start else ""
+        t_end = ">" if self.tuple_end else ""
+        return f"{self.real_duration()} {t_start}{t_end}"
 
 
 class MTuple():
@@ -161,7 +165,10 @@ class Note(TimeHolder):
         self.tied = False
         
     def __str__(self):
-        return f"d: {self.base_duration}"
+        tie = "__" if self.tied else ""
+        t_start = "<" if self.tuple_start else ""
+        t_end = ">" if self.tuple_end else ""
+        return f"{self.pitch} {self.real_duration()} {tie} {t_start}{t_end}"
 
     def flip_orientation(self):
         self.orientation_up = not self.orientation_up
