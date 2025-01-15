@@ -76,11 +76,11 @@ all_tokens = [
     ]
 
 samples = [
-#     """r16 d e f g r8 a  ^d  c#   v a  e  g | f# d ^ r4 c.    r16 b a r8 b  g |
-# e  g  bb  d  c#  a  v a  ^g   | r4 f   e    r16 d c# d e f# g# a b |"""
-# ,
+    """r16 d e f g r8 a  ^d  c#   v a  e  g | f# d ^ r4 c.    r16 b a r8 b  g |
+e  g  bb  d  c#  a  v a  ^g   | r4 f   e    r16 d c# d e f# g# a b |"""
+,
 
-# """r4 t3(c d e) t3(c d r16 e f) d c d e """,
+"""r4 t3(c d e) t3(c d r16 e f) d c d e """,
 """r4 cx v dbb t3(c# db ebb) e._ f.. !.. """,
 "r4 ebb.._ ebb.."
 ]
