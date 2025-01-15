@@ -76,7 +76,7 @@ samples = [
 e  g  bb  d  c#  a  v a  ^g   | r4 f   e    r16 d c# d e f# g# a b |"""
 
 , """r4 t3(c d e) t3(c d r16 e f) d c d e """
-, """r16 cx dbb t32(r8 c# db ebb) e. f.. !.. """
+, """r16 cx dbb t32(r8 c# r16 db ebb) e. f.. !.. """
 ]
 
 
@@ -100,7 +100,7 @@ def parse(input_str: str, curr_idx = 0):
                 res.append([ch, *sub_res])
             elif ch == "r":
                 curr_idx, sub_res = parse_number(input_str, curr_idx+1)
-                res.append([ch, *sub_res])
+                res.append([ch, sub_res])
             if ch == ")":
                 break
             curr_idx += 1
