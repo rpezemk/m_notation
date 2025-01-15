@@ -3,7 +3,7 @@ from enum import Enum
 from model.musical.structure import *
 
 
-note_tokens = [
+note_tokens: list[tuple[str, Callable[[], Note]]] = [
     ("c", Note.C),
     ("d", Note.D),
     ("e", Note.E),
@@ -60,6 +60,10 @@ punctuation_tokens: list[tuple[str, Callable[[Note], Note]]] = [
     ("..", lambda n: n.double_dot()),
     ]
 
+tie_tokens: list[tuple[str, Callable[[Note], Note]]] = [
+    ("_", lambda n: n.tie()),
+    ]
+
 all_tokens = [
     *note_tokens, 
     *acc_tokens, 
@@ -72,18 +76,20 @@ all_tokens = [
     ]
 
 samples = [
-    """r16 d e f g r8 a  ^d  c#   v a  e  g | f# d ^ r4 c.    r16 b a r8 b  g |
-e  g  bb  d  c#  a  v a  ^g   | r4 f   e    r16 d c# d e f# g# a b |"""
-,
+#     """r16 d e f g r8 a  ^d  c#   v a  e  g | f# d ^ r4 c.    r16 b a r8 b  g |
+# e  g  bb  d  c#  a  v a  ^g   | r4 f   e    r16 d c# d e f# g# a b |"""
+# ,
 
-"""r4 t3(c d e) t3(c d r16 e f) d c d e """,
-"""r16 cx v dbb t32(r8 c# r16 db ebb) e. f.. !.. """
+# """r4 t3(c d e) t3(c d r16 e f) d c d e """,
+"""r4 cx v dbb t3(c# db ebb) e._ f.. !.. """,
+"r4 ebb.._ ebb.."
 ]
 
 
 note_symbols = [n[0] for n in note_tokens]
 acc_symbols =  [n[0] for n in acc_tokens]
 punctuation_symbols =  [n[0] for n in punctuation_tokens]
+tie_symbols = [n[0] for n in tie_tokens]
 
 def parse_list(input_str: str, curr_idx = 0):
     max_idx = len(input_str) - 1
@@ -113,7 +119,7 @@ def parse_list(input_str: str, curr_idx = 0):
 def parse_number(input_str: str, curr_idx = 0):
     max_idx = len(input_str) - 1
     res = ""
-    while curr_idx < max_idx:
+    while curr_idx <= max_idx:
         ch = input_str[curr_idx]
         if ch.isnumeric():
             res += ch
@@ -144,9 +150,9 @@ def parse_whole_tuple(input_str: str, curr_idx = 0):
 def parse_note(input_str: str, curr_idx = 0):
     res = ""
     max_idx = len(input_str) - 1
-    while curr_idx < max_idx:
+    while curr_idx <= max_idx:
         ch = input_str[curr_idx]
-        if ch not in acc_symbols and ch not in punctuation_symbols:
+        if ch not in acc_symbols and ch not in punctuation_symbols and ch not in tie_symbols:
             curr_idx -=1
             break
         else:
@@ -164,9 +170,16 @@ def crawl_structure(tokens: list, indent = 0):
             crawl_structure(token, indent + 4)
 
 
+
+curr_ratio = Ratio(t=(1, 4))
+curr_oct = 5
 def eval(tokens: list) -> list[TimeHolder]:
+    global curr_ratio
+    global curr_oct
     time_holders = []
     first = tokens[0]
+    
+
     if first == "n":
         for sub in tokens[1:]:
             ths = eval(sub)
@@ -175,24 +188,55 @@ def eval(tokens: list) -> list[TimeHolder]:
         ...
     elif first == "t":
         ths = eval(tokens[2])
+        num = int(tokens[1])
+        
+        for th in ths:
+            th.base_duration = th.base_duration * Ratio(t=(2, num))
+            
+        ths[0].tuple_start = True
+        ths[-1].tuple_end = True
+            
         for th in ths:
             time_holders.append(th)
         ...
         
     elif first == "r":
         num = tokens[1]
-        Ratio(t=(1, int(num)))
+        curr_ratio = Ratio(t=(1, int(num)))
         ...
     
     elif first in note_symbols:
-        # n = Note()
+        func = [nt for nt in note_tokens if nt[0]==first][0][1]
+        n = func()
+        acc = "".join([x for x in tokens[1:] if x in acc_symbols])
+        alter = [x for x in acc_tokens if x[0] == acc][:1]
+        if alter:
+            n = alter[0][1](n)
+            n.base_duration = curr_ratio
+        dot = "".join([x for x in tokens[1:] if x in punctuation_symbols])
+        dotting = [x for x in punctuation_tokens if x[0] == dot][:1]
+        if dotting:
+            n = dotting[0][1](n)
+            
+        tie = "".join([x for x in tokens[1:] if x in tie_symbols])
+        tied = [x for x in tie_tokens if x[0] == tie][:1]
+        if tied:
+            n = tied[0][1](n)
+        time_holders.append(n)
         ...
 
     return time_holders
 
+# for sample in samples:      
+#     tokens = parse_list(sample)
+#     eval(tokens[1])
+#     print(tokens[1])
+    
+
 for sample in samples:      
-    tokens = parse_list(sample, -1)
-    crawl_structure(tokens[1])
-    eval(tokens[1])
-    print(tokens[1])
+    tokens = parse_list(sample)
+    ths = eval(tokens[1])
+    print("-------------")
+    for th in ths:
+        print(th)
     

@@ -1,13 +1,13 @@
 from enum import Enum
 
 class NoteName(Enum):
-    C = (0, 0)
-    D = (2, 1)
-    E = (4, 2)
-    F = (5, 3)
-    G = (7, 4)
-    A = (9, 5)
-    B = (11, 6)
+    C = (0, 0, "c")
+    D = (2, 1, "d")
+    E = (4, 2, "e")
+    F = (5, 3, "f")
+    G = (7, 4, "g")
+    A = (9, 5, "a")
+    B = (11, 6,"b")
     
     def all_pitches():
         res = [NoteName.C, NoteName.D, NoteName.E, NoteName.F, NoteName.G, NoteName.A, NoteName.B]
@@ -20,6 +20,7 @@ class NoteName(Enum):
         
     
 class Pitch():
+    accs = ["bb", "b", "", "#", "x"]
     def __init__(self, note_name: NoteName, alter: int = 0, oct_no: int = 5):
         self.oct_no = oct_no
         self.note_name = note_name
@@ -39,4 +40,9 @@ class Pitch():
     
     def midi_pitch(self):
         res = self.oct_no * 12 + self.note_name.value[0] + self.alter
+        return res
+    
+    def __str__(self):
+        alt = Pitch.accs[self.alter + 2]
+        res = f"{self.note_name.value[2]}{alt}{self.oct_no}"
         return res
