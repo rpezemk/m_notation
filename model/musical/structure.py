@@ -163,6 +163,8 @@ class Note(TimeHolder):
         self.pitch = pitch
         self.orientation_up = True
         self.tied = False
+        self.slur_starts: list[Slur] = []
+        self.slur_ends: list[Slur] = []
         
     def __str__(self):
         tie = "__" if self.tied else ""
@@ -445,14 +447,15 @@ class Dynamics():
         ...
 
 class WideThConstrainedObject():
-    def __init__(self, note0: TimeHolder, note1: TimeHolder):
+    def __init__(self, note0: Note, note1: Note):
         self.note0 = note0
         self.note1 = note1
 
 class Slur(WideThConstrainedObject):
-    def __init__(self, start_note, end_note):
+    def __init__(self, start_note: Note, end_note: Note):
         super().__init__(start_note, end_note)
-        
+        start_note.slur_starts.append(self)
+        end_note.slur_ends.append(self)
         
 class LongFreeHObject():
     def __init__(self, start_note: Note, start_offset: Ratio, end_note: Note, end_offset: Ratio):

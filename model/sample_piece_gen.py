@@ -1,4 +1,4 @@
-from model.musical.structure import ConductorPart, MTuple, Measure, Note, Part, Piece, TempoMark, AllClefs
+from model.musical.structure import ConductorPart, MTuple, Measure, Note, Part, Piece, Slur, TempoMark, AllClefs
 from model.ratio import Ratio
 from model.pitch import Pitch, NoteName
 
@@ -31,7 +31,23 @@ def generate_sample_piece(n_treble_parts: int, n_bass_parts, n_measures: int):
         part.parent=piece
         piece.parts.append(part)
 
+    if piece.parts:
+        apply_slurs(piece.parts[0])
+    
     return piece.validate()
+
+
+def apply_slurs(part: Part):
+    for m_idx in range(0, 2*(len(part.measures)//2), 2):
+        ok1, note1 = part.measures[m_idx].time_holders[0].try_get_next_note()
+        ok2, note2 = part.measures[m_idx+1].time_holders[0].try_get_next_note()
+        
+        if not (ok1 and ok2):
+            continue
+        
+        slur = Slur(note1, note2)
+    
+
 
 def get_some_notes_01():
     notes = [Note.A().o_dwn().r1().tie()]
