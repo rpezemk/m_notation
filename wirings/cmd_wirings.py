@@ -32,7 +32,7 @@ score_view_bindings = CommandContainer         \
         (C_NAME_DOWN, lambda view: view.name_down()),
         (C_NAME_UP, lambda view: view.name_up()),
         (C_ALTER_DOWN, lambda view: view.alter_down()),
-        (C_ALTER_UP, lambda view: view.alter_up()),
+        (build_command([[Qt.Key_Shift, Qt.Key_K]]), lambda view: view.alter_up()),
      ])
 
 root_kbd_resolver = KbdResolver([score_view_bindings])

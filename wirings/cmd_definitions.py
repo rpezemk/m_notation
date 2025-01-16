@@ -97,6 +97,11 @@ CMD_ESC = CompoundCommand("ESC", [S_ESC])
 CMD_TIE = CompoundCommand("TIE", [S_CTRL_T, S_CTRL_T])
 ######## MEASURE COMMANDS #########
 
+
+def build_command(defs: list[list[int]]):
+    res = CompoundCommand("", [SubCmd("", keys) for keys in defs])
+    return res
+
 C_SEL_VERTICAL_MEASURE = CompoundCommand("SEL_VERT_MEASURE", [S_CTRL_T, S_CTRL_V])
 C_SEL_HORIZONTAL_MEASURES = CompoundCommand("SEL_VERT_MEASURE", [S_CTRL_T, S_CTRL_H])
 C_SEL_SINGLE_MEASURE = CompoundCommand("SEL_VERT_MEASURE", [S_CTRL_T, S_CTRL_M])
@@ -112,5 +117,6 @@ C_NAME_UP = CompoundCommand("", [S_CTRL_I])
 C_NAME_DOWN = CompoundCommand("", [S_CTRL_K])
 
 C_ALTER_UP = CompoundCommand("", [S_SHIFT_I])
-C_ALTER_DOWN = CompoundCommand("", [S_SHIFT_K])
+C_ALTER_DOWN = build_command([[Qt.Key_Shift, Qt.Key_K]])
 
+    
