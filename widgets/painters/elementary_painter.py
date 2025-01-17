@@ -53,6 +53,7 @@ def paint_time_holders(q_painter: QPainter, visual_notes_by_measure: list[list[V
         for tuple_v_notes in res_mtuples:
                 paint_tuple_bracket(q_painter, tuple_v_notes)
 
+        # draw ties
         for v_n in visual_notes:
             if not isinstance(v_n.inner, Note):
                 continue
@@ -77,7 +78,30 @@ def paint_time_holders(q_painter: QPainter, visual_notes_by_measure: list[list[V
                 continue
             if prev.tied:
                 draw_left_passing_tie(q_painter, v_n)
-            
+        
+        
+    #draw slurs
+    all_visible_notes: list[Note] = [vn for vn in all_shown_notes if isinstance(vn, Note)]
+    all_slur_starting = [sl for vn in all_visible_notes for sl in vn.slur_starts]
+    all_slur_ending = [sl for vn in all_visible_notes for sl in vn.slur_ends]
+    
+    full_visible_slurs = [sl for sl in all_slur_starting if sl in all_slur_ending]
+    
+    for slur in full_visible_slurs:
+        ...
+        draw_tie(q_painter, slur.note0.visual_note, slur.note1.visual_note)
+    
+    
+    left_passing_slurs = [sl for sl in all_slur_ending if sl not in all_slur_starting]
+    right_passing_slurs = [sl for sl in all_slur_starting if sl not in all_slur_ending]
+        
+        
+    for right_slur in left_passing_slurs:
+        draw_left_passing_tie(q_painter, right_slur.note1.visual_note)    
+
+        
+    for right_slur in right_passing_slurs:
+        draw_right_passing_tie(q_painter, right_slur.note0.visual_note)    
         
 def paint_time_holder(q_painter: QPainter, v_n: VisualNote, v_note_spacing: int, base_y_offset: int):
     color = red if v_n.inner.is_selected else very_light_gray
