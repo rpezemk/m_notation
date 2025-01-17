@@ -98,7 +98,7 @@ CMD_TIE = CompoundCommand("TIE", [S_CTRL_T, S_CTRL_T])
 ######## MEASURE COMMANDS #########
 
 
-def build_command(defs: list[list[int]]):
+def cmd(defs: list[list[int]]):
     res = CompoundCommand("", [SubCmd("", keys) for keys in defs])
     return res
 
@@ -116,7 +116,7 @@ C_OCT_UP = CompoundCommand("", [S_CTRL_U])
 C_NAME_UP = CompoundCommand("", [S_CTRL_I])
 C_NAME_DOWN = CompoundCommand("", [S_CTRL_K])
 
-C_ALTER_UP = CompoundCommand("", [S_SHIFT_I])
-C_ALTER_DOWN = build_command([[Qt.Key_Shift, Qt.Key_K]])
+C_ALTER_UP = cmd([[Qt.Key_Shift, Qt.Key_I]])
+C_ALTER_DOWN = cmd([[Qt.Key_Shift, Qt.Key_K]])
 
     

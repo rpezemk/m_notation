@@ -261,6 +261,13 @@ class Measure():
             # validate tie -- allow only same midi pitch ties
             if n.tied and n.pitch.midi_pitch() != nxt.pitch.midi_pitch():
                 n.tied = False
+                
+                
+        for th in self.time_holders:
+            if not isinstance(th, Note):
+                continue
+            n: Note = th
+            n.orientation_up = self.part.clef.vis_pitch + self.part.clef.n_of_lines > n.pitch.vis_pitch()
     
 class Part():
     def __init__(self, clef: 'Clef', measures: list[Measure]=None, piece: 'Piece'=None):
@@ -477,9 +484,10 @@ class Clef():
     def __init__(self, base_line_pitch: Pitch, n_of_lines: int = 5, clef_str: str = Glyphs.G_Clef, clef_y_offset: int = 0):
         self.base_line_pitch = base_line_pitch
         self.n_of_lines = n_of_lines
-        self.vis_pitch = base_line_pitch.vis_pitch()
         self.clef_str = clef_str
         self.clef_y_offset = clef_y_offset
+        
+        self.vis_pitch = base_line_pitch.vis_pitch()
         ...
 
 class AllClefs():
